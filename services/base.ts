@@ -1,19 +1,19 @@
-import { Config } from "@/config";
-import AsyncStorage from "@react-native-async-storage/async-storage";
-
+import { Config } from '@/config';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import {
   BaseQueryApi,
   createApi,
   FetchArgs,
   fetchBaseQuery,
-} from "@reduxjs/toolkit/query/react";
+} from '@reduxjs/toolkit/query/react';
+import { API_URL } from '@env';
 
 const baseQuery = fetchBaseQuery({
-  baseUrl: Config.API_URL,
+  baseUrl: API_URL,
   prepareHeaders: async (headers, api) => {
-    const token = await AsyncStorage.getItem("user");
+    const token = await AsyncStorage.getItem('user');
     if (token) {
-      headers.set("authorization", `Bearer ${token}`);
+      headers.set('authorization', `Bearer ${token}`);
     }
 
     return headers;
@@ -23,7 +23,7 @@ const baseQuery = fetchBaseQuery({
 const baseQueryWithInterceptor = async (
   args: string | FetchArgs,
   api: BaseQueryApi,
-  extraOptions: {}
+  extraOptions: {},
 ) => {
   const result = await baseQuery(args, api, extraOptions);
   if (result.error && result.error.status === 401) {

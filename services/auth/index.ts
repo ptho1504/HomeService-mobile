@@ -1,8 +1,8 @@
-import { User } from "./../users/index";
-import { createApi } from "@reduxjs/toolkit/query";
-import { API } from "../base";
-import { Response } from "@/types/response";
-import { Address, BankAccount } from "@/types/types";
+import { User } from './../users/index';
+import { createApi } from '@reduxjs/toolkit/query';
+import { API } from '../base';
+import { Response } from '@/types/response';
+import { Address, BankAccount } from '@/types/types';
 
 export interface LoginRequest {
   email: string;
@@ -63,33 +63,35 @@ export interface VerifyRequest {
   otp: string;
 }
 
+const baseUrl = '/auth';
+
 const authApi = API.injectEndpoints({
-  endpoints: (build) => ({
+  endpoints: build => ({
     login: build.mutation<Response<User>, LoginRequest>({
-      query: (credentials) => ({
-        url: "/api/auth/logIn",
-        method: "POST",
+      query: credentials => ({
+        url: `${baseUrl}/logIn`,
+        method: 'POST',
         body: credentials,
       }),
     }),
     signup: build.mutation<Response<User>, SignUpRequest>({
-      query: (credentials) => ({
-        url: "/api/auth/signUp",
-        method: "POST",
+      query: credentials => ({
+        url: `${baseUrl}/signUp`,
+        method: 'POST',
         body: credentials,
       }),
     }),
     sendOtp: build.mutation<Response<{}>, SendOtpRequest>({
-      query: (credentials) => ({
-        url: "/api/auth/sendOtp",
-        method: "POST",
+      query: credentials => ({
+        url: `${baseUrl}/sendOtp`,
+        method: 'POST',
         body: credentials,
       }),
     }),
     verifyOtp: build.mutation<Response<{}>, VerifyRequest>({
-      query: (credentials) => ({
-        url: "/api/auth/verifyOtp",
-        method: "POST",
+      query: credentials => ({
+        url: `${baseUrl}/verifyOtp`,
+        method: 'POST',
         body: credentials,
       }),
     }),

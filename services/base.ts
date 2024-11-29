@@ -6,16 +6,14 @@ import {
   FetchArgs,
   fetchBaseQuery,
 } from '@reduxjs/toolkit/query/react';
-import { API_URL } from '@env';
 
 const baseQuery = fetchBaseQuery({
-  baseUrl: API_URL,
+  baseUrl: Config.API_URL,
   prepareHeaders: async (headers, api) => {
     const token = await AsyncStorage.getItem('user');
     if (token) {
       headers.set('authorization', `Bearer ${token}`);
     }
-
     return headers;
   },
 });

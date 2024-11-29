@@ -1,0 +1,15 @@
+export enum LocalizationKey {
+  WELCOME = "welcome",
+  HOME = "home",
+  START = "start",
+  LOADING = "loading",
+  ONBOARDING_1_TITLE = "onboard_1_title",
+  ONBOARING_1_DESCRIPTION = "onboard_1_decription",
+  ONBOARDING_2_TITLE = "onboard_2_title",
+  ONBOARING_2_DESCRIPTION = "onboard_2_decription",
+  ONBOARDING_3_TITLE = "onboard_3_title",
+  ONBOARING_3_DESCRIPTION = "onboard_3_decription",
+  ACTIVITIES = "activities",
+  CHAT = "chat",
+  PROFILE = "profile",
+}

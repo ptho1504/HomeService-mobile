@@ -1,29 +1,29 @@
-import { Tabs } from "expo-router";
-import { Image, ImageSourcePropType, View } from "react-native";
-import FontAwesome from "@expo/vector-icons/FontAwesome";
-import Ionicons from "@expo/vector-icons/Ionicons";
-import { i18n, Language } from "@/localization";
+import { Tabs } from 'expo-router';
+import { Image, ImageSourcePropType, View } from 'react-native';
+import FontAwesome from '@expo/vector-icons/FontAwesome';
+import Ionicons from '@expo/vector-icons/Ionicons';
+import { i18n, Language } from '@/localization';
 
 // Language
 
 // i18n.locale = getLocales()[0].languageCode ?? "vn";
-i18n.locale = "vn";
+i18n.locale = 'vn';
 i18n.enableFallback = true;
 i18n.defaultLocale = Language.VIETNAMESE;
 
 export default function Layout() {
   return (
     <Tabs
-      initialRouteName="home"
+      initialRouteName="(home)"
       screenOptions={{
-        tabBarActiveTintColor: "#059669",
+        tabBarActiveTintColor: '#059669',
         tabBarStyle: { paddingVertical: 10 },
       }}
     >
       <Tabs.Screen
-        name="home"
+        name="(home)"
         options={{
-          title: i18n.t("home"),
+          title: i18n.t('home'),
           headerShown: false,
           tabBarIcon: ({ color }) => (
             <FontAwesome size={28} name="home" color={color} />
@@ -31,9 +31,9 @@ export default function Layout() {
         }}
       />
       <Tabs.Screen
-        name="activities"
+        name="(activities)"
         options={{
-          title: i18n.t("activities"),
+          title: i18n.t('activities'),
           headerShown: false,
           tabBarIcon: ({ color }) => (
             <FontAwesome size={28} name="bell-o" color={color} />
@@ -41,9 +41,9 @@ export default function Layout() {
         }}
       />
       <Tabs.Screen
-        name="chat"
+        name="(notifications)"
         options={{
-          title: i18n.t("chat"),
+          title: i18n.t('chat'),
           headerShown: false,
           tabBarIcon: ({ color }) => (
             <Ionicons name="chatbox-outline" size={24} color={color} />
@@ -51,9 +51,9 @@ export default function Layout() {
         }}
       />
       <Tabs.Screen
-        name="profile"
+        name="(profile)"
         options={{
-          title: i18n.t("activities"),
+          title: i18n.t('activities'),
           headerShown: false,
           tabBarIcon: ({ color }) => (
             <FontAwesome size={28} name="user" color={color} />

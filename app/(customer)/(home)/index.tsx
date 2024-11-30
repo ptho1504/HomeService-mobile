@@ -1,12 +1,12 @@
-import { Button, ButtonText } from "@/components/ui/button";
-import { router } from "expo-router";
-import React from "react";
+import { Button, ButtonText } from '@/components/ui/button';
+import { router } from 'expo-router';
+import React from 'react';
 import {
   View,
   Text,
   SafeAreaView,
   TouchableWithoutFeedback,
-} from "react-native";
+} from 'react-native';
 
 const Home = () => {
   return (
@@ -19,7 +19,7 @@ const Home = () => {
               className="w-fit self-end mt-4"
               size="md"
               onPress={() => {
-                router.push("/(root)/(home)/(package)?service=housecleaning");
+                router.push('/(customer)/(home)/HouseCleaningPost');
               }}
             >
               <ButtonText>Đăng việc dọn nhà</ButtonText>
@@ -32,7 +32,7 @@ const Home = () => {
               className="w-fit self-end mt-4"
               size="md"
               onPress={() => {
-                router.push("/(root)/(home)/(package)?service=babykeeping");
+                router.push('/(customer)/(home)');
               }}
             >
               <ButtonText>Đăng việc giữ trẻ</ButtonText>

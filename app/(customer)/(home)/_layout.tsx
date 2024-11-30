@@ -14,7 +14,14 @@ export default function HomeLayout() {
         }}
       />
       <Stack.Screen
-        name="HouseCleaningPost"
+        name="Post"
+        options={{
+          title: 'Đăng công việc',
+          headerShown: true,
+        }}
+      />
+      <Stack.Screen
+        name="HouseCleaningForm"
         options={{
           title: 'Dọn dẹp nhà',
           headerShown: true,

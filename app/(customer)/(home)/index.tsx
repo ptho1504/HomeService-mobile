@@ -1,4 +1,5 @@
 import { Button, ButtonText } from '@/components/ui/button';
+import { WorkType } from '@/constants';
 import { router } from 'expo-router';
 import React from 'react';
 import {
@@ -19,10 +20,10 @@ const Home = () => {
               className="w-fit self-end mt-4"
               size="md"
               onPress={() => {
-                router.push('/(customer)/(home)/HouseCleaningPost');
+                router.push(`/Post?workType=${WorkType.HOUSECLEANING.key}`);
               }}
             >
-              <ButtonText>Đăng việc dọn nhà</ButtonText>
+              <ButtonText>Đăng việc {WorkType.HOUSECLEANING.value}</ButtonText>
             </Button>
           </TouchableWithoutFeedback>
         </View>
@@ -32,10 +33,10 @@ const Home = () => {
               className="w-fit self-end mt-4"
               size="md"
               onPress={() => {
-                router.push('/(customer)/(home)');
+                router.push(`/Post?name=${WorkType.BABYSITTING.key}`);
               }}
             >
-              <ButtonText>Đăng việc giữ trẻ</ButtonText>
+              <ButtonText>Đăng việc {WorkType.BABYSITTING.value}</ButtonText>
             </Button>
           </TouchableWithoutFeedback>
         </View>

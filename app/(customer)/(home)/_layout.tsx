@@ -27,6 +27,13 @@ export default function HomeLayout() {
           headerShown: true,
         }}
       />
+      <Stack.Screen
+        name="Checkout"
+        options={{
+          title: 'Xác nhận và thanh toán',
+          headerShown: true,
+        }}
+      />
     </Stack>
   );
 }

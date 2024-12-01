@@ -3,3 +3,13 @@ export interface HouseCleaningOption {
   totalFreelancers: number;
   duration: number;
 }
+
+export interface WorkDay {
+  day: string;
+  date: string;
+}
+
+export interface Package {
+  key: string;
+  value: string;
+}

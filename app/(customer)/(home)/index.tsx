@@ -33,7 +33,7 @@ const Home = () => {
               className="w-fit self-end mt-4"
               size="md"
               onPress={() => {
-                router.push(`/Post?name=${WorkType.BABYSITTING.key}`);
+                router.push(`/Post?workType=${WorkType.BABYSITTING.key}`);
               }}
             >
               <ButtonText>Đăng việc {WorkType.BABYSITTING.value}</ButtonText>

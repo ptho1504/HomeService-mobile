@@ -1,97 +1,68 @@
 import { Button, ButtonText } from '@/components/ui/button';
 import { router, useLocalSearchParams } from 'expo-router';
-import React from 'react';
-import { Pressable, SafeAreaView, View } from 'react-native';
-import { Card } from '@/components/ui/card';
-import { Heading } from '@/components/ui/heading';
-import { Text } from '@/components/ui/text';
-import Ionicons from '@expo/vector-icons/Ionicons';
-import { Badge, BadgeIcon, BadgeText } from '@/components/ui/badge';
-import { VStack } from '@/components/ui/vstack';
-import { HStack } from '@/components/ui/hstack';
-import { Divider } from '@/components/ui/divider';
-import { CheckIcon } from '@/components/ui/icon';
-import { Center } from '@/components/ui/center';
+import React, { useEffect } from 'react';
+import { SafeAreaView } from 'react-native';
 import { WorkType } from '@/constants';
 import { Box } from '@/components/ui/box';
+import { useGetPostsByUserIdQuery } from '@/services/post';
+import {
+  Toast,
+  ToastDescription,
+  ToastTitle,
+  useToast,
+} from '@/components/ui/toast';
+import PostSkeleton from '@/components/activity/PostSkeleton';
+import PostList from '@/components/activity/PostList';
+import { PostModel } from '@/types/postTypes';
+
+const userId = 'USER-1';
 
 const Post = () => {
   const { workType } = useLocalSearchParams();
+  const { data, error, isLoading } = useGetPostsByUserIdQuery(userId);
+  const toast = useToast();
+
+  useEffect(() => {
+    if (error || (data && data.returnCode !== 1000)) {
+      toast.show({
+        placement: 'top',
+        duration: 3000,
+        render: ({ id }) => {
+          const uniqueToastId = 'toast-' + id;
+          return (
+            <Toast nativeID={uniqueToastId} action="error" variant="outline">
+              <ToastTitle>
+                Lấy thông tin các bài đăng công việc thất bại
+              </ToastTitle>
+              <ToastDescription>{data?.message}</ToastDescription>
+            </Toast>
+          );
+        },
+      });
+    }
+  }, []);
+
+  let posts: PostModel[] = data?.items
+    ? data?.items.filter(
+        post =>
+          post.work.name === WorkType[workType as keyof typeof WorkType].key,
+      )
+    : [];
 
   return (
     <SafeAreaView className="flex h-full">
-      <Box className="p-3">
-        <VStack space="lg">
-          <Card size="lg" variant="elevated">
-            <VStack space="md">
-              <Heading>Công việc đăng gần nhất</Heading>
-              <VStack space="md">
-                <HStack className="items-center" space="md">
-                  <Text className="text-cyan-600 text-md">
-                    <Ionicons name="time-outline" size={24} />
-                  </Text>
-                  <Text className="text-md text-primary-100">
-                    Nguyễn Đại Tiến
-                  </Text>
-                </HStack>
-                <HStack className="items-center" space="md">
-                  <Text className="text-gray-600 text-md">
-                    <Ionicons name="people-outline" size={24} />
-                  </Text>
-                  <Text className="text-md">3 người làm</Text>
-                </HStack>
-                <HStack className="items-center" space="md">
-                  <Text className="text-green-600 text-md">
-                    <Ionicons name="square-outline" size={24} />
-                  </Text>
-                  <Text className="text-md">3 m^2</Text>
-                </HStack>
-                <HStack className="items-center" space="md">
-                  <Text className="text-red-600 text-md">
-                    <Ionicons name="location-outline" size={24} />
-                  </Text>
-                  <Text className="text-md">Nguyễn Đại Tiến</Text>
-                </HStack>
-              </VStack>
-              <Divider className="my-2" />
-              <HStack className="items-center justify-between">
-                <Badge
-                  size="lg"
-                  variant="solid"
-                  action="success"
-                  className="rounded-md"
-                >
-                  <BadgeText>Hoàn thành</BadgeText>
-                  <BadgeIcon as={CheckIcon} className="ml-1" />
-                </Badge>
-                <Pressable className="">
-                  {({ pressed }) => (
-                    <Text
-                      className={`${
-                        pressed ? 'text-green-800' : 'text-green-600'
-                      } text-lg font-semibold`}
-                    >
-                      Đăng lại
-                    </Text>
-                  )}
-                </Pressable>
-              </HStack>
-            </VStack>
-          </Card>
-          <Center>
-            <Button
-              className="bg-green-600 focus:bg-green-800 text-white"
-              size="lg"
-              variant="solid"
-              action="positive"
-              onPress={() => router.push('/HouseCleaningForm')}
-            >
-              <ButtonText>
-                Đăng việc {WorkType[workType as keyof typeof WorkType].value}
-              </ButtonText>
-            </Button>
-          </Center>
-        </VStack>
+      {isLoading ? <PostSkeleton /> : <PostList posts={posts} />}
+      <Box className="sticky bottom-0 p-4">
+        <Button
+          onPress={() => router.push('/HouseCleaningForm')}
+          size="xl"
+          className="bg-green-500 flex flex-row items-center justify-center"
+          action="positive"
+        >
+          <ButtonText>
+            Đăng việc {WorkType[workType as keyof typeof WorkType].value}
+          </ButtonText>
+        </Button>
       </Box>
     </SafeAreaView>
   );

@@ -7,13 +7,18 @@ import { Text } from '@/components/ui/text';
 import { Pressable } from '@/components/ui/pressable';
 import { Heading } from '@/components/ui/heading';
 import { Grid, GridItem } from '@/components/ui/grid';
-import { HouseCleaningOption, Package, WorkDay } from '@/types/postTypes';
+import {
+  CreatePostModel,
+  HouseCleaningOption,
+  Package,
+  WorkDay,
+} from '@/types/postTypes';
 import { Box } from '@/components/ui/box';
 import Ionicons from '@expo/vector-icons/Ionicons';
 import { generateNext7Days } from '@/utils/dateUtil';
 import ScrollPickerModal from '@/components/post/ScrollPickerModal';
 import { Button, ButtonText } from '@/components/ui/button';
-import { router } from 'expo-router';
+import { router, useNavigation } from 'expo-router';
 
 const options: HouseCleaningOption[] = [
   { area: 60, totalFreelancers: 2, duration: 3 },
@@ -44,6 +49,23 @@ const packages: Package[] = [
 ];
 
 const HouseCleaningForm = () => {
+  const navigation = useNavigation();
+  const [postForm, setPostForm] = useState<CreatePostModel>({
+    customerNote: '',
+    startTime: '',
+    duration: 0,
+    price: 0,
+    paymentType: '',
+    totalFreelancer: 0,
+    packageName: '',
+    totalWorkDay: 0,
+    chooseFreelancer: false,
+    workSchedules: [],
+    customerId: '',
+    addressId: '',
+    workId: '',
+    payment: false,
+  });
   const [selectedOption, setSelectedOption] = useState<HouseCleaningOption>(
     options[0],
   );
@@ -55,6 +77,13 @@ const HouseCleaningForm = () => {
   const [selectedHour, setSelectedHour] = useState<number>(0);
   const [selectedMinute, setSelectedMinute] = useState<number>(0);
   const [chooseFreelancers, setChooseFreelancers] = useState<boolean>(false);
+
+  const navigateToCheckout = () => {
+    setPostForm({ ...postForm });
+    router.push({
+      pathname: '/Checkout',
+    });
+  };
 
   const toggleSwitch = async () => {
     setChooseFreelancers(() => !chooseFreelancers);
@@ -215,7 +244,7 @@ const HouseCleaningForm = () => {
                           }`}
                         >
                           <Text
-                            className={`font-semibold ${
+                            className={`text-lg font-semibold ${
                               selectedDay === day.day
                                 ? 'text-green-600'
                                 : 'text-gray-700'
@@ -224,7 +253,7 @@ const HouseCleaningForm = () => {
                             {day.day}
                           </Text>
                           <Text
-                            className={`${
+                            className={`text-lg ${
                               selectedDay === day.day
                                 ? 'text-green-600'
                                 : 'text-gray-700'
@@ -246,7 +275,9 @@ const HouseCleaningForm = () => {
                       <Text className="text-cyan-600 text-md">
                         <Ionicons name="time-outline" size={24} />
                       </Text>
-                      <Text className="text-md font-medium">Chọn giờ làm</Text>
+                      <Text className="text-lg font-medium">
+                        Giờ bắt đầu làm
+                      </Text>
                     </HStack>
 
                     <Pressable onPress={() => setShowPickerModal(true)}>
@@ -273,7 +304,7 @@ const HouseCleaningForm = () => {
                       <Text className="text-green-600 text-md">
                         <Ionicons name="people-outline" size={24} />
                       </Text>
-                      <Text className="text-md font-medium">
+                      <Text className="text-lg font-medium">
                         Tự chọn freelancers
                       </Text>
 
@@ -304,9 +335,9 @@ const HouseCleaningForm = () => {
           selectedMinute={selectedMinute}
         />
       </ScrollView>
-      <Box className="sticky bg-white p-4 rounded-t-lg">
+      <Box className="sticky bg-white p-4 rounded-t-lg shadow-lg">
         <Button
-          onPress={() => router.push('/Checkout')}
+          onPress={navigateToCheckout}
           size="xl"
           className="bg-green-500 flex flex-row items-center justify-between"
           action="positive"

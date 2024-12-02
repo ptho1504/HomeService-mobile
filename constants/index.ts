@@ -122,31 +122,37 @@ export const PostStatus = {
     key: 'INITIAL',
     value: 'Khởi tạo',
     bgColor: 'bg-gray-400', // Màu xám cho trạng thái khởi tạo
+    action: 'muted',
   },
   SCHEDULED: {
     key: 'SCHEDULED',
     value: 'Đã lên lịch',
     bgColor: 'bg-blue-400', // Màu xanh dương cho trạng thái đã lên lịch
+    action: 'info',
   },
   CANCELED: {
     key: 'CANCELED',
     value: 'Bị hủy',
     bgColor: 'bg-red-400', // Màu đỏ cho trạng thái bị hủy
+    action: 'warning',
   },
   DOING: {
     key: 'DOING',
     value: 'Đang làm',
     bgColor: 'bg-yellow-400', // Màu vàng cho trạng thái đang làm
+    action: 'info',
   },
   COMPLETED: {
     key: 'COMPLETED',
     value: 'Hoàn thành',
     bgColor: 'bg-green-400', // Màu xanh lá cho trạng thái hoàn thành
+    action: 'success',
   },
   FAILED: {
     key: 'FAILED',
     value: 'Thất bại',
     bgColor: 'bg-orange-400', // Màu cam cho trạng thái thất bại
+    action: 'error',
   },
 };
 

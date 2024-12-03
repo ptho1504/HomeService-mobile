@@ -38,3 +38,5 @@ export const onboardings: OnboardingItem[] = [
 export const data = {
   onboardings,
 };
+
+export const LOCAL_STORAGE_JWT_KEY = "jwt";

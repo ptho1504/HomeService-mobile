@@ -12,11 +12,16 @@ import { SafeAreaView } from "react-native-safe-area-context";
 
 import { useState } from "react";
 import { OtpInput } from "react-native-otp-entry";
-import { useVerifyOtpMutation } from "@/services";
+import { useLoginMutation, useVerifyOtpMutation } from "@/services";
 import { router, useLocalSearchParams } from "expo-router";
 import onboarding3 from "@/assets/images/onboarding3.png";
 import { i18n, Language } from "@/localization";
 import { Button, ButtonSpinner, ButtonText } from "@/components/ui/button";
+import { useDispatch } from "react-redux";
+import { setUser, authenticateUser } from "@/store/reducers/auth";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import { LOCAL_STORAGE_JWT_KEY } from "@/constants";
+
 // i18n.locale = getLocales()[0].languageCode ?? "vn";
 i18n.locale = "vn";
 i18n.enableFallback = true;
@@ -30,16 +35,30 @@ const Verify = () => {
   console.log("Email", email, " Role", role);
 
   const [isLoading, SetIsLoading] = useState(false);
-
   const [otp, setOtp] = useState<string | null>(null);
-  const [verifyOtp] = useVerifyOtpMutation();
+  const [login] = useLoginMutation();
+  const dispatch = useDispatch();
+
+  // Handle Submit
   const handleSubmit = async () => {
     if (otp) {
       console.log("otp", otp);
-      const response = await verifyOtp({ email, otp: otp });
-      if (response) {
-        console.log(response);
-        router.replace("/(auth)/verify");
+      SetIsLoading(true);
+      const response = await login({ email, role: role, otp: otp });
+      console.log("respone", response);
+      if (response.error) {
+        // router.replace("/(auth)/verify");
+      } else if (response.data) {
+        dispatch(setUser(response.data.items));
+        dispatch(authenticateUser(true));
+
+        // Save to Async storage
+        await AsyncStorage.setItem(
+          LOCAL_STORAGE_JWT_KEY,
+          response.data.items.jwt!
+        );
+        SetIsLoading(false);
+        router.replace("/(customer)/(home)");
       }
     }
   };

@@ -1,4 +1,5 @@
 import { Config } from "@/config";
+import { LOCAL_STORAGE_JWT_KEY } from "@/constants";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import {
   BaseQueryApi,
@@ -11,7 +12,7 @@ import {
 const baseQuery = fetchBaseQuery({
   baseUrl: Config.API_URL,
   prepareHeaders: async (headers, api) => {
-    const token = await AsyncStorage.getItem("user");
+    const token = await AsyncStorage.getItem(LOCAL_STORAGE_JWT_KEY);
     if (token) {
       headers.set("authorization", `Bearer ${token}`);
     }

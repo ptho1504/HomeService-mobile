@@ -1,19 +1,36 @@
-import { Stack } from 'expo-router';
+import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs';
+import Activities from '.';
+import { RootStackParamList } from '@/types/postTypes';
 
-export default function ActivitiesLayout() {
+const Tab = createMaterialTopTabNavigator<RootStackParamList>();
+
+export default function ActivityLayout() {
   return (
-    <Stack
+    <Tab.Navigator
       screenOptions={{
-        headerStyle: {
-          backgroundColor: '#f4511e',
-        },
-        headerTintColor: '#fff',
-        headerTitleStyle: {
-          fontWeight: 'bold',
+        tabBarIndicatorStyle: {
+          backgroundColor: '#059669',
         },
       }}
     >
-      <Stack.Screen name="index" />
-    </Stack>
+      <Tab.Screen
+        name="UpcomingWork"
+        options={{ title: 'Chờ làm' }}
+        component={Activities} // Truyền component mà không cần hàm inline
+        initialParams={{ status: 'UPCOMING' }} // Truyền tham số
+      />
+      <Tab.Screen
+        name="PackageWork"
+        options={{ title: 'Theo gói' }}
+        component={Activities}
+        initialParams={{ status: 'PACKAGE' }}
+      />
+      <Tab.Screen
+        name="PastWork"
+        options={{ title: 'Lịch sử' }}
+        component={Activities}
+        initialParams={{ status: 'ALL' }}
+      />
+    </Tab.Navigator>
   );
 }

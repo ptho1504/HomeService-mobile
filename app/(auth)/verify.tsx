@@ -19,7 +19,7 @@ import { i18n, Language } from "@/localization";
 import { Button, ButtonSpinner, ButtonText } from "@/components/ui/button";
 import { useDispatch } from "react-redux";
 import { setUser, authenticateUser } from "@/store/reducers/auth";
-import AsyncStorage from "@react-native-async-storage/async-storage";
+import * as SecureStore from "expo-secure-store";
 import { LOCAL_STORAGE_JWT_KEY } from "@/constants";
 
 // i18n.locale = getLocales()[0].languageCode ?? "vn";
@@ -32,7 +32,6 @@ const Verify = () => {
     email: string;
     role: "FREELANCER" | "CUSTOMER";
   }>();
-  console.log("Email", email, " Role", role);
 
   const [isLoading, SetIsLoading] = useState(false);
   const [otp, setOtp] = useState<string | null>(null);
@@ -42,21 +41,25 @@ const Verify = () => {
   // Handle Submit
   const handleSubmit = async () => {
     if (otp) {
-      console.log("otp", otp);
       SetIsLoading(true);
       const response = await login({ email, role: role, otp: otp });
-      console.log("respone", response);
       if (response.error) {
+        SetIsLoading(false);
         // router.replace("/(auth)/verify");
       } else if (response.data) {
         dispatch(setUser(response.data.items));
         dispatch(authenticateUser(true));
 
         // Save to Async storage
-        await AsyncStorage.setItem(
+        if (!response.data.items.jwt) {
+          console.error("JWT is missing!");
+          return;
+        }
+        await SecureStore.setItemAsync(
           LOCAL_STORAGE_JWT_KEY,
           response.data.items.jwt!
         );
+
         SetIsLoading(false);
         router.replace("/(customer)/(home)");
       }
@@ -112,6 +115,7 @@ const Verify = () => {
             onPress={handleSubmit}
             variant="solid"
             action="positive"
+            disabled={otp?.length != 6}
           >
             {isLoading && <ButtonSpinner color={"#D1D5DB"} />}
             <ButtonText className="text-white">{i18n.t("verify")}</ButtonText>

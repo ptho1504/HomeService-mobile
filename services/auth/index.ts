@@ -3,6 +3,7 @@ import { createApi } from "@reduxjs/toolkit/query";
 import { API } from "../base";
 import { Response } from "@/types/response";
 import { Address, BankAccount } from "@/types/types";
+import { FreelancerWorkModel } from "@/types/workTypes";
 
 export interface LoginRequest {
   email: string;
@@ -26,8 +27,7 @@ export interface LoginResponse {
   googleSub: string;
   addresses: Address[];
   bankAccount: BankAccount;
-  createdAt: any;
-  
+  freelancerWorkServices: FreelancerWorkModel[];
 }
 
 export interface SignUpRequest {

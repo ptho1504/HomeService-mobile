@@ -56,4 +56,3 @@ export interface User {
   addresses: Address[];
   bankAccount: BankAccount;
 }
-

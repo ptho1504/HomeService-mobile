@@ -8,11 +8,13 @@ import {
   FetchArgs,
   fetchBaseQuery,
 } from "@reduxjs/toolkit/query/react";
-
+import * as SecureStore from "expo-secure-store";
 const baseQuery = fetchBaseQuery({
   baseUrl: Config.API_URL,
   prepareHeaders: async (headers, api) => {
-    const token = await AsyncStorage.getItem(LOCAL_STORAGE_JWT_KEY);
+    const token = await SecureStore.getItemAsync("jwt");
+    // console.log("token in base APi", token);
+
     if (token) {
       headers.set("authorization", `Bearer ${token}`);
     }

@@ -26,7 +26,7 @@ export default function Layout() {
           title: i18n.t('home'),
           headerShown: false,
           tabBarIcon: ({ color }) => (
-            <FontAwesome size={28} name="home" color={color} />
+            <Ionicons size={28} name="home-outline" color={color} />
           ),
         }}
       />
@@ -34,9 +34,10 @@ export default function Layout() {
         name="(activities)"
         options={{
           title: i18n.t('activities'),
-          headerShown: false,
+          headerShown: true,
+          headerShadowVisible: false,
           tabBarIcon: ({ color }) => (
-            <FontAwesome size={28} name="bell-o" color={color} />
+            <Ionicons size={28} name="clipboard-outline" color={color} />
           ),
         }}
       />

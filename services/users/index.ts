@@ -1,6 +1,7 @@
 import { createApi } from "@reduxjs/toolkit/query";
 import { API } from "../base";
 import { Address, BankAccount } from "@/types/types";
+import { FreelancerWorkModel } from "@/types/workTypes";
 
 export interface User {
   id?: string;
@@ -18,6 +19,7 @@ export interface User {
   googleSub: string;
   addresses: Address[];
   bankAccount: BankAccount;
+  freelancerWorkServices: FreelancerWorkModel[];
 }
 
 const usersApi = API.injectEndpoints({

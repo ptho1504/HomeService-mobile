@@ -30,4 +30,7 @@ export const vn = {
   [LocalizationKey.ROLE_VALID]: "Vui lòng chọn role",
   [LocalizationKey.ROLE_NOT_FOUND]: "Không được để trống role",
   [LocalizationKey.NOT_HAVE_ACCOUNT]: "Bạn chưa có tài khoản ?",
+  [LocalizationKey.RESEND]: "Gửi lại",
+  [LocalizationKey.SEND_OTP_TEXT]: "Không nhận được mã xác thực ?",
+  [LocalizationKey.VERIFY]: "Xác thực",
 };

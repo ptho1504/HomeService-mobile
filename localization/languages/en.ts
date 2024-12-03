@@ -30,4 +30,7 @@ export const en = {
   [LocalizationKey.ROLE_VALID]: "Please choose your role",
   [LocalizationKey.ROLE_NOT_FOUND]: "Role is required",
   [LocalizationKey.NOT_HAVE_ACCOUNT]: "You don't have account ?",
+  [LocalizationKey.RESEND]: "Resend",
+  [LocalizationKey.SEND_OTP_TEXT]: "Don't receive the code ?",
+  [LocalizationKey.VERIFY]: "Verify",
 };

@@ -24,4 +24,7 @@ export enum LocalizationKey {
   FREELANCER = "freelancer",
   CUSTOMER = "customer",
   NOT_HAVE_ACCOUNT = "not_have_account",
+  SEND_OTP_TEXT = "send_otp_text",
+  RESEND = "resend",
+  VERIFY = "verify",
 }

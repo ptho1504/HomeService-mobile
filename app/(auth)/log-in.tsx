@@ -29,7 +29,6 @@ import {
 import { SafeAreaView } from "react-native-safe-area-context";
 import { getLocales } from "expo-localization";
 import { i18n, Language } from "@/localization";
-import { OnboardingItem } from "@/types/types";
 import { Box } from "@/components/ui/box";
 import { Divider } from "@/components/ui/divider";
 import { HStack } from "@/components/ui/hstack";
@@ -107,7 +106,7 @@ const LogIn = () => {
     } else {
       setLoading(false);
       setIsInvalid(false);
-      router.push("/(auth)/verify");
+      router.push(`/(auth)/verify?email=${email}&role=${role}`);
     }
   };
 
@@ -235,7 +234,7 @@ const LogIn = () => {
                 className="w-full self-end mt-2 bg-green-500 border-none"
                 size="md"
                 onPress={handleSubmit}
-                variant="solid" 
+                variant="solid"
                 action="positive"
               >
                 {loading && <ButtonSpinner color={"#D1D5DB"} />}
@@ -244,14 +243,14 @@ const LogIn = () => {
                 </ButtonText>
               </Button>
             </TouchableWithoutFeedback>
-            
+
             {/* You have account */}
             <Box className="flex items-center mt-4">
               <Link className="text-center" href={"/(auth)/sign-up"}>
                 {i18n.t("not_have_account")}
               </Link>
             </Box>
-            
+
             <Box className="mt-3 px-10 w-full flex flex-row items-center justify-center">
               <Divider className="my-1 w-1/2" />
               <Text className="text-center px-4">{i18n.t("or")}</Text>

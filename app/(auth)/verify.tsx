@@ -34,18 +34,13 @@ const Verify = () => {
   const [otp, setOtp] = useState<string | null>(null);
   const [verifyOtp] = useVerifyOtpMutation();
   const handleSubmit = async () => {
-    try {
-      if (otp) {
-        console.log("otp", otp);
-        return;
-        const response = await verifyOtp({ email, otp: otp });
-        if (response) {
-          console.log(response);
-          router.replace("/(auth)/verify");
-        }
+    if (otp) {
+      console.log("otp", otp);
+      const response = await verifyOtp({ email, otp: otp });
+      if (response) {
+        console.log(response);
+        router.replace("/(auth)/verify");
       }
-    } catch (error) {
-      console.log(error);
     }
   };
   return (

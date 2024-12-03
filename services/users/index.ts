@@ -1,13 +1,25 @@
 import { createApi } from "@reduxjs/toolkit/query";
 import { API } from "../base";
+import { Address, BankAccount } from "@/types/types";
+import { FreelancerWorkModel } from "@/types/workTypes";
 
 export interface User {
+  id?: string;
+  jwt?: string;
+  avatar: string;
   email: string;
-  id: number;
+  role: string;
+  dob: Date;
   name: string;
-  phone: string;
-  username: string;
-  website: string;
+  gender: string;
+  status: string;
+  balance: number;
+  phoneNumber: string;
+  reputationPoint: number;
+  googleSub: string;
+  addresses: Address[];
+  bankAccount: BankAccount;
+  freelancerWorkServices: FreelancerWorkModel[];
 }
 
 const usersApi = API.injectEndpoints({

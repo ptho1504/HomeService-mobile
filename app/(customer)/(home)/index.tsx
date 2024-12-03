@@ -1,15 +1,23 @@
-import { Button, ButtonText } from '@/components/ui/button';
-import { WorkType } from '@/constants';
-import { router } from 'expo-router';
-import React from 'react';
+import { Button, ButtonText } from "@/components/ui/button";
+import { LOCAL_STORAGE_JWT_KEY } from "@/constants";
+import { selectUser } from "@/store/reducers";
+import { WorkType } from "@/constants";
+import { router } from "expo-router";
+import React, { useEffect, useState } from "react";
 import {
   View,
   Text,
   SafeAreaView,
   TouchableWithoutFeedback,
-} from 'react-native';
+} from "react-native";
+import { useSelector } from "react-redux";
+import * as SecureStore from "expo-secure-store";
+import { useGetPostsByUserIdQuery } from "@/services/post";
 
 const Home = () => {
+  const currentUser = useSelector(selectUser);
+  // console.log("currentUser", currentUser);
+  
   return (
     <SafeAreaView>
       <Text>Home Page</Text>

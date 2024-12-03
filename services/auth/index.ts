@@ -1,12 +1,13 @@
-import { User } from './../users/index';
-import { createApi } from '@reduxjs/toolkit/query';
-import { API } from '../base';
-import { Response } from '@/types/response';
-import { Address, BankAccount } from '@/types/types';
+import { User } from "./../users/index";
+import { createApi } from "@reduxjs/toolkit/query";
+import { API } from "../base";
+import { Response } from "@/types/response";
+import { Address, BankAccount } from "@/types/types";
+import { FreelancerWorkModel } from "@/types/workTypes";
 
 export interface LoginRequest {
   email: string;
-  password: string;
+  role: "FREELANCER" | "CUSTOMER";
   otp: string;
 }
 
@@ -26,6 +27,7 @@ export interface LoginResponse {
   googleSub: string;
   addresses: Address[];
   bankAccount: BankAccount;
+  freelancerWorkServices: FreelancerWorkModel[];
 }
 
 export interface SignUpRequest {
@@ -63,35 +65,35 @@ export interface VerifyRequest {
   otp: string;
 }
 
-const baseUrl = '/auth';
+const baseUrl = "/auth";
 
 const authApi = API.injectEndpoints({
-  endpoints: build => ({
+  endpoints: (build) => ({
     login: build.mutation<Response<User>, LoginRequest>({
-      query: credentials => ({
+      query: (credentials) => ({
         url: `${baseUrl}/logIn`,
-        method: 'POST',
+        method: "POST",
         body: credentials,
       }),
     }),
     signup: build.mutation<Response<User>, SignUpRequest>({
-      query: credentials => ({
+      query: (credentials) => ({
         url: `${baseUrl}/signUp`,
-        method: 'POST',
+        method: "POST",
         body: credentials,
       }),
     }),
     sendOtp: build.mutation<Response<{}>, SendOtpRequest>({
-      query: credentials => ({
+      query: (credentials) => ({
         url: `${baseUrl}/sendOtp`,
-        method: 'POST',
+        method: "POST",
         body: credentials,
       }),
     }),
     verifyOtp: build.mutation<Response<{}>, VerifyRequest>({
-      query: credentials => ({
+      query: (credentials) => ({
         url: `${baseUrl}/verifyOtp`,
-        method: 'POST',
+        method: "POST",
         body: credentials,
       }),
     }),

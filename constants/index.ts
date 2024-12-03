@@ -221,3 +221,5 @@ export const WorkScheduleStatus = {
 export const ReturnCode = {
   SUCCESS: 1000,
 };
+
+export const LOCAL_STORAGE_JWT_KEY = "jwt";

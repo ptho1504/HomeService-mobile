@@ -1,15 +1,12 @@
 import { User } from "@/services";
-import { errors } from "./../../node_modules/immer/src/utils/errors";
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
 interface AuthState {
   user: User | null;
-  jwt: string | null;
   isAuthenticated: boolean;
 }
 
 const initialState: AuthState = {
-  jwt: null,
   isAuthenticated: false,
   user: null,
 };
@@ -18,15 +15,11 @@ const slice = createSlice({
   name: "auth",
   initialState: initialState,
   reducers: {
-    setUser(state, action) {
+    setUser(state, action: PayloadAction<User | null>) {
       state.user = action.payload;
-    },
-    setToken(state, action) {
-      state.jwt = action.payload;
     },
     clearAuthState(state) {
       state.user = null;
-      state.jwt = null;
       state.isAuthenticated = false;
     },
     authenticateUser(state, action) {
@@ -35,6 +28,13 @@ const slice = createSlice({
   },
 });
 
+export const { setUser, clearAuthState, authenticateUser } = slice.actions;
+
+export const selectIsAuthenticated = (state: { auth: AuthState }) =>
+  state.auth.isAuthenticated;
+
+export const selectUser = (state: { auth: AuthState }) => state.auth.user;
+
 const authReducer = slice.reducer;
 
-export default authReducer;
+export default authReducer; /*  */

@@ -1,5 +1,7 @@
 import {
   Image,
+  ImageSourcePropType,
+  StatusBar,
   Text,
   TouchableOpacity,
   TouchableWithoutFeedback,
@@ -7,82 +9,116 @@ import {
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 // import Swiper from "react-native-swiper";
-import {
-  FormControl,
-  FormControlError,
-  FormControlErrorIcon,
-  FormControlErrorText,
-  FormControlHelper,
-  FormControlHelperText,
-  FormControlLabel,
-  FormControlLabelText,
-} from "@/components/ui/form-control";
-import { Input, InputField } from "@/components/ui/input";
+
 import { useState } from "react";
-import { AlertCircleIcon } from "@/components/ui/icon";
-import { Button, ButtonText } from "@/components/ui/button";
-import { useVerifyOtpMutation } from "@/services";
-import { router } from "expo-router";
+import { OtpInput } from "react-native-otp-entry";
+import { useLoginMutation, useVerifyOtpMutation } from "@/services";
+import { router, useLocalSearchParams } from "expo-router";
+import onboarding3 from "@/assets/images/onboarding3.png";
+import { i18n, Language } from "@/localization";
+import { Button, ButtonSpinner, ButtonText } from "@/components/ui/button";
+import { useDispatch } from "react-redux";
+import { setUser, authenticateUser } from "@/store/reducers/auth";
+import * as SecureStore from "expo-secure-store";
+import { LOCAL_STORAGE_JWT_KEY } from "@/constants";
+
+// i18n.locale = getLocales()[0].languageCode ?? "vn";
+i18n.locale = "vn";
+i18n.enableFallback = true;
+i18n.defaultLocale = Language.VIETNAMESE;
+
 const Verify = () => {
-  const email = "tho.nguyen1504@hcmut.edu.vn";
+  const { email, role } = useLocalSearchParams<{
+    email: string;
+    role: "FREELANCER" | "CUSTOMER";
+  }>();
+
+  const [isLoading, SetIsLoading] = useState(false);
   const [otp, setOtp] = useState<string | null>(null);
-  const [verifyOtp] = useVerifyOtpMutation();
+  const [login] = useLoginMutation();
+  const dispatch = useDispatch();
+
+  // Handle Submit
   const handleSubmit = async () => {
-    try {
-      if (otp) {
-        console.log("otp", otp);
-        const response = await verifyOtp({ email, otp: otp });
-        if (response) {
-          console.log(response);
-          router.replace("/(auth)/verify");
+    if (otp) {
+      SetIsLoading(true);
+      const response = await login({ email, role: role, otp: otp });
+      if (response.error) {
+        SetIsLoading(false);
+        // router.replace("/(auth)/verify");
+      } else if (response.data) {
+        dispatch(setUser(response.data.items));
+        dispatch(authenticateUser(true));
+
+        // Save to Async storage
+        if (!response.data.items.jwt) {
+          console.error("JWT is missing!");
+          return;
         }
+        await SecureStore.setItemAsync(
+          LOCAL_STORAGE_JWT_KEY,
+          response.data.items.jwt!
+        );
+
+        SetIsLoading(false);
+        router.replace("/(customer)/(home)");
       }
-    } catch (error) {
-      console.log(error);
     }
   };
   return (
     <SafeAreaView className="flex h-full items-center justify-between bg-white">
-      <View>
-        <Text className="text-red-500">Verify OTP</Text>
-      </View>
-      <View className="w-full">
-        <FormControl
-          size="md"
-          isDisabled={false}
-          isReadOnly={false}
-          isRequired={false}
-        >
-          <FormControlLabel>
-            <FormControlLabelText>Email</FormControlLabelText>
-          </FormControlLabel>
-          <Input className="my-1" size={"lg"}>
-            <InputField
-              type="text"
-              placeholder="OTP"
-              value={otp!}
-              onChangeText={(text) => setOtp(text)}
-            />
-          </Input>
-          <FormControlHelper>
-            <FormControlHelperText>
-              Must be atleast 6 characters.
-            </FormControlHelperText>
-          </FormControlHelper>
-          <FormControlError>
-            <FormControlErrorIcon as={AlertCircleIcon} />
-            <FormControlErrorText>
-              Atleast 6 characters are required.
-            </FormControlErrorText>
-          </FormControlError>
-        </FormControl>
+      <View className="flex h-full bg-white p-4 items-center">
+        <StatusBar />
+        <Image
+          source={onboarding3 as ImageSourcePropType | undefined}
+          resizeMode="contain"
+          className="w-40 h-40 mb-4"
+        />
+        <Text className="text-2xl font-bold my-3">Enter Verification Code</Text>
+        <Text className="text-xl font-font-normal">
+          We are automatically send OTP to
+        </Text>
+        <Text className="text-xl font-font-normal">
+          your email. Check your email{" "}
+        </Text>
+        {/* OTP */}
+        <View className="my-5 w-full">
+          <OtpInput
+            numberOfDigits={6}
+            onTextChange={(text) => setOtp(text)}
+            focusColor={"#397e52"}
+            focusStickBlinkingDuration={400}
+            disabled={false}
+            theme={{
+              pinCodeContainerStyle: {
+                backgroundColor: "white",
+                width: 58,
+                height: 58,
+                borderRadius: 12,
+              },
+            }}
+          />
+        </View>
+
+        <View className="my-3 flex items-center flex-row gap-3">
+          <Text>{i18n.t("send_otp_text")}</Text>
+          <TouchableOpacity>
+            <Text className="text-base font-bold color-green-600">
+              {i18n.t("resend")}
+            </Text>
+          </TouchableOpacity>
+        </View>
         <TouchableWithoutFeedback>
           <Button
-            className="w-fit self-end mt-4"
+            className="w-full self-end mt-2 bg-green-500 rounded-lg"
             size="md"
             onPress={handleSubmit}
+            variant="solid"
+            action="positive"
+            disabled={otp?.length != 6}
           >
-            <ButtonText>Đăng nhập</ButtonText>
+            {isLoading && <ButtonSpinner color={"#D1D5DB"} />}
+            <ButtonText className="text-white">{i18n.t("verify")}</ButtonText>
           </Button>
         </TouchableWithoutFeedback>
       </View>

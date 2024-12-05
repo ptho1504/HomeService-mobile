@@ -33,4 +33,5 @@ export const vn = {
   [LocalizationKey.RESEND]: "Gửi lại",
   [LocalizationKey.SEND_OTP_TEXT]: "Không nhận được mã xác thực ?",
   [LocalizationKey.VERIFY]: "Xác thực",
+  [LocalizationKey.HAVE_ACCOUNT]: "Bạn đã có tài khoản ?",
 };

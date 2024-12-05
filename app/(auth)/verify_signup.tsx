@@ -27,10 +27,9 @@ i18n.locale = "vn";
 i18n.enableFallback = true;
 i18n.defaultLocale = Language.VIETNAMESE;
 
-const Verify = () => {
-  const { email, role } = useLocalSearchParams<{
+const VerifySignUp = () => {
+  const { email } = useLocalSearchParams<{
     email: string;
-    role: "FREELANCER" | "CUSTOMER";
   }>();
 
   const [isLoading, SetIsLoading] = useState(false);
@@ -39,39 +38,13 @@ const Verify = () => {
   const dispatch = useDispatch();
 
   // Handle Submit
-  const handleSubmit = async () => {
-    if (otp) {
-      SetIsLoading(true);
-      const response = await login({ email, role: role, otp: otp });
-      if (response.error) {
-        SetIsLoading(false);
-        // router.replace("/(auth)/verify");
-      } else if (response.data) {
-        dispatch(setUser(response.data.items));
-        dispatch(authenticateUser(true));
-
-        // Save to Async storage
-        if (!response.data.items.jwt) {
-          console.error("JWT is missing!");
-          return;
-        }
-        await SecureStore.setItemAsync(
-          LOCAL_STORAGE_JWT_KEY,
-          response.data.items.jwt!
-        );
-
-        SetIsLoading(false);
-        router.replace("/(customer)/(home)");
-      }
-    }
-  };
+  const handleSubmit = async () => {};
   return (
     <SafeAreaView className="flex h-full items-center justify-between bg-white">
       <View className="flex h-full bg-white p-4 items-center">
-      
         <StatusBar />
         <Image
-          source={require('@/assets/images/verify.jpg')}
+          source={require('@/assets/images/verify_signup.jpg')}
           resizeMode="contain"
           className="w-60 h-60 mb-4"
         />
@@ -119,7 +92,7 @@ const Verify = () => {
             disabled={otp?.length != 6}
           >
             {isLoading && <ButtonSpinner color={"#D1D5DB"} />}
-            <ButtonText className="text-white">{i18n.t("verify")}</ButtonText>
+            <ButtonText className="text-white">{i18n.t("signup")}</ButtonText>
           </Button>
         </TouchableWithoutFeedback>
       </View>
@@ -127,4 +100,4 @@ const Verify = () => {
   );
 };
 
-export default Verify;
+export default VerifySignUp;

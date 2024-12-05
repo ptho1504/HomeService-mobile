@@ -11,7 +11,7 @@ const App = () => {
   const getToken = async () => {
     try {
       const result = await SecureStore.getItemAsync("jwt");
-      // console.log("Result ", result);
+      // console.log("api ", result);
     } catch (error) {
       console.error("Error retrieving token:", error);
     }

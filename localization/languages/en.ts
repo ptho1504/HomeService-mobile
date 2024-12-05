@@ -33,4 +33,5 @@ export const en = {
   [LocalizationKey.RESEND]: "Resend",
   [LocalizationKey.SEND_OTP_TEXT]: "Don't receive the code ?",
   [LocalizationKey.VERIFY]: "Verify",
+  [LocalizationKey.HAVE_ACCOUNT]: "Already have account ?",
 };

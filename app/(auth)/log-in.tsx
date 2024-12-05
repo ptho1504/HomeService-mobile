@@ -41,19 +41,14 @@ import {
   RadioIndicator,
   RadioLabel,
 } from "@/components/ui/radio";
+import { validateEmail } from "@/utils/helper";
 
 // i18n.locale = getLocales()[0].languageCode ?? "vn";
 i18n.locale = "vn";
 i18n.enableFallback = true;
 i18n.defaultLocale = Language.VIETNAMESE;
 
-function validateEmail(email: string): boolean {
-  // Regular expression for validating email
-  const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
 
-  // Test the email against the regex and return the result
-  return emailRegex.test(email);
-}
 
 const LogIn = () => {
   // Set Valid
@@ -111,10 +106,15 @@ const LogIn = () => {
   };
 
   return (
-    <SafeAreaView className="flex h-full items-center justify-between">
-      <View className="flex p-5 items-center justify-start h-full bg-white">
+    <View className="flex h-full items-center justify-between">
+      <View className="flex items-center justify-start h-full bg-white">
+        <Image
+          className="h-full w-full absolute opacity-50"
+          source={require("@/assets/images/bg.png")}
+        />
+
         {/* header */}
-        <View className="flex flex-row items-center justify-between ">
+        <View className="p-5 mt-10 flex flex-row items-center justify-between ">
           <View className="flex-1 flex-row gap-1">
             <Text className="text-black text-xl font-extrabold">Home</Text>
             <Text className="text-xl text-success-600 font-extrabold">
@@ -141,7 +141,7 @@ const LogIn = () => {
         </View>
 
         {/* login */}
-        <Box className="w-full flex gap-5">
+        <Box className="p-10 w-[80%] rounded-xl flex gap-5 bg-white border border-gray-200">
           {/* Input */}
           {/* Email */}
           <FormControl
@@ -294,7 +294,7 @@ const LogIn = () => {
           </Box>
         </Box>
       </View>
-    </SafeAreaView>
+    </View>
   );
 };
 

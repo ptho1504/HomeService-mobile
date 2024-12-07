@@ -23,7 +23,7 @@ import { i18n, Language } from "@/localization";
 import { Box } from "@/components/ui/box";
 import { useState } from "react";
 import { Input, InputField, InputIcon, InputSlot } from "@/components/ui/input";
-import { AlertCircleIcon, CircleIcon, MailIcon } from "@/components/ui/icon";
+import { AlertCircleIcon, AtSignIcon, CircleIcon, MailIcon } from "@/components/ui/icon";
 import {
   Radio,
   RadioGroup,
@@ -39,6 +39,7 @@ import { useSendOtpMutation, useSignupMutation } from "@/services";
 import { LOCAL_STORAGE_JWT_KEY, LOCAL_STORAGE_OTP } from "@/constants";
 import { useDispatch } from "react-redux";
 import { authenticateUser, setUser } from "@/store/reducers";
+import { Keyboard } from "react-native";
 // i18n.locale = getLocales()[0].languageCode ?? "vn";
 i18n.locale = "vn";
 i18n.enableFallback = true;
@@ -127,7 +128,7 @@ const Register = () => {
   };
 
   return (
-    <View className="flex h-full items-center justify-between">
+    <TouchableWithoutFeedback className="flex h-full items-center justify-between" onPress={Keyboard.dismiss}>
       <View className="flex items-center justify-start h-full bg-white">
         <Image
           className="h-full w-full absolute opacity-50"
@@ -208,10 +209,10 @@ const Register = () => {
             <FormControlLabel>
               <FormControlLabelText>Username</FormControlLabelText>
             </FormControlLabel>
-            <TouchableWithoutFeedback>
+            <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
               <Input className="my-1 flex items-center h-12">
                 <InputSlot className="pl-3 flex items-center">
-                  <InputIcon as={MailIcon} size={"lg"} />
+                  <InputIcon as={AtSignIcon} size={"lg"} />
                 </InputSlot>
                 <InputField
                   className="leading-none px-4 py-2 h-full"
@@ -304,7 +305,7 @@ const Register = () => {
           </Box>
         </Box>
       </View>
-    </View>
+    </TouchableWithoutFeedback>
   );
 };
 

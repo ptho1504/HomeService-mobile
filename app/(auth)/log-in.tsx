@@ -21,6 +21,7 @@ import { Link, router } from "expo-router";
 import React, { useCallback, useState } from "react";
 import {
   Image,
+  Keyboard,
   Text,
   TouchableOpacity,
   TouchableWithoutFeedback,
@@ -106,7 +107,7 @@ const LogIn = () => {
   };
 
   return (
-    <View className="flex h-full items-center justify-between">
+    <TouchableWithoutFeedback className="flex h-full items-center justify-between" onPress={Keyboard.dismiss}>
       <View className="flex items-center justify-start h-full bg-white">
         <Image
           className="h-full w-full absolute opacity-50"
@@ -294,7 +295,7 @@ const LogIn = () => {
           </Box>
         </Box>
       </View>
-    </View>
+    </TouchableWithoutFeedback>
   );
 };
 

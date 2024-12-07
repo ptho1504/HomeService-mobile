@@ -2,18 +2,51 @@ import React, { useEffect, useState } from "react";
 import { Redirect } from "expo-router";
 import { Text, View } from "react-native";
 import { useSelector } from "react-redux";
-import { selectIsAuthenticated } from "@/store/reducers";
+import {
+  authenticateUser,
+  selectIsAuthenticated,
+  setUser,
+} from "@/store/reducers";
 import * as SecureStore from "expo-secure-store";
+import { LOCAL_STORAGE_JWT_KEY } from "@/constants";
+import { useVerifyJwtForUserMutation } from "@/services";
+import { useDispatch } from "react-redux";
 
 const App = () => {
-  const isAuthenticated = useSelector(selectIsAuthenticated);
+  // const isAuthenticated = useSelector(selectIsAuthenticated);
+  const isAuthenticated = false;
+  const dispatch = useDispatch();
+  const [loading, setLoading] = useState(false);
+
+  // Call Api
+  const [verifyJwtForUser] = useVerifyJwtForUserMutation();
 
   const getToken = async () => {
     try {
-      const result = await SecureStore.getItemAsync("jwt");
-      // console.log("api ", result);
+      setLoading(true);
+      const jwt = await SecureStore.getItemAsync(LOCAL_STORAGE_JWT_KEY);
+      if (!jwt) {
+        return;
+      }
+      console.log("jwt", jwt);
+
+      const response = await verifyJwtForUser({ jwt });
+
+      console.log(response);
+
+      if (response.error) {
+        const message = response.error.data?.message || "Unknown error";
+        console.error(message);
+        return;
+      } else if (response.data) {
+        console.log("abcdefg");
+        dispatch(setUser(response.data.items));
+        dispatch(authenticateUser(true));
+      }
     } catch (error) {
       console.error("Error retrieving token:", error);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -21,9 +54,16 @@ const App = () => {
     getToken();
   }, []);
 
-  const signIn = false;
-  if (signIn) {
-    return <Redirect href={"./(root)/(tabs)/home"} />;
+  if (loading) {
+    return (
+      <View className="flex-1 justify-center items-center">
+        <Text>Loading...</Text>
+      </View>
+    );
+  }
+
+  if (isAuthenticated) {
+    return <Redirect href={"/(customer)/(home)"} />;
   }
 
   return <Redirect href="/(auth)/welcome" />;

@@ -1,6 +1,7 @@
 import {
   Image,
   ImageSourcePropType,
+  Keyboard,
   StatusBar,
   Text,
   TouchableOpacity,
@@ -62,7 +63,10 @@ const VerifySignUp = () => {
   const handleResend = async () => {};
 
   return (
-    <SafeAreaView className="flex h-full items-center justify-between bg-white">
+    <TouchableWithoutFeedback
+      className="flex h-full items-center justify-between"
+      onPress={Keyboard.dismiss}
+    >
       <View className="flex h-full bg-white p-4 items-center">
         <StatusBar />
         <Image
@@ -106,6 +110,7 @@ const VerifySignUp = () => {
             </Text>
           </TouchableOpacity>
         </View>
+
         <Button
           className="w-full self-end mt-2 bg-green-500 rounded-lg"
           size="md"
@@ -118,7 +123,7 @@ const VerifySignUp = () => {
           <ButtonText className="text-white">{i18n.t("signup")}</ButtonText>
         </Button>
       </View>
-    </SafeAreaView>
+    </TouchableWithoutFeedback>
   );
 };
 

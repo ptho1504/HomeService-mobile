@@ -21,6 +21,7 @@ import { useDispatch } from "react-redux";
 import { setUser, authenticateUser } from "@/store/reducers/auth";
 import * as SecureStore from "expo-secure-store";
 import { LOCAL_STORAGE_JWT_KEY } from "@/constants";
+import { Keyboard } from "react-native";
 
 // i18n.locale = getLocales()[0].languageCode ?? "vn";
 i18n.locale = "vn";
@@ -66,9 +67,11 @@ const Verify = () => {
     }
   };
   return (
-    <SafeAreaView className="flex h-full items-center justify-between bg-white">
+    <TouchableWithoutFeedback
+      className="flex h-full items-center justify-between bg-green-200"
+      onPress={Keyboard.dismiss}
+    >
       <View className="flex h-full bg-white p-4 items-center">
-        <StatusBar />
         <Image
           source={require("@/assets/images/verify.jpg")}
           resizeMode="contain"
@@ -99,6 +102,7 @@ const Verify = () => {
                 borderRadius: 12,
               },
             }}
+            autoFocus={false}
           />
         </View>
 
@@ -124,7 +128,7 @@ const Verify = () => {
           </Button>
         </TouchableWithoutFeedback>
       </View>
-    </SafeAreaView>
+    </TouchableWithoutFeedback>
   );
 };
 

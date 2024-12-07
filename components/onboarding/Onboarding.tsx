@@ -58,6 +58,7 @@ const Onboarding = ({ onboardings }: Props) => {
             <TouchableOpacity
               className=""
               onPress={() => {
+                // router.replace('/(auth)/register');
                 router.replace('/(auth)/log-in');
                 // router.push(`/(auth)/verify?email=${email}&role=${role}`);
               }}

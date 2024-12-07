@@ -223,3 +223,4 @@ export const ReturnCode = {
 };
 
 export const LOCAL_STORAGE_JWT_KEY = "jwt";
+export const LOCAL_STORAGE_OTP = "storage_otp";

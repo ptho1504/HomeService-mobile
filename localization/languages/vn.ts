@@ -22,7 +22,9 @@ export const vn = {
   [LocalizationKey.LOG_IN]: "Đăng nhập",
   [LocalizationKey.SIGN_UP]: "Đăng ký",
   [LocalizationKey.MAIL_PLACEHOLADER]: "Nhập email",
+  [LocalizationKey.USERNAME_PLACEHOLDER]: "Nhập username",
   [LocalizationKey.MAIL_VALID]: "Vui lòng nhập địa chỉ email hợp lệ",
+  [LocalizationKey.USER_NAME_VALID]: "Vui lòng nhập username",
   [LocalizationKey.MAIL_INVALID]: "Email đã nhập không hợp lệ",
   [LocalizationKey.OR]: "Hoặc",
   [LocalizationKey.FREELANCER]: "Freelancer",
@@ -33,4 +35,6 @@ export const vn = {
   [LocalizationKey.RESEND]: "Gửi lại",
   [LocalizationKey.SEND_OTP_TEXT]: "Không nhận được mã xác thực ?",
   [LocalizationKey.VERIFY]: "Xác thực",
+  [LocalizationKey.HAVE_ACCOUNT]: "Bạn đã có tài khoản ?",
+  [LocalizationKey.ENTER_VERIFY]: "Nhập mã xác nhận",
 };

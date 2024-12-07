@@ -14,9 +14,8 @@ import { SafeAreaView } from "react-native-safe-area-context";
 
 import { onboardings } from "@/constants";
 import Onboarding from "@/components/onboarding/Onboarding";
-import AntDesign from "@expo/vector-icons/AntDesign";
 
-const Home = () => {
+const Welcome = () => {
   return (
     <SafeAreaView className="flex h-full items-center justify-between bg-red-700">
       {/* Onboards */}
@@ -33,4 +32,4 @@ const Home = () => {
   );
 };
 
-export default Home;
+export default Welcome;

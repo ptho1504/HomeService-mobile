@@ -21,6 +21,7 @@ const Home = () => {
   return (
     <SafeAreaView>
       <Text>Home Page</Text>
+      <Text>Hello {currentUser?.name}</Text>
       <View className="flex">
         <View>
           <TouchableWithoutFeedback>

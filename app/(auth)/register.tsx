@@ -1,4 +1,13 @@
-import { Button, ButtonSpinner, ButtonText } from '@/components/ui/button';
+import {
+  Image,
+  Text,
+  TouchableOpacity,
+  TouchableWithoutFeedback,
+  View,
+} from "react-native";
+import { SafeAreaView } from "react-native-safe-area-context";
+import { setPost } from "@/store/reducers/post";
+import { PostModel } from "@/types/postTypes";
 import {
   FormControl,
   FormControlError,
@@ -8,111 +17,122 @@ import {
   FormControlHelperText,
   FormControlLabel,
   FormControlLabelText,
-} from '@/components/ui/form-control';
-import {
-  AlertCircleIcon,
-  CircleIcon,
-  EyeIcon,
-  MailIcon,
-} from '@/components/ui/icon';
-import { Input, InputField, InputIcon, InputSlot } from '@/components/ui/input';
-import { useLoginMutation, useSendOtpMutation } from '@/services';
-import { Link, router } from 'expo-router';
-import React, { useCallback, useState } from 'react';
-import {
-  Image,
-  Keyboard,
-  Text,
-  TouchableOpacity,
-  TouchableWithoutFeedback,
-  View,
-} from 'react-native';
-import { SafeAreaView } from 'react-native-safe-area-context';
-import { getLocales } from 'expo-localization';
-import { i18n, Language } from '@/localization';
-import { Box } from '@/components/ui/box';
-import { Divider } from '@/components/ui/divider';
-import { HStack } from '@/components/ui/hstack';
-import GoogleSvg from '@/components/svg/GoogleSvg';
-import FacebookSvg from '@/components/svg/FacebookSvg';
+} from "@/components/ui/form-control";
+import { Button, ButtonSpinner, ButtonText } from "@/components/ui/button";
+import { i18n, Language } from "@/localization";
+import { Box } from "@/components/ui/box";
+import { useState } from "react";
+import { Input, InputField, InputIcon, InputSlot } from "@/components/ui/input";
+import { AlertCircleIcon, AtSignIcon, CircleIcon, MailIcon } from "@/components/ui/icon";
 import {
   Radio,
   RadioGroup,
   RadioIcon,
   RadioIndicator,
   RadioLabel,
-} from '@/components/ui/radio';
-import { validateEmail } from '@/utils/helper';
-
+} from "@/components/ui/radio";
+import { Link, router, useLocalSearchParams } from "expo-router";
+import { Divider } from "@/components/ui/divider";
+import * as SecureStore from "expo-secure-store";
+import { validateEmail } from "@/utils/helper";
+import { useSendOtpMutation, useSignupMutation } from "@/services";
+import { LOCAL_STORAGE_JWT_KEY, LOCAL_STORAGE_OTP } from "@/constants";
+import { useDispatch } from "react-redux";
+import { authenticateUser, setUser } from "@/store/reducers";
+import { Keyboard } from "react-native";
 // i18n.locale = getLocales()[0].languageCode ?? "vn";
-i18n.locale = 'vn';
+i18n.locale = "vn";
 i18n.enableFallback = true;
 i18n.defaultLocale = Language.VIETNAMESE;
 
-const LogIn = () => {
+const Register = () => {
+  //
+  // const email = "tho.nguyen1504@hcmut.edu.vn";
+  const dispatch = useDispatch();
+  const { email } = useLocalSearchParams<{
+    email: string;
+  }>();
+
   // Set Valid
   const [isInvalid, setIsInvalid] = useState(false);
-  const [errorText, setErrorText] = useState('');
+  const [errorText, setErrorText] = useState("");
   const [loading, setLoading] = useState(false);
 
   const [isRoleInvalid, setIsRoleInvalid] = useState(false);
-  const [errorRoleText, setErrorRoleText] = useState('');
+  const [errorRoleText, setErrorRoleText] = useState("");
 
   // Set form
-  const [email, setEmail] = useState<string>('');
-  const [role, setRole] = useState<string>('');
+  const [username, setUsername] = useState<string>("");
+  const [role, setRole] = useState<string>("");
   // Call Api
-  const [sendOtp] = useSendOtpMutation();
+  const [signUp] = useSignupMutation();
 
   const handleSubmit = async () => {
-    setLoading(true);
-    setErrorText('');
-    setIsInvalid(false);
-    setIsRoleInvalid(false);
-
-    // Check Email
-    if (!validateEmail(email)) {
-      setIsInvalid(true);
-      setErrorText(i18n.t('mail_invalid'));
-      setLoading(false);
+    const otp = await SecureStore.getItemAsync(LOCAL_STORAGE_OTP);
+    if (!otp) {
       return;
     }
+    console.log(email, username, role, otp);
+
+    setLoading(true);
+    setErrorText("");
+    setIsInvalid(false);
+    setIsRoleInvalid(false);
 
     // Check Role
     if (!role) {
       setIsRoleInvalid(true);
-      setErrorRoleText(i18n.t('role_not_found'));
+      setErrorRoleText(i18n.t("role_not_found"));
       setLoading(false);
       return;
     }
 
     // console.log(email, role);
 
-    const response = await sendOtp({ email, role });
+    const response = await signUp({
+      email: email,
+      role: role,
+      name: username,
+      otp: otp!,
+    });
     console.log(response);
 
     if (response.error) {
-      const message = response.error.data?.message || 'Unknown error';
+      const message = response.error.data?.message || "Unknown error";
       // console.log(message);
       setIsInvalid(true);
       setErrorText(message);
       setLoading(false);
-    } else {
-      setLoading(false);
+    } else if (response.data) {
       setIsInvalid(false);
-      router.push(`/(auth)/verify?email=${email}&role=${role}`);
+
+      dispatch(setUser(response.data.items));
+      dispatch(authenticateUser(true));
+
+      // Save to Async storage
+      if (!response.data.items.jwt) {
+        console.error("JWT is missing!");
+        return;
+      }
+
+      await SecureStore.deleteItemAsync(LOCAL_STORAGE_OTP);
+
+      await SecureStore.setItemAsync(
+        LOCAL_STORAGE_JWT_KEY,
+        response.data.items.jwt!
+      );
+
+      setLoading(false);
+      router.replace("/(customer)/(home)");
     }
   };
 
   return (
-    <TouchableWithoutFeedback
-      className="flex h-full items-center justify-between"
-      onPress={Keyboard.dismiss}
-    >
+    <TouchableWithoutFeedback className="flex h-full items-center justify-between" onPress={Keyboard.dismiss}>
       <View className="flex items-center justify-start h-full bg-white">
         <Image
           className="h-full w-full absolute opacity-50"
-          source={require('@/assets/images/bg.png')}
+          source={require("@/assets/images/bg.png")}
         />
 
         {/* header */}
@@ -131,7 +151,7 @@ const LogIn = () => {
               className="bg-white"
             >
               <ButtonText className="text-primary-500">
-                {i18n.t('language')}
+                {i18n.t("language")}
               </ButtonText>
             </Button>
           </View>
@@ -156,23 +176,56 @@ const LogIn = () => {
             <FormControlLabel>
               <FormControlLabelText>Email</FormControlLabelText>
             </FormControlLabel>
+
             <TouchableWithoutFeedback>
+              <Input className="my-1 flex items-center h-12 border-none">
+                <InputSlot className="pl-3 flex items-center">
+                  <InputIcon as={MailIcon} size={"lg"} />
+                </InputSlot>
+                <InputField
+                  className="leading-none px-4 py-2 h-full cursor-not-allowed opacity-80"
+                  type="text"
+                  value={email}
+                  readOnly
+                  editable={false}
+                />
+              </Input>
+            </TouchableWithoutFeedback>
+
+            <FormControlError>
+              <FormControlErrorIcon as={AlertCircleIcon} />
+              <FormControlErrorText>{errorText}</FormControlErrorText>
+            </FormControlError>
+          </FormControl>
+
+          {/* Username */}
+          <FormControl
+            isInvalid={isInvalid}
+            size="md"
+            isDisabled={false}
+            isReadOnly={false}
+            isRequired={false}
+          >
+            <FormControlLabel>
+              <FormControlLabelText>Username</FormControlLabelText>
+            </FormControlLabel>
+            <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
               <Input className="my-1 flex items-center h-12">
                 <InputSlot className="pl-3 flex items-center">
-                  <InputIcon as={MailIcon} size={'lg'} />
+                  <InputIcon as={AtSignIcon} size={"lg"} />
                 </InputSlot>
                 <InputField
                   className="leading-none px-4 py-2 h-full"
                   type="text"
-                  placeholder={`${i18n.t('mail_placeholder')}`}
-                  value={email}
-                  onChangeText={text => setEmail(text)}
+                  placeholder={`${i18n.t("username_placeholder")}`}
+                  value={username}
+                  onChangeText={(text) => setUsername(text)}
                 />
               </Input>
             </TouchableWithoutFeedback>
             <FormControlHelper>
               <FormControlHelperText>
-                {i18n.t('mail_valid')}
+                {i18n.t("username_valid")}
               </FormControlHelperText>
             </FormControlHelper>
             <FormControlError>
@@ -180,9 +233,7 @@ const LogIn = () => {
               <FormControlErrorText>{errorText}</FormControlErrorText>
             </FormControlError>
           </FormControl>
-
           {/* Role */}
-
           <FormControl
             isInvalid={isRoleInvalid}
             size="md"
@@ -203,7 +254,7 @@ const LogIn = () => {
                 <RadioIndicator>
                   <RadioIcon as={CircleIcon} />
                 </RadioIndicator>
-                <RadioLabel>{i18n.t('freelancer')}</RadioLabel>
+                <RadioLabel>{i18n.t("freelancer")}</RadioLabel>
               </Radio>
               <Radio
                 value="CUSTOMER"
@@ -214,12 +265,12 @@ const LogIn = () => {
                 <RadioIndicator>
                   <RadioIcon as={CircleIcon} />
                 </RadioIndicator>
-                <RadioLabel>{i18n.t('customer')}</RadioLabel>
+                <RadioLabel>{i18n.t("customer")}</RadioLabel>
               </Radio>
             </RadioGroup>
             <FormControlHelper>
               <FormControlHelperText>
-                {i18n.t('role_valid')}
+                {i18n.t("role_valid")}
               </FormControlHelperText>
             </FormControlHelper>
             <FormControlError>
@@ -239,60 +290,18 @@ const LogIn = () => {
                 variant="solid"
                 action="positive"
               >
-                {loading && <ButtonSpinner color={'#D1D5DB'} />}
+                {loading && <ButtonSpinner color={"#D1D5DB"} />}
                 <ButtonText className="text-white">
-                  {i18n.t('login')}
+                  {i18n.t("login")}
                 </ButtonText>
               </Button>
             </TouchableWithoutFeedback>
 
-            {/* You have account */}
-            <Box className="flex items-center mt-4">
-              <Link className="text-center" href={'/(auth)/sign-up'}>
-                {i18n.t('not_have_account')}
-              </Link>
-            </Box>
-
-            <Box className="mt-3 px-10 w-full flex flex-row items-center justify-center">
+            <Box className="mt-3 px-10  flex flex-row items-center justify-center opacity-0 ">
               <Divider className="my-1 w-1/2" />
-              <Text className="text-center px-4">{i18n.t('or')}</Text>
+              <Text className="text-center px-4">{i18n.t("or")}</Text>
               <Divider className="my-1 w-1/2" />
             </Box>
-            {/* Login third party */}
-            <HStack
-              space="md"
-              reversed={false}
-              className="flex justify-center items-center mt-4"
-            >
-              {/* Google */}
-              <TouchableOpacity className="hover:bg-red-500">
-                <Button
-                  variant="outline"
-                  action="secondary"
-                  className="bg-white flex flex-row items-center border border-gray-200 py-5"
-                  isPressed={false}
-                >
-                  <GoogleSvg />
-                  <ButtonText className="h-6 text-black text-lg flex items-center">
-                    Google
-                  </ButtonText>
-                </Button>
-              </TouchableOpacity>
-
-              {/* Facebook */}
-              <TouchableOpacity>
-                <Button
-                  variant="outline"
-                  action="secondary"
-                  className="bg-white flex flex-row items-center border border-gray-200 py-5"
-                >
-                  <FacebookSvg className="w-7 h-7" />
-                  <ButtonText className="h-6 text-black text-lg flex items-center">
-                    Facebook
-                  </ButtonText>
-                </Button>
-              </TouchableOpacity>
-            </HStack>
           </Box>
         </Box>
       </View>
@@ -300,4 +309,4 @@ const LogIn = () => {
   );
 };
 
-export default LogIn;
+export default Register;

@@ -32,7 +32,7 @@ export interface LoginResponse {
 
 export interface SignUpRequest {
   email: string;
-  password: string;
+  name: string;
   role: string;
   otp: string;
 }
@@ -63,6 +63,10 @@ export interface SendOtpRequest {
 export interface VerifyRequest {
   email: string;
   otp: string;
+}
+
+export interface VerifyJwtForUserRequest {
+  jwt: string;
 }
 
 const baseUrl = "/auth";
@@ -97,6 +101,13 @@ const authApi = API.injectEndpoints({
         body: credentials,
       }),
     }),
+    verifyJwtForUser: build.mutation<Response<User>, VerifyJwtForUserRequest>({
+      query: (credentials) => ({
+        url: `${baseUrl}/verifyJwtForUser`,
+        method: "POST",
+        body: credentials,
+      }),
+    }),
   }),
 });
 
@@ -105,5 +116,6 @@ export const {
   useSignupMutation,
   useSendOtpMutation,
   useVerifyOtpMutation,
+  useVerifyJwtForUserMutation,
 } = authApi;
 export default authApi;

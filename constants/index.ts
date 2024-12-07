@@ -222,4 +222,5 @@ export const ReturnCode = {
   SUCCESS: 1000,
 };
 
-export const LOCAL_STORAGE_JWT_KEY = 'jwt';
+export const LOCAL_STORAGE_JWT_KEY = "jwt";
+export const LOCAL_STORAGE_OTP = "storage_otp";

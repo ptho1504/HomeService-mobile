@@ -20,8 +20,8 @@ import { Button, ButtonSpinner, ButtonText } from "@/components/ui/button";
 import { useDispatch } from "react-redux";
 import { setUser, authenticateUser } from "@/store/reducers/auth";
 import * as SecureStore from "expo-secure-store";
-import { LOCAL_STORAGE_JWT_KEY } from "@/constants";
-
+import { LOCAL_STORAGE_JWT_KEY, LOCAL_STORAGE_OTP } from "@/constants";
+import { Button as ButtonReacNative } from "react-native";
 // i18n.locale = getLocales()[0].languageCode ?? "vn";
 i18n.locale = "vn";
 i18n.enableFallback = true;
@@ -34,21 +34,45 @@ const VerifySignUp = () => {
 
   const [isLoading, SetIsLoading] = useState(false);
   const [otp, setOtp] = useState<string | null>(null);
-  const [login] = useLoginMutation();
+  const [verifyOtp] = useVerifyOtpMutation();
   const dispatch = useDispatch();
 
   // Handle Submit
-  const handleSubmit = async () => {};
+  const handleSubmit = async () => {
+    if (otp) {
+      console.log("email", email);
+      SetIsLoading(true);
+      const response = await verifyOtp({ email, otp: otp });
+      console.log(response);
+      if (response.error) {
+        SetIsLoading(false);
+        // router.replace("/(auth)/verify");
+      } else if (response.data) {
+        // Save to Async storage
+
+        await SecureStore.setItemAsync(LOCAL_STORAGE_OTP, otp);
+
+        SetIsLoading(false);
+        router.replace(`/(auth)/register?email=${email}`);
+      }
+    }
+  };
+
+  // Handle Resend
+  const handleResend = async () => {};
+
   return (
     <SafeAreaView className="flex h-full items-center justify-between bg-white">
       <View className="flex h-full bg-white p-4 items-center">
         <StatusBar />
         <Image
-          source={require('@/assets/images/verify_signup.jpg')}
+          source={require("@/assets/images/verify_signup.jpg")}
           resizeMode="contain"
           className="w-60 h-60 mb-4"
         />
-        <Text className="text-2xl font-bold my-3">Enter Verification Code</Text>
+        <Text className="text-2xl font-bold my-3">
+          {i18n.t("enter_verify")}
+        </Text>
         <Text className="text-xl font-font-normal">
           We are automatically send OTP to
         </Text>
@@ -76,25 +100,23 @@ const VerifySignUp = () => {
 
         <View className="my-3 flex items-center flex-row gap-3">
           <Text>{i18n.t("send_otp_text")}</Text>
-          <TouchableOpacity>
+          <TouchableOpacity onPress={handleResend}>
             <Text className="text-base font-bold color-green-600">
               {i18n.t("resend")}
             </Text>
           </TouchableOpacity>
         </View>
-        <TouchableWithoutFeedback>
-          <Button
-            className="w-full self-end mt-2 bg-green-500 rounded-lg"
-            size="md"
-            onPress={handleSubmit}
-            variant="solid"
-            action="positive"
-            disabled={otp?.length != 6}
-          >
-            {isLoading && <ButtonSpinner color={"#D1D5DB"} />}
-            <ButtonText className="text-white">{i18n.t("signup")}</ButtonText>
-          </Button>
-        </TouchableWithoutFeedback>
+        <Button
+          className="w-full self-end mt-2 bg-green-500 rounded-lg"
+          size="md"
+          onPress={handleSubmit}
+          variant="solid"
+          action="positive"
+          disabled={otp?.length != 6}
+        >
+          {isLoading && <ButtonSpinner color={"#D1D5DB"} />}
+          <ButtonText className="text-white">{i18n.t("signup")}</ButtonText>
+        </Button>
       </View>
     </SafeAreaView>
   );

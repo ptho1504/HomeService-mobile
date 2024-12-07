@@ -16,7 +16,9 @@ export enum LocalizationKey {
   LOG_IN = "login",
   SIGN_UP = "signup",
   MAIL_PLACEHOLADER = "mail_placeholder",
+  USERNAME_PLACEHOLDER = "username_placeholder",
   MAIL_VALID = "mail_valid",
+  USER_NAME_VALID = "username_valid",
   MAIL_INVALID = "mail_invalid",
   ROLE_VALID = "role_valid",
   ROLE_NOT_FOUND = "role_not_found",
@@ -28,4 +30,5 @@ export enum LocalizationKey {
   SEND_OTP_TEXT = "send_otp_text",
   RESEND = "resend",
   VERIFY = "verify",
+  ENTER_VERIFY = "enter_verify",
 }

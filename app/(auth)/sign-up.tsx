@@ -81,7 +81,7 @@ const SignUp = () => {
     } else {
       setLoading(false);
       setIsInvalid(false);
-      router.push(`/(auth)/verify?email=${email}`);
+      router.push(`/(auth)/verify_signup?email=${email}`);
     }
   };
 

@@ -68,14 +68,15 @@ const Verify = () => {
   return (
     <SafeAreaView className="flex h-full items-center justify-between bg-white">
       <View className="flex h-full bg-white p-4 items-center">
-      
         <StatusBar />
         <Image
-          source={require('@/assets/images/verify.jpg')}
+          source={require("@/assets/images/verify.jpg")}
           resizeMode="contain"
           className="w-60 h-60 mb-4"
         />
-        <Text className="text-2xl font-bold my-3">Enter Verification Code</Text>
+        <Text className="text-2xl font-bold my-3">
+          {i18n.t("enter_verify")}
+        </Text>
         <Text className="text-xl font-font-normal">
           We are automatically send OTP to
         </Text>

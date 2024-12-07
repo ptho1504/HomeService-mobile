@@ -22,7 +22,9 @@ export const en = {
   [LocalizationKey.LOG_IN]: "Log in",
   [LocalizationKey.SIGN_UP]: "Sign up",
   [LocalizationKey.MAIL_PLACEHOLADER]: "Enter your email",
+  [LocalizationKey.USERNAME_PLACEHOLDER]: "Enter your user",
   [LocalizationKey.MAIL_VALID]: "Enter valid email",
+  [LocalizationKey.USER_NAME_VALID]: "Enter valid username",
   [LocalizationKey.OR]: "Or",
   [LocalizationKey.MAIL_INVALID]: "Mail is not valid",
   [LocalizationKey.FREELANCER]: "Freelancer",
@@ -34,4 +36,5 @@ export const en = {
   [LocalizationKey.SEND_OTP_TEXT]: "Don't receive the code ?",
   [LocalizationKey.VERIFY]: "Verify",
   [LocalizationKey.HAVE_ACCOUNT]: "Already have account ?",
+  [LocalizationKey.ENTER_VERIFY]: "Enter Verification Code",
 };

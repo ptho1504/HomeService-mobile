@@ -17,10 +17,11 @@ import { useGetPostsByUserIdQuery } from "@/services/post";
 const Home = () => {
   const currentUser = useSelector(selectUser);
   // console.log("currentUser", currentUser);
-  
+
   return (
     <SafeAreaView>
       <Text>Home Page</Text>
+      <Text>Hello {currentUser?.name}</Text>
       <View className="flex">
         <View>
           <TouchableWithoutFeedback>

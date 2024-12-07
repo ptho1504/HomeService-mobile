@@ -1,32 +1,16 @@
-import PostStatusBadge from '@/components/activity/PostStatusBadge';
 import { Box } from '@/components/ui/box';
-import { Card } from '@/components/ui/card';
 import {
   Toast,
   ToastDescription,
   ToastTitle,
   useToast,
 } from '@/components/ui/toast';
-import { VStack } from '@/components/ui/vstack';
-import { PackageName, PostStatus, WorkType } from '@/constants';
+import { PackageName } from '@/constants';
 import { useGetPostsByUserIdQuery } from '@/services/post';
 import React, { useEffect } from 'react';
-import { SafeAreaView, ScrollView, View } from 'react-native';
-import moment from 'moment';
-import {
-  convertMinuteToHour,
-  formatTimeRange,
-  normalizeDate,
-  normalizeDateTime,
-} from '@/utils/dateUtil';
-import { Divider } from '@/components/ui/divider';
-import { HStack } from '@/components/ui/hstack';
-import Ionicons from '@expo/vector-icons/Ionicons';
-import { Text } from '@/components/ui/text';
+import { SafeAreaView } from 'react-native';
 import { Button, ButtonText } from '@/components/ui/button';
 import { router } from 'expo-router';
-import { Center } from '@/components/ui/center';
-import { Skeleton, SkeletonText } from '@/components/ui/skeleton';
 import PostList from '@/components/activity/PostList';
 import PostSkeleton from '@/components/activity/PostSkeleton';
 import { PostModel, RootStackParamList } from '@/types/postTypes';
@@ -41,9 +25,16 @@ interface Props {
     | RouteProp<RootStackParamList, 'PastWork'>;
 }
 
-const Activities = ({ route }: Props) => {
-  const { data, error, isLoading } = useGetPostsByUserIdQuery(userId);
+const Posts = ({ route }: Props) => {
   const { status } = route.params;
+  const query =
+    status === 'UPCOMING'
+      ? { id: userId, packageName: PackageName._1DAY.key }
+      : status === 'PACKAGE'
+      ? { id: userId, packageName: PackageName._1MONTH.key }
+      : { id: userId };
+  const { data, error, isFetching } = useGetPostsByUserIdQuery(query);
+
   const toast = useToast();
 
   useEffect(() => {
@@ -67,29 +58,10 @@ const Activities = ({ route }: Props) => {
   }, []);
 
   let posts: PostModel[] = data?.items ? data?.items : [];
-  if (status === 'UPCOMING') {
-    posts = posts.filter(
-      post =>
-        [
-          PostStatus.SCHEDULED.key,
-          PostStatus.DOING.key,
-          PostStatus.INITIAL.key,
-        ].includes(post.status) && post.packageName === PackageName._1DAY.key,
-    );
-  } else if (status === 'PACKAGE') {
-    posts = posts.filter(
-      post =>
-        [
-          PostStatus.SCHEDULED.key,
-          PostStatus.DOING.key,
-          PostStatus.INITIAL.key,
-        ].includes(post.status) && post.packageName !== PackageName._1DAY.key,
-    );
-  }
 
   return (
     <SafeAreaView className="flex h-full">
-      {isLoading ? <PostSkeleton /> : <PostList posts={posts} />}
+      {isFetching ? <PostSkeleton /> : <PostList posts={posts} />}
       <Box className="sticky bottom-0 p-4">
         <Button
           onPress={() => router.push('../(home)')}
@@ -104,4 +76,4 @@ const Activities = ({ route }: Props) => {
   );
 };
 
-export default Activities;
+export default Posts;

@@ -1,6 +1,6 @@
 import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs';
-import Activities from '.';
 import { RootStackParamList } from '@/types/postTypes';
+import Posts from '.';
 
 const Tab = createMaterialTopTabNavigator<RootStackParamList>();
 
@@ -16,19 +16,19 @@ export default function ActivityLayout() {
       <Tab.Screen
         name="UpcomingWork"
         options={{ title: 'Chờ làm' }}
-        component={Activities} // Truyền component mà không cần hàm inline
+        component={Posts} // Truyền component mà không cần hàm inline
         initialParams={{ status: 'UPCOMING' }} // Truyền tham số
       />
       <Tab.Screen
         name="PackageWork"
         options={{ title: 'Theo gói' }}
-        component={Activities}
+        component={Posts}
         initialParams={{ status: 'PACKAGE' }}
       />
       <Tab.Screen
         name="PastWork"
         options={{ title: 'Lịch sử' }}
-        component={Activities}
+        component={Posts}
         initialParams={{ status: 'ALL' }}
       />
     </Tab.Navigator>

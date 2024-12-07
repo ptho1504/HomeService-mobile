@@ -19,7 +19,10 @@ const userId = 'USER-1';
 
 const Post = () => {
   const { workType } = useLocalSearchParams();
-  const { data, error, isLoading } = useGetPostsByUserIdQuery(userId);
+  const { data, error, isFetching } = useGetPostsByUserIdQuery({
+    id: userId,
+    workId: workType === WorkType.BABYSITTING.key ? 'WORK-2' : 'WORK-1',
+  });
   const toast = useToast();
 
   useEffect(() => {
@@ -43,18 +46,34 @@ const Post = () => {
   }, []);
 
   let posts: PostModel[] = data?.items
-    ? data?.items.filter(
-        post =>
-          post.work.name === WorkType[workType as keyof typeof WorkType].key,
-      )
+    ? data?.items.slice().sort((a, b) => {
+        const dateA = new Date(
+          a.createdAt[0],
+          a.createdAt[1],
+          a.createdAt[2],
+          a.createdAt[3],
+          a.createdAt[4],
+          a.createdAt[5],
+        );
+        const dateB = new Date(
+          b.createdAt[0],
+          b.createdAt[1],
+          b.createdAt[2],
+          b.createdAt[3],
+          b.createdAt[4],
+          b.createdAt[5],
+        );
+        // Nếu các phần tử so sánh được bằng nhau, ưu tiên mảng có độ dài lớn hơn
+        return dateB.getTime() - dateA.getTime();
+      })
     : [];
 
   return (
     <SafeAreaView className="flex h-full">
-      {isLoading ? <PostSkeleton /> : <PostList posts={posts} />}
+      {isFetching ? <PostSkeleton /> : <PostList posts={posts} />}
       <Box className="sticky bottom-0 p-4">
         <Button
-          onPress={() => router.push('/HouseCleaningForm')}
+          onPress={() => router.push(`/PostForm?workType=${workType}`)}
           size="xl"
           className="bg-green-500 flex flex-row items-center justify-center"
           action="positive"

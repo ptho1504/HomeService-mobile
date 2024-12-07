@@ -109,7 +109,7 @@ export const PackageName = {
 export const PaymentType = {
   QR: {
     key: 'QR',
-    value: 'Quét mã thanh toán',
+    value: 'Trừ vào số dư',
   },
   CASH: {
     key: 'CASH',
@@ -222,4 +222,4 @@ export const ReturnCode = {
   SUCCESS: 1000,
 };
 
-export const LOCAL_STORAGE_JWT_KEY = "jwt";
+export const LOCAL_STORAGE_JWT_KEY = 'jwt';

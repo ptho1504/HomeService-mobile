@@ -1,23 +1,15 @@
-import React, { useEffect, useState } from 'react';
-import { SafeAreaView, ScrollView, Switch, View } from 'react-native';
+import React, { useState } from 'react';
+import { SafeAreaView, ScrollView } from 'react-native';
 import { VStack } from '@/components/ui/vstack';
 import { HStack } from '@/components/ui/hstack';
 import { Card } from '@/components/ui/card';
 import { Text } from '@/components/ui/text';
-import { Pressable } from '@/components/ui/pressable';
 import { Heading } from '@/components/ui/heading';
-import { Grid, GridItem } from '@/components/ui/grid';
-import {
-  CreatePostModel,
-  HouseCleaningOption,
-  Package,
-  WorkDay,
-} from '@/types/postTypes';
+import { CreatePostModel, HouseCleaningOption } from '@/types/postTypes';
 import { Box } from '@/components/ui/box';
 import Ionicons from '@expo/vector-icons/Ionicons';
-import { generateNext7Days } from '@/utils/dateUtil';
 import ScrollPickerModal from '@/components/post/ScrollPickerModal';
-import { Button, ButtonText } from '@/components/ui/button';
+import { Button, ButtonSpinner, ButtonText } from '@/components/ui/button';
 import {
   Radio,
   RadioGroup,
@@ -27,6 +19,18 @@ import {
 } from '@/components/ui/radio';
 import { CircleIcon } from '@/components/ui/icon';
 import { Textarea, TextareaInput } from '@/components/ui/textarea';
+import { useDispatch, useSelector } from 'react-redux';
+import { clearPostForm, selectPostForm } from '@/store/reducers';
+import { router, useLocalSearchParams } from 'expo-router';
+import { useCreatePostMutation } from '@/services/post';
+import {
+  useToast,
+  Toast,
+  ToastTitle,
+  ToastDescription,
+} from '@/components/ui/toast';
+import PostInfo from '@/components/post/PostInfo';
+import PostAddress from '@/components/post/PostAddress';
 
 const options: HouseCleaningOption[] = [
   { area: 60, totalFreelancers: 2, duration: 3 },
@@ -37,61 +41,69 @@ const options: HouseCleaningOption[] = [
   { area: 400, totalFreelancers: 4, duration: 8 },
 ];
 
-const packages: Package[] = [
-  {
-    key: '_1DAY',
-    value: 'Gói lẻ',
-  },
-  {
-    key: '_1MONTH',
-    value: '1 tháng',
-  },
-  {
-    key: '_2MONTH',
-    value: '2 tháng',
-  },
-  {
-    key: '_3MONTH',
-    value: '3 tháng',
-  },
-];
+const addressId = '9b18beec-a0da-4b40-a377-b8adc0612b2a';
 
-interface Props {
-  postForm: CreatePostModel;
-}
-
-const Checkout = ({ postForm }: Props) => {
-  const [selectedOption, setSelectedOption] = useState<HouseCleaningOption>(
-    options[0],
-  );
-  const [selectedPackage, setSelectedPackage] = useState<Package>(packages[0]);
-  const [daysOfWeek, setDaysOfWeek] = useState<WorkDay[]>([]);
-  const [selectedDay, setSelectedDay] = useState<string>('');
+const Checkout = () => {
+  const dispatch = useDispatch();
+  const [createPost, { isLoading, error, data }] = useCreatePostMutation();
+  const { workType } = useLocalSearchParams();
   const [showPickerModal, setShowPickerModal] = useState<boolean>(false);
 
   const [selectedHour, setSelectedHour] = useState<number>(0);
   const [selectedMinute, setSelectedMinute] = useState<number>(0);
-  const [chooseFreelancers, setChooseFreelancers] = useState<boolean>(false);
-  const [paymentType, setPaymentType] = useState<string>('CASH');
-  const [customerNote, setCustomerNote] = useState<string>('CASH');
+  const [paymentType, setPaymentType] = useState<string>('QR');
+  const [customerNote, setCustomerNote] = useState<string>('');
 
-  const toggleSwitch = async () => {
-    setChooseFreelancers(() => !chooseFreelancers);
-  };
+  const toast = useToast();
 
-  useEffect(() => {
-    const days: WorkDay[] = generateNext7Days();
-    setDaysOfWeek(days);
-    setSelectedDay(days[0]?.day); // Mặc định chọn ngày đầu tiên
-  }, []);
+  const postForm = useSelector(selectPostForm);
 
-  const handleOptionSelect = (option: HouseCleaningOption) => {
-    console.info({ option });
-    setSelectedOption(option);
-  };
+  const handlePost = async () => {
+    if (postForm != null) {
+      const data: CreatePostModel = {
+        ...postForm,
+        addressId: addressId,
+        customerNote: customerNote,
+        paymentType: paymentType,
+      };
+      const res = await createPost(data);
+      if (error || res.data?.returnCode != 1000) {
+        toast.show({
+          placement: 'top',
+          duration: 3000,
+          render: ({ id }) => {
+            const uniqueToastId = 'toast-' + id;
+            return (
+              <Toast nativeID={uniqueToastId} action="error" variant="outline">
+                <ToastTitle>Đăng công việc thất bại</ToastTitle>
+                <ToastDescription>{res.error.data.message}</ToastDescription>
+              </Toast>
+            );
+          },
+        });
+      } else {
+        toast.show({
+          placement: 'top',
+          duration: 3000,
+          render: ({ id }) => {
+            const uniqueToastId = 'toast-' + id;
+            return (
+              <Toast
+                nativeID={uniqueToastId}
+                action="success"
+                variant="outline"
+              >
+                <ToastTitle>Thành công</ToastTitle>
+                <ToastDescription>Đăng công việc thành công</ToastDescription>
+              </Toast>
+            );
+          },
+        });
+        dispatch(clearPostForm());
 
-  const handlePackageSelect = (pack: Package) => {
-    setSelectedPackage(pack);
+        router.dismissTo(`/Post?workType=${workType}`);
+      }
+    }
   };
 
   return (
@@ -99,78 +111,8 @@ const Checkout = ({ postForm }: Props) => {
       <ScrollView>
         <Box className="overflow-y-auto m-3">
           <VStack space="md">
-            <Card size="md" variant="elevated">
-              <VStack space="md">
-                <Heading>Địa chỉ làm việc</Heading>
-                <VStack
-                  space="md"
-                  className="border p-4 rounded-lg border-secondary-50"
-                >
-                  <HStack space="sm" className="items-center">
-                    <Text className="text-red-600 text-lg">
-                      <Ionicons name="location" size={24} />
-                    </Text>
-                    <Text className="font-medium text-lg">
-                      Phước Tân, Biên Hòa, Đồng Nai
-                    </Text>
-                  </HStack>
-                  <HStack className="justify-between items-center">
-                    <HStack space="sm" className="items-center">
-                      <Text className="text-cyan-600 text-lg">
-                        <Ionicons name="person" size={24} />
-                      </Text>
-                      <VStack>
-                        <Text className="font-medium text-lg">
-                          Nguyễn Đại Tiến
-                        </Text>
-                        <Text>0346066323</Text>
-                      </VStack>
-                    </HStack>
-                    <Button
-                      action="positive"
-                      className="rounded-2xl bg-green-600"
-                      size="sm"
-                    >
-                      <ButtonText>Thay đổi</ButtonText>
-                    </Button>
-                  </HStack>
-                </VStack>
-              </VStack>
-            </Card>
-            <Card size="md" variant="elevated">
-              <VStack space="md">
-                <Heading>Thông tin công việc</Heading>
-                <VStack
-                  space="md"
-                  className="border p-4 rounded-lg border-secondary-50"
-                >
-                  <HStack space="sm" className="items-center">
-                    <Text className="font-medium text-lg">
-                      Loại công việc:{' '}
-                    </Text>
-                    <Text className="text-lg">Dọn dẹp nhà</Text>
-                  </HStack>
-                  <HStack space="sm" className="items-center">
-                    <Text className="font-medium text-lg">Diện tích:</Text>
-                    <Text className="text-lg">60 m²</Text>
-                  </HStack>
-                  <HStack space="sm" className="items-center">
-                    <Text className="font-medium text-lg">Thời lượng:</Text>
-                    <Text className="text-lg">3 người/2 giờ</Text>
-                  </HStack>
-                  <HStack space="sm" className="items-center">
-                    <Text className="font-medium text-lg">Loại gói:</Text>
-                    <Text className="text-lg">1 tháng</Text>
-                  </HStack>
-                  <HStack space="sm" className="items-center">
-                    <Text className="font-medium text-lg">
-                      Giờ bắt đầu làm:
-                    </Text>
-                    <Text className="text-lg">02:30</Text>
-                  </HStack>
-                </VStack>
-              </VStack>
-            </Card>
+            <PostAddress canChange={true} />
+            <PostInfo workType={workType} postForm={postForm} />
             <Card size="md" variant="elevated">
               <VStack space="md">
                 <Heading>Hình thức thanh toán</Heading>
@@ -257,14 +199,16 @@ const Checkout = ({ postForm }: Props) => {
           <Box className="flex flex-row justify-between items-center">
             <Text className="text-xl font-semibold">Tổng cộng:</Text>
             <Text className="text-xl font-semibold text-green-600">
-              100,000 VND
+              {postForm?.price.toLocaleString()} VND
             </Text>
           </Box>
           <Button
             size="xl"
             className="bg-green-500 flex flex-row items-center justify-center"
             action="positive"
+            onPress={handlePost}
           >
+            {isLoading && <ButtonSpinner className="text-secondary-50" />}
             <ButtonText>Đăng việc</ButtonText>
           </Button>
         </VStack>

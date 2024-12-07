@@ -28,18 +28,15 @@ const App = () => {
       if (!jwt) {
         return;
       }
-      console.log("jwt", jwt);
 
       const response = await verifyJwtForUser({ jwt });
 
-      console.log(response);
 
       if (response.error) {
         const message = response.error.data?.message || "Unknown error";
         console.error(message);
         return;
       } else if (response.data) {
-        console.log("abcdefg");
         dispatch(setUser(response.data.items));
         dispatch(authenticateUser(true));
       }

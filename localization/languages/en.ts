@@ -37,4 +37,6 @@ export const en = {
   [LocalizationKey.VERIFY]: "Verify",
   [LocalizationKey.HAVE_ACCOUNT]: "Already have account ?",
   [LocalizationKey.ENTER_VERIFY]: "Enter Verification Code",
+  [LocalizationKey.DISCOVER_WELCOME]:
+    "Explore services and experiences from today? ",
 };

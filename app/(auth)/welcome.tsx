@@ -14,8 +14,10 @@ import { SafeAreaView } from "react-native-safe-area-context";
 
 import { onboardings } from "@/constants";
 import Onboarding from "@/components/onboarding/Onboarding";
+import Loading from "@/components/loading/Loading";
 
 const Welcome = () => {
+  return <Loading />;
   return (
     <SafeAreaView className="flex h-full items-center justify-between bg-red-700">
       {/* Onboards */}

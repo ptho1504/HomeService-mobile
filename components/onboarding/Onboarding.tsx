@@ -58,8 +58,8 @@ const Onboarding = ({ onboardings }: Props) => {
             <TouchableOpacity
               className=""
               onPress={() => {
-                // router.replace('/(auth)/register');
-                router.replace('/(auth)/log-in');
+                // router.replace('/(auth)/log-in');
+                router.replace('/(customer)/(home)');
                 // router.push(`/(auth)/verify?email=${email}&role=${role}`);
               }}
             >

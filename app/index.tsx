@@ -11,6 +11,7 @@ import * as SecureStore from "expo-secure-store";
 import { LOCAL_STORAGE_JWT_KEY } from "@/constants";
 import { useVerifyJwtForUserMutation } from "@/services";
 import { useDispatch } from "react-redux";
+import Loading from "@/components/loading/Loading";
 
 const App = () => {
   // const isAuthenticated = useSelector(selectIsAuthenticated);
@@ -30,7 +31,6 @@ const App = () => {
       }
 
       const response = await verifyJwtForUser({ jwt });
-
 
       if (response.error) {
         const message = response.error.data?.message || "Unknown error";
@@ -52,11 +52,7 @@ const App = () => {
   }, []);
 
   if (loading) {
-    return (
-      <View className="flex-1 justify-center items-center">
-        <Text>Loading...</Text>
-      </View>
-    );
+    return <Loading />;
   }
 
   if (isAuthenticated) {

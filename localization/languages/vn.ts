@@ -37,4 +37,5 @@ export const vn = {
   [LocalizationKey.VERIFY]: "Xác thực",
   [LocalizationKey.HAVE_ACCOUNT]: "Bạn đã có tài khoản ?",
   [LocalizationKey.ENTER_VERIFY]: "Nhập mã xác nhận",
+  [LocalizationKey.DISCOVER_WELCOME]: "Khám phá các dịch vụ kể từ hôm nay",
 };

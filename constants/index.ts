@@ -109,7 +109,7 @@ export const PackageName = {
 export const PaymentType = {
   QR: {
     key: 'QR',
-    value: 'Quét mã thanh toán',
+    value: 'Trừ vào số dư',
   },
   CASH: {
     key: 'CASH',

@@ -1,9 +1,9 @@
-import { Button, ButtonText } from "@/components/ui/button";
-import { LOCAL_STORAGE_JWT_KEY } from "@/constants";
-import { selectUser } from "@/store/reducers";
-import { WorkType } from "@/constants";
-import { router } from "expo-router";
-import React, { useEffect, useState } from "react";
+import { Button, ButtonText } from '@/components/ui/button';
+import { LOCAL_STORAGE_JWT_KEY } from '@/constants';
+import { selectUser } from '@/store/reducers';
+import { WorkType } from '@/constants';
+import { router } from 'expo-router';
+import React, { useEffect, useState } from 'react';
 import {
   View,
   Text,

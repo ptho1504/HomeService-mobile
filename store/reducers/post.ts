@@ -1,20 +1,26 @@
-import { User } from "@/services";
-import { PostModel } from "@/types/postTypes";
-import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { isLoading } from "expo-font";
+import { CreatePostModel, PostModel } from '@/types/postTypes';
+import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
 interface PostState {
+  postForm: CreatePostModel | null;
   post: PostModel | null;
 }
 
 const initialState: PostState = {
+  postForm: null,
   post: null,
 };
 
 const slice = createSlice({
-  name: "post",
+  name: 'post',
   initialState: initialState,
   reducers: {
+    setPostForm(state, action: PayloadAction<CreatePostModel | null>) {
+      state.postForm = action.payload;
+    },
+    clearPostForm(state) {
+      state.postForm = null;
+    },
     setPost(state, action: PayloadAction<PostModel | null>) {
       state.post = action.payload;
     },
@@ -24,10 +30,13 @@ const slice = createSlice({
   },
 });
 
-export const { setPost, clearPost } = slice.actions;
+export const { setPostForm, clearPostForm, setPost, clearPost } = slice.actions;
 
-export const selectPost = (state: { post: PostState }) => state.post;
+export const selectPostForm = (state: { post: PostState }) =>
+  state.post.postForm;
 
-const authReducer = slice.reducer;
+export const selectPost = (state: { post: PostState }) => state.post.post;
 
-export default authReducer;
+const postReducer = slice.reducer;
+
+export default postReducer;

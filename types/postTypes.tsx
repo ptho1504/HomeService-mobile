@@ -5,6 +5,7 @@ export type RootStackParamList = {
   UpcomingWork: { status: string };
   PackageWork: { status: string };
   PastWork: { status: string };
+  PostDetail: { post: PostModel | null };
 };
 
 export interface HouseCleaningOption {
@@ -13,14 +14,10 @@ export interface HouseCleaningOption {
   duration: number;
 }
 
-export interface WorkDay {
-  day: string;
-  date: string;
-}
-
 export interface Package {
   key: string;
   value: string;
+  month: number;
 }
 
 export interface CreatePostModel {
@@ -35,13 +32,15 @@ export interface CreatePostModel {
   chooseFreelancer: boolean;
   houseCleaning?: HouseCleaningModel;
   babysitting?: BabysittingModel;
-  workSchedules: {
-    date: string; // ISO 8601 date string
-  }[];
+  workSchedules: CreateWorkScheduleModel[];
   customerId: string;
   addressId: string;
   workId: string;
   payment: boolean;
+}
+
+export interface CreateWorkScheduleModel {
+  date: Date;
 }
 
 export interface PostModel {

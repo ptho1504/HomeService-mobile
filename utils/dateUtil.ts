@@ -1,22 +1,54 @@
-import { WorkDay } from '@/types/postTypes';
+import moment from 'moment';
 
-export const generateNext7Days = () => {
-  const days: WorkDay[] = [];
+export const generateNext7Days = (): Date[] => {
+  const dates: Date[] = [];
   const today = new Date();
 
   for (let i = 0; i < 7; i++) {
     const nextDay = new Date(today);
     nextDay.setDate(today.getDate() + i);
 
-    const dayOfWeek = nextDay.toLocaleDateString('vi-VN', { weekday: 'short' }); // T2, T3, ...
-    const date = nextDay.getDate(); // Ngày (1-31)
-
-    const newWorkDay: WorkDay = { day: dayOfWeek, date: date.toString() };
-
-    days.push(newWorkDay);
+    // Thêm đối tượng Date vào mảng
+    dates.push(nextDay);
   }
 
-  return days;
+  return dates;
+};
+
+export const getWorkSchedulesByDaysOfWeek = (
+  daysOfWeek: string[],
+  monthOffset: number,
+): Date[] => {
+  const currentDate = new Date();
+
+  // Ngày bắt đầu là ngày mai
+  currentDate.setDate(currentDate.getDate() + 1);
+
+  // Ngày kết thúc là ngày cuối cùng của tháng sau
+  const endDate = new Date(currentDate);
+  endDate.setMonth(endDate.getMonth() + monthOffset);
+  endDate.setDate(0); // Ngày cuối cùng của tháng trước tháng tiếp theo
+
+  const schedules: Date[] = [];
+
+  // Mảng các thứ trong tuần
+  const weekDays = ['CN', 'TH 2', 'TH 3', 'TH 4', 'TH 5', 'TH 6', 'TH 7'];
+
+  // Lặp qua từng ngày từ ngày bắt đầu đến ngày kết thúc
+  for (
+    let date = currentDate;
+    date <= endDate;
+    date.setDate(date.getDate() + 1)
+  ) {
+    const dayIndex = date.getDay(); // Lấy chỉ số ngày trong tuần (0 = CN, 1 = TH 2, ..., 6 = TH 7)
+
+    // Kiểm tra xem ngày hiện tại có nằm trong danh sách daysOfWeek không
+    if (daysOfWeek.includes(weekDays[dayIndex])) {
+      schedules.push(new Date(date)); // Thêm ngày vào mảng
+    }
+  }
+
+  return schedules;
 };
 
 export function normalizeDateTime(dateTime: number[]): number[] {
@@ -32,8 +64,21 @@ export function normalizeDateTime(dateTime: number[]): number[] {
   return normalizedDateTime;
 }
 
-export function normalizeDate(date: number[]): string {
-  return date[2] + '/' + date[1] + '/' + date[0];
+export function normalizeDate(
+  date: number[] | Date | undefined,
+  pattern: string,
+  isCalendar: boolean,
+): string {
+  if (Array.isArray(date)) {
+    return isCalendar
+      ? date[0] + pattern + date[1] + pattern + date[2]
+      : date[2] + pattern + date[1] + pattern + date[0];
+  } else {
+    const format = 'DD' + pattern + 'MM' + pattern + 'YYYY';
+    return moment(date).format(
+      isCalendar ? format.split('').reverse().join('') : format,
+    );
+  }
 }
 
 export function convertMinuteToHour(duration: number): string {
@@ -55,7 +100,7 @@ export function formatTimeRange(startTime: string, duration: number): string {
   // Chuyển startTime thành đối tượng Date
   const start = new Date(`1970-01-01T${startTime}Z`); // Dùng ngày giả định
   // Tính toán endTime bằng cách thêm duration (phút) vào startTime
-  const end = new Date(start.getTime() + duration * 60000);
+  const end = new Date(start.getTime() + duration * 3600000);
 
   // Định dạng thời gian thành HH:mm
   const formatTime = (date: Date): string =>
@@ -64,9 +109,19 @@ export function formatTimeRange(startTime: string, duration: number): string {
   return `${formatTime(start)} đến ${formatTime(end)}`;
 }
 
-// Ví dụ sử dụng
-const startTime = '02:00:00';
-const duration = 10;
-
-console.log(formatTimeRange(startTime, duration));
-// Kết quả: "từ 02:00 đến 02:10"
+export function convertToTime(
+  hour: number,
+  minute: number,
+  second: number,
+): string {
+  return (
+    (hour < 10 ? '0' : '') +
+    hour +
+    ':' +
+    (minute < 10 ? '0' : '') +
+    minute +
+    ':' +
+    (second < 10 ? '0' : '') +
+    second
+  );
+}

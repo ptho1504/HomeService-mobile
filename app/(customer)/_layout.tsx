@@ -1,5 +1,4 @@
 import { Tabs } from 'expo-router';
-import { Image, ImageSourcePropType, View } from 'react-native';
 import FontAwesome from '@expo/vector-icons/FontAwesome';
 import Ionicons from '@expo/vector-icons/Ionicons';
 import { i18n, Language } from '@/localization';

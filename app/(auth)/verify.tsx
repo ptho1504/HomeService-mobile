@@ -1,8 +1,5 @@
 import {
   Image,
-  ImageSourcePropType,
-  StatusBar,
-  Text,
   TouchableOpacity,
   TouchableWithoutFeedback,
   View,
@@ -14,7 +11,6 @@ import { useState } from "react";
 import { OtpInput } from "react-native-otp-entry";
 import { useLoginMutation, useVerifyOtpMutation } from "@/services";
 import { router, useLocalSearchParams } from "expo-router";
-import onboarding3 from "@/assets/images/onboarding3.png";
 import { i18n, Language } from "@/localization";
 import { Button, ButtonSpinner, ButtonText } from "@/components/ui/button";
 import { useDispatch } from "react-redux";
@@ -22,6 +18,7 @@ import { setUser, authenticateUser } from "@/store/reducers/auth";
 import * as SecureStore from "expo-secure-store";
 import { LOCAL_STORAGE_JWT_KEY } from "@/constants";
 import { Keyboard } from "react-native";
+import { Text } from "@/components/ui/text";
 
 // i18n.locale = getLocales()[0].languageCode ?? "vn";
 i18n.locale = "vn";
@@ -77,7 +74,7 @@ const Verify = () => {
           resizeMode="contain"
           className="w-60 h-60 mb-4"
         />
-        <Text className="text-2xl font-bold my-3">
+        <Text className="text-3xl font-bold my-3">
           {i18n.t("enter_verify")}
         </Text>
         <Text className="text-xl font-font-normal">
@@ -107,9 +104,9 @@ const Verify = () => {
         </View>
 
         <View className="my-3 flex items-center flex-row gap-3">
-          <Text>{i18n.t("send_otp_text")}</Text>
+          <Text size="lg">{i18n.t("send_otp_text")}</Text>
           <TouchableOpacity>
-            <Text className="text-base font-bold color-green-600">
+            <Text size="lg" className="font-bold color-green-600">
               {i18n.t("resend")}
             </Text>
           </TouchableOpacity>
@@ -124,7 +121,7 @@ const Verify = () => {
             disabled={otp?.length != 6}
           >
             {isLoading && <ButtonSpinner color={"#D1D5DB"} />}
-            <ButtonText className="text-white">{i18n.t("verify")}</ButtonText>
+            <ButtonText size="lg" className="text-white">{i18n.t("verify")}</ButtonText>
           </Button>
         </TouchableWithoutFeedback>
       </View>

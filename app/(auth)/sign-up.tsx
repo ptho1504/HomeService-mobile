@@ -1,14 +1,10 @@
 import {
   Image,
   Keyboard,
-  Text,
   TouchableOpacity,
   TouchableWithoutFeedback,
   View,
 } from "react-native";
-import { SafeAreaView } from "react-native-safe-area-context";
-import { setPost } from "@/store/reducers/post";
-import { PostModel } from "@/types/postTypes";
 import {
   FormControl,
   FormControlError,
@@ -22,16 +18,9 @@ import {
 import { Button, ButtonSpinner, ButtonText } from "@/components/ui/button";
 import { i18n, Language } from "@/localization";
 import { Box } from "@/components/ui/box";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Input, InputField, InputIcon, InputSlot } from "@/components/ui/input";
 import { AlertCircleIcon, CircleIcon, MailIcon } from "@/components/ui/icon";
-import {
-  Radio,
-  RadioGroup,
-  RadioIcon,
-  RadioIndicator,
-  RadioLabel,
-} from "@/components/ui/radio";
 import { Link, router } from "expo-router";
 import { Divider } from "@/components/ui/divider";
 import { HStack } from "@/components/ui/hstack";
@@ -39,6 +28,8 @@ import FacebookSvg from "@/components/svg/FacebookSvg";
 import GoogleSvg from "@/components/svg/GoogleSvg";
 import { validateEmail } from "@/utils/helper";
 import { useSendOtpMutation } from "@/services";
+import { Text } from "@/components/ui/text";
+import { Pressable } from "@/components/ui/pressable";
 // i18n.locale = getLocales()[0].languageCode ?? "vn";
 i18n.locale = "vn";
 i18n.enableFallback = true;
@@ -52,7 +43,6 @@ const SignUp = () => {
 
   // Set form
   const [email, setEmail] = useState<string>("");
-  const [role, setRole] = useState<string>("");
 
   // Call Api
   const [sendOtp] = useSendOtpMutation();
@@ -86,21 +76,40 @@ const SignUp = () => {
     }
   };
 
+  useEffect(() => {
+    if (email.length > 0) {
+      if (!validateEmail(email)) {
+        setIsInvalid(true);
+        setErrorText(i18n.t("mail_invalid"));
+      } else {
+        setIsInvalid(false);
+      }
+    } else {
+      setIsInvalid(false);
+      setErrorText("");
+    }
+  }, [email]);
+
   return (
-    <TouchableWithoutFeedback className="flex h-full items-center" onPress={Keyboard.dismiss}>
-      <View className="flex items-center justify-start h-full bg-white">
+    <TouchableWithoutFeedback
+      className="flex h-full items-center"
+      onPress={Keyboard.dismiss}
+    >
+      <View className="flex items-center justify-start h-full bg-white gap-5">
         <Image
           className="h-full w-full absolute opacity-50"
           source={require("@/assets/images/bg1.png")}
         />
-        <View className="p-5 mt-10 flex flex-row items-center justify-between ">
-          <View className="flex-1 flex-row gap-1">
-            <Text className="text-black text-xl font-extrabold">Home</Text>
-            <Text className="text-xl text-success-600 font-extrabold">
+        <Box className="p-5 mt-10 flex flex-row items-center justify-between ">
+          <Box className="flex-1 flex-row gap-1">
+            <Text size="3xl" className="text-black font-extrabold">
+              Home
+            </Text>
+            <Text size="3xl" className="text-success-600 font-extrabold">
               Service
             </Text>
-          </View>
-          <View className="flex-2 bg-white border-2 border-primary-300 rounded-md">
+          </Box>
+          <Box className="flex-2 bg-white border-2 border-primary-300 rounded-md">
             <Button
               size="md"
               variant="solid"
@@ -111,15 +120,18 @@ const SignUp = () => {
                 {i18n.t("language")}
               </ButtonText>
             </Button>
-          </View>
-        </View>
+          </Box>
+        </Box>
 
-        <View>
-          <Text>Logo</Text>
-        </View>
-
+        {/* Logo */}
+        <Box className="shadow-2xl">
+          <Image
+            className="w-40 h-40 rounded-full"
+            source={require("@/assets/images/logo.jpg")}
+          />
+        </Box>
         {/* signup */}
-        <Box className="p-10 w-[80%] rounded-xl flex gap-5 bg-white border border-gray-200">
+        <Box className="p-10 w-[90%] rounded-xl flex gap-5 bg-white border border-gray-200">
           {/* Input */}
           {/* Email */}
           <FormControl
@@ -130,14 +142,15 @@ const SignUp = () => {
             isRequired={false}
           >
             <FormControlLabel>
-              <FormControlLabelText>Email</FormControlLabelText>
+              <FormControlLabelText size="lg">Email</FormControlLabelText>
             </FormControlLabel>
             <TouchableWithoutFeedback>
-              <Input className="my-1 flex items-center h-12">
+              <Input size="lg" className="my-1 flex items-center h-12">
                 <InputSlot className="pl-3 flex items-center">
                   <InputIcon as={MailIcon} size={"lg"} />
                 </InputSlot>
                 <InputField
+                  size="lg"
                   className="leading-none px-4 py-2 h-full"
                   type="text"
                   placeholder={`${i18n.t("mail_placeholder")}`}
@@ -146,11 +159,6 @@ const SignUp = () => {
                 />
               </Input>
             </TouchableWithoutFeedback>
-            <FormControlHelper>
-              <FormControlHelperText>
-                {i18n.t("mail_valid")}
-              </FormControlHelperText>
-            </FormControlHelper>
             <FormControlError>
               <FormControlErrorIcon as={AlertCircleIcon} />
               <FormControlErrorText>{errorText}</FormControlErrorText>
@@ -169,17 +177,26 @@ const SignUp = () => {
                 action="positive"
               >
                 {loading && <ButtonSpinner color={"#D1D5DB"} />}
-                <ButtonText className="text-white">
+                <ButtonText size="lg" className="text-white">
                   {i18n.t("verify")}
                 </ButtonText>
               </Button>
             </TouchableWithoutFeedback>
 
             {/* You have account */}
-            <Box className="flex items-center mt-4">
-              <Link className="text-center" href={"/(auth)/log-in"}>
+            <Box className="flex flex-row gap-2 items-center mt-4">
+              <Text size="lg" className="text-center">
                 {i18n.t("have_account")}
-              </Link>
+              </Text>
+              <Pressable
+                onPress={() => {
+                  router.replace("/(auth)/log-in");
+                }}
+              >
+                <Text size="lg" className="font-bold color-green-600">
+                  {i18n.t("login")}
+                </Text>
+              </Pressable>
             </Box>
 
             <Box className="mt-3 px-10 w-full flex flex-row items-center justify-center">
@@ -194,7 +211,7 @@ const SignUp = () => {
               className="flex justify-center items-center mt-4"
             >
               {/* Google */}
-              <TouchableOpacity className="hover:bg-red-500">
+              <TouchableOpacity className="w-full hover:bg-red-500">
                 <Button
                   variant="outline"
                   action="secondary"
@@ -204,20 +221,6 @@ const SignUp = () => {
                   <GoogleSvg />
                   <ButtonText className="h-6 text-black text-lg flex items-center">
                     Google
-                  </ButtonText>
-                </Button>
-              </TouchableOpacity>
-
-              {/* Facebook */}
-              <TouchableOpacity>
-                <Button
-                  variant="outline"
-                  action="secondary"
-                  className="bg-white flex flex-row items-center border border-gray-200 py-5"
-                >
-                  <FacebookSvg className="w-7 h-7" />
-                  <ButtonText className="h-6 text-black text-lg flex items-center">
-                    Facebook
                   </ButtonText>
                 </Button>
               </TouchableOpacity>

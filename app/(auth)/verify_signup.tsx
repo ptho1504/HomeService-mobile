@@ -3,7 +3,6 @@ import {
   ImageSourcePropType,
   Keyboard,
   StatusBar,
-  Text,
   TouchableOpacity,
   TouchableWithoutFeedback,
   View,
@@ -23,6 +22,7 @@ import { setUser, authenticateUser } from "@/store/reducers/auth";
 import * as SecureStore from "expo-secure-store";
 import { LOCAL_STORAGE_JWT_KEY, LOCAL_STORAGE_OTP } from "@/constants";
 import { Button as ButtonReacNative } from "react-native";
+import { Text } from "@/components/ui/text";
 // i18n.locale = getLocales()[0].languageCode ?? "vn";
 i18n.locale = "vn";
 i18n.enableFallback = true;
@@ -41,7 +41,6 @@ const VerifySignUp = () => {
   // Handle Submit
   const handleSubmit = async () => {
     if (otp) {
-      console.log("email", email);
       SetIsLoading(true);
       const response = await verifyOtp({ email, otp: otp });
       console.log(response);
@@ -74,7 +73,7 @@ const VerifySignUp = () => {
           resizeMode="contain"
           className="w-60 h-60 mb-4"
         />
-        <Text className="text-2xl font-bold my-3">
+        <Text className="text-3xl font-bold my-3">
           {i18n.t("enter_verify")}
         </Text>
         <Text className="text-xl font-font-normal">
@@ -103,9 +102,9 @@ const VerifySignUp = () => {
         </View>
 
         <View className="my-3 flex items-center flex-row gap-3">
-          <Text>{i18n.t("send_otp_text")}</Text>
+          <Text size="lg">{i18n.t("send_otp_text")}</Text>
           <TouchableOpacity onPress={handleResend}>
-            <Text className="text-base font-bold color-green-600">
+            <Text size="lg" className="font-bold color-green-600">
               {i18n.t("resend")}
             </Text>
           </TouchableOpacity>
@@ -120,7 +119,7 @@ const VerifySignUp = () => {
           disabled={otp?.length != 6}
         >
           {isLoading && <ButtonSpinner color={"#D1D5DB"} />}
-          <ButtonText className="text-white">{i18n.t("signup")}</ButtonText>
+          <ButtonText size="lg" className="text-white">{i18n.t("signup")}</ButtonText>
         </Button>
       </View>
     </TouchableWithoutFeedback>

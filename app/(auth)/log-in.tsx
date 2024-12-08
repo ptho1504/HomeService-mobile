@@ -14,15 +14,15 @@ import {
   CircleIcon,
   EyeIcon,
   MailIcon,
-} from '@/components/ui/icon';
-import { Input, InputField, InputIcon, InputSlot } from '@/components/ui/input';
-import { useLoginMutation, useSendOtpMutation } from '@/services';
-import { Link, router } from 'expo-router';
-import React, { useCallback, useState } from 'react';
+} from "@/components/ui/icon";
+import { Input, InputField, InputIcon, InputSlot } from "@/components/ui/input";
+import { useLoginMutation, useSendOtpMutation } from "@/services";
+import { Link, router } from "expo-router";
+import React, { useCallback, useEffect, useState } from "react";
 import {
   Image,
   Keyboard,
-  Text,
+  Pressable,
   TouchableOpacity,
   TouchableWithoutFeedback,
   View,
@@ -41,8 +41,9 @@ import {
   RadioIcon,
   RadioIndicator,
   RadioLabel,
-} from '@/components/ui/radio';
-import { validateEmail } from '@/utils/helper';
+} from "@/components/ui/radio";
+import { validateEmail } from "@/utils/helper";
+import { Text } from "@/components/ui/text";
 
 // i18n.locale = getLocales()[0].languageCode ?? "vn";
 i18n.locale = 'vn';
@@ -104,25 +105,42 @@ const LogIn = () => {
     }
   };
 
+  useEffect(() => {
+    if (email.length > 0) {
+      if (!validateEmail(email)) {
+        setIsInvalid(true);
+        setErrorText(i18n.t("mail_invalid"));
+      }
+      else {
+        setIsInvalid(false)
+      }
+    } else {
+      setIsInvalid(false);
+      setErrorText("");
+    }
+  }, [email]);
+
   return (
     <TouchableWithoutFeedback
       className="flex h-full items-center justify-between"
       onPress={Keyboard.dismiss}
     >
-      <View className="flex items-center justify-start h-full bg-white">
+      <Box className="flex items-center justify-start h-full bg-white gap-5">
         <Image
           className="h-full w-full absolute opacity-50"
           source={require('@/assets/images/bg.png')}
         />
 
         {/* header */}
-        <View className="p-5 mt-10 flex flex-row items-center justify-between ">
-          <View className="flex-1 flex-row gap-1">
-            <Text className="text-black text-xl font-extrabold">Home</Text>
-            <Text className="text-xl text-success-600 font-extrabold">
+        <Box className="p-5 mt-10 flex flex-row items-center justify-between ">
+          <Box className="flex-1 flex-row gap-1">
+            <Text size="3xl" className="text-black font-extrabold">
+              Home
+            </Text>
+            <Text size="3xl" className="text-success-600 font-extrabold">
               Service
             </Text>
-          </View>
+          </Box>
           <View className="flex-2 bg-white border-2 border-primary-300 rounded-md">
             <Button
               size="md"
@@ -135,15 +153,18 @@ const LogIn = () => {
               </ButtonText>
             </Button>
           </View>
-        </View>
+        </Box>
 
         {/* Logo */}
-        <View>
-          <Text>Logo</Text>
-        </View>
+        <Box className="shadow-2xl">
+          <Image
+            className="w-40 h-40 rounded-full"
+            source={require("@/assets/images/logo.jpg")}
+          />
+        </Box>
 
         {/* login */}
-        <Box className="p-10 w-[80%] rounded-xl flex gap-5 bg-white border border-gray-200">
+        <Box className="p-10 w-[90%] rounded-xl flex gap-5 bg-white border border-gray-200">
           {/* Input */}
           {/* Email */}
           <FormControl
@@ -154,10 +175,10 @@ const LogIn = () => {
             isRequired={false}
           >
             <FormControlLabel>
-              <FormControlLabelText>Email</FormControlLabelText>
+              <FormControlLabelText size="lg">Email</FormControlLabelText>
             </FormControlLabel>
             <TouchableWithoutFeedback>
-              <Input className="my-1 flex items-center h-12">
+              <Input size="lg" className="my-1 flex items-center h-12">
                 <InputSlot className="pl-3 flex items-center">
                   <InputIcon as={MailIcon} size={'lg'} />
                 </InputSlot>
@@ -170,11 +191,7 @@ const LogIn = () => {
                 />
               </Input>
             </TouchableWithoutFeedback>
-            <FormControlHelper>
-              <FormControlHelperText>
-                {i18n.t('mail_valid')}
-              </FormControlHelperText>
-            </FormControlHelper>
+
             <FormControlError>
               <FormControlErrorIcon as={AlertCircleIcon} />
               <FormControlErrorText>{errorText}</FormControlErrorText>
@@ -191,12 +208,16 @@ const LogIn = () => {
             isRequired={false}
           >
             <FormControlLabel>
-              <FormControlLabelText>Role</FormControlLabelText>
+              <FormControlLabelText size="lg">Role</FormControlLabelText>
             </FormControlLabel>
-            <RadioGroup value={role} onChange={setRole}>
+            <RadioGroup
+              className="flex  flex-row justify-between"
+              value={role}
+              onChange={setRole}
+            >
               <Radio
                 value="FREELANCER"
-                size="md"
+                size="lg"
                 isInvalid={false}
                 isDisabled={false}
               >
@@ -207,7 +228,7 @@ const LogIn = () => {
               </Radio>
               <Radio
                 value="CUSTOMER"
-                size="md"
+                size="lg"
                 isInvalid={false}
                 isDisabled={false}
               >
@@ -217,11 +238,7 @@ const LogIn = () => {
                 <RadioLabel>{i18n.t('customer')}</RadioLabel>
               </Radio>
             </RadioGroup>
-            <FormControlHelper>
-              <FormControlHelperText>
-                {i18n.t('role_valid')}
-              </FormControlHelperText>
-            </FormControlHelper>
+
             <FormControlError>
               <FormControlErrorIcon as={AlertCircleIcon} />
               <FormControlErrorText>{errorRoleText}</FormControlErrorText>
@@ -239,18 +256,27 @@ const LogIn = () => {
                 variant="solid"
                 action="positive"
               >
-                {loading && <ButtonSpinner color={'#D1D5DB'} />}
-                <ButtonText className="text-white">
-                  {i18n.t('login')}
+                {loading && <ButtonSpinner color={"#D1D5DB"} />}
+                <ButtonText size="lg" className="text-white">
+                  {i18n.t("login")}
                 </ButtonText>
               </Button>
             </TouchableWithoutFeedback>
 
             {/* You have account */}
-            <Box className="flex items-center mt-4">
-              <Link className="text-center" href={'/(auth)/sign-up'}>
-                {i18n.t('not_have_account')}
-              </Link>
+            <Box className="flex flex-row gap-2 items-center mt-4">
+              <Text size="md" className="text-center">
+                {i18n.t("not_have_account")}
+              </Text>
+              <Pressable
+                onPress={() => {
+                  router.replace("/(auth)/sign-up");
+                }}
+              >
+                <Text size="lg" className="font-bold color-green-600">
+                  {i18n.t("signup")}
+                </Text>
+              </Pressable>
             </Box>
 
             <Box className="mt-3 px-10 w-full flex flex-row items-center justify-center">
@@ -265,7 +291,7 @@ const LogIn = () => {
               className="flex justify-center items-center mt-4"
             >
               {/* Google */}
-              <TouchableOpacity className="hover:bg-red-500">
+              <TouchableOpacity className="w-full hover:bg-red-500">
                 <Button
                   variant="outline"
                   action="secondary"
@@ -278,24 +304,10 @@ const LogIn = () => {
                   </ButtonText>
                 </Button>
               </TouchableOpacity>
-
-              {/* Facebook */}
-              <TouchableOpacity>
-                <Button
-                  variant="outline"
-                  action="secondary"
-                  className="bg-white flex flex-row items-center border border-gray-200 py-5"
-                >
-                  <FacebookSvg className="w-7 h-7" />
-                  <ButtonText className="h-6 text-black text-lg flex items-center">
-                    Facebook
-                  </ButtonText>
-                </Button>
-              </TouchableOpacity>
             </HStack>
           </Box>
         </Box>
-      </View>
+      </Box>
     </TouchableWithoutFeedback>
   );
 };

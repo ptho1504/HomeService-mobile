@@ -26,7 +26,7 @@ import { Divider } from "@/components/ui/divider";
 import { HStack } from "@/components/ui/hstack";
 import FacebookSvg from "@/components/svg/FacebookSvg";
 import GoogleSvg from "@/components/svg/GoogleSvg";
-import { validateEmail } from "@/utils/helper";
+import { useDebounce, validateEmail } from "@/utils/helper";
 import { useSendOtpMutation } from "@/services";
 import { Text } from "@/components/ui/text";
 import { Pressable } from "@/components/ui/pressable";
@@ -43,7 +43,7 @@ const SignUp = () => {
 
   // Set form
   const [email, setEmail] = useState<string>("");
-
+  const debounceEmail = useDebounce(email, 1000);
   // Call Api
   const [sendOtp] = useSendOtpMutation();
 
@@ -75,9 +75,12 @@ const SignUp = () => {
       router.push(`/(auth)/verify_signup?email=${email}`);
     }
   };
-
   useEffect(() => {
-    if (email.length > 0) {
+    if (
+      debounceEmail !== undefined &&
+      email !== undefined &&
+      email.length > 0
+    ) {
       if (!validateEmail(email)) {
         setIsInvalid(true);
         setErrorText(i18n.t("mail_invalid"));
@@ -88,7 +91,7 @@ const SignUp = () => {
       setIsInvalid(false);
       setErrorText("");
     }
-  }, [email]);
+  }, [debounceEmail]);
 
   return (
     <TouchableWithoutFeedback

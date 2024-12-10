@@ -1,8 +1,4 @@
-import {
-  Image,
-  TouchableWithoutFeedback,
-  View,
-} from "react-native";
+import { Image, TouchableWithoutFeedback, View } from "react-native";
 import {
   FormControl,
   FormControlError,
@@ -16,9 +12,14 @@ import {
 import { Button, ButtonSpinner, ButtonText } from "@/components/ui/button";
 import { i18n, Language } from "@/localization";
 import { Box } from "@/components/ui/box";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Input, InputField, InputIcon, InputSlot } from "@/components/ui/input";
-import { AlertCircleIcon, AtSignIcon, CircleIcon, MailIcon } from "@/components/ui/icon";
+import {
+  AlertCircleIcon,
+  AtSignIcon,
+  CircleIcon,
+  MailIcon,
+} from "@/components/ui/icon";
 import {
   Radio,
   RadioGroup,
@@ -29,12 +30,13 @@ import {
 import { Link, router, useLocalSearchParams } from "expo-router";
 import { Divider } from "@/components/ui/divider";
 import * as SecureStore from "expo-secure-store";
-import {  useSignupMutation } from "@/services";
+import { useSignupMutation } from "@/services";
 import { LOCAL_STORAGE_JWT_KEY, LOCAL_STORAGE_OTP } from "@/constants";
 import { useDispatch } from "react-redux";
 import { authenticateUser, setUser } from "@/store/reducers";
 import { Keyboard } from "react-native";
 import { Text } from "@/components/ui/text";
+import { useDebounce, validateEmail } from "@/utils/helper";
 // i18n.locale = getLocales()[0].languageCode ?? "vn";
 i18n.locale = "vn";
 i18n.enableFallback = true;
@@ -47,6 +49,7 @@ const Register = () => {
   const { email } = useLocalSearchParams<{
     email: string;
   }>();
+  
 
   // Set Valid
   const [isInvalid, setIsInvalid] = useState(false);
@@ -64,7 +67,7 @@ const Register = () => {
 
   const handleSubmit = async () => {
     const otp = await SecureStore.getItemAsync(LOCAL_STORAGE_OTP);
-  if (!otp || !email || !role || !username) {
+    if (!otp || !email || !role || !username) {
       return;
     }
     console.log(email, username, role, otp);
@@ -122,8 +125,13 @@ const Register = () => {
     }
   };
 
+  
+
   return (
-    <TouchableWithoutFeedback className="flex h-full items-center justify-between" onPress={Keyboard.dismiss}>
+    <TouchableWithoutFeedback
+      className="flex h-full items-center justify-between"
+      onPress={Keyboard.dismiss}
+    >
       <View className="flex items-center gap-5 justify-start h-full bg-white">
         <Image
           className="h-full w-full absolute opacity-50"
@@ -133,7 +141,9 @@ const Register = () => {
         {/* header */}
         <View className="p-5 mt-10 flex flex-row items-center justify-between ">
           <View className="flex-1 flex-row gap-1">
-            <Text size="3xl" className="text-black font-extrabold">Home</Text>
+            <Text size="3xl" className="text-black font-extrabold">
+              Home
+            </Text>
             <Text size="3xl" className="text-success-600 font-extrabold">
               Service
             </Text>
@@ -175,7 +185,10 @@ const Register = () => {
             </FormControlLabel>
 
             <TouchableWithoutFeedback>
-              <Input size="lg" className="my-1 flex items-center h-12 border-none">
+              <Input
+                size="lg"
+                className="my-1 flex items-center h-12 border-none"
+              >
                 <InputSlot className="pl-3 flex items-center">
                   <InputIcon as={MailIcon} size={"lg"} />
                 </InputSlot>
@@ -213,7 +226,7 @@ const Register = () => {
                   <InputIcon as={AtSignIcon} size={"lg"} />
                 </InputSlot>
                 <InputField
-                size="lg"
+                  size="lg"
                   className="leading-none px-4 py-2 h-full"
                   type="text"
                   placeholder={`${i18n.t("username_placeholder")}`}
@@ -238,7 +251,11 @@ const Register = () => {
             <FormControlLabel>
               <FormControlLabelText>Role</FormControlLabelText>
             </FormControlLabel>
-            <RadioGroup className="flex flex-row gap-5" value={role} onChange={setRole}>
+            <RadioGroup
+              className="flex flex-row gap-5"
+              value={role}
+              onChange={setRole}
+            >
               <Radio
                 value="FREELANCER"
                 size="lg"

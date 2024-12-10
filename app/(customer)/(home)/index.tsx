@@ -20,86 +20,87 @@ import FlagVN from "@/components/svg/FlagVN";
 import { Pressable } from "@/components/ui/pressable";
 import { i18n } from "@/localization";
 import { HStack } from "@/components/ui/hstack";
+import Carousel from "@/components/carousel/Carousel";
 
 const Home = () => {
   const currentUser = useSelector(selectUser);
   // console.log("currentUser", currentUser);
 
   return (
-    <View className="relative flex h-full">
-      <Image
-        className="h-full w-full absolute opacity-30"
-        source={require("@/assets/images/bg2.jpg")}
-      />
-      <VStack space="2xl" className="px-5 h-full flex items-center">
-        {/* Hello And change languae */}
-        <Box className="w-full m-5 px-8 py-2 flex flex-row justify-center h-auto bg-green-300 rounded-full">
-          <VStack>
-            <Text size="xl" className="px-4 w-full text-white font-semibold">
-              Xin chào 👋,
-            </Text>
-            <Text size="xl" className="px-4 w-full text-white font-semibold">
-              {currentUser?.name}
-            </Text>
-          </VStack>
-          <Box className="px-4 rounded-full flex flex-row items-center justify-between gap-3 bg-white">
-            <Pressable className="bg-green-200 p-3 rounded-full">
-              <FlagVN />
-            </Pressable>
-            <Pressable className="bg-green-200 p-3 rounded-full">
-              <Ionicons name="calendar-sharp" size={20} color="black" />
-            </Pressable>
+    <SafeAreaView className="relative flex h-full">
+      <View>
+        <Image
+          className="h-full w-full absolute opacity-30"
+          source={require("@/assets/images/bg2.jpg")}
+        />
+        <VStack space="2xl" className="px-5 h-full flex items-center">
+          {/* Hello And change languae */}
+          <Box className="w-full m-5 px-8 py-2 flex flex-row justify-center h-auto bg-green-300 rounded-full">
+            <VStack>
+              <Text size="xl" className="px-4 w-full text-white font-semibold">
+                Xin chào 👋,
+              </Text>
+              <Text size="xl" className="px-4 w-full text-white font-semibold">
+                {currentUser?.name}
+              </Text>
+            </VStack>
+            <Box className="px-4 rounded-full flex flex-row items-center justify-between gap-3 bg-white">
+              <Pressable className="bg-green-200 p-3 rounded-full">
+                <FlagVN />
+              </Pressable>
+              <Pressable className="bg-green-200 p-3 rounded-full">
+                <Ionicons name="calendar-sharp" size={20} color="black" />
+              </Pressable>
+            </Box>
           </Box>
-        </Box>
-        <Box className="w-full h-auto px-8 bg-gray-100 flex gap-2 py-5 rounded-3xl shadow-2xl shadow-green-400">
-          <Text size="xl" className="font-bold">
-            {i18n.t("discover_welcome")}
-          </Text>
-          <Pressable>
-            {({ pressed }) => (
-              <HStack
-                className={`border-2 bg-gray-200 border-green-500 max-w-56 
-                  flex flex-row items-center py-2 px-5 rounded-lg ${
+          <Box className="w-full h-auto px-8 bg-white flex gap-2 py-5 rounded-3xl shadow-2xl shadow-green-400">
+            <Text size="xl" className="font-bold">
+              {i18n.t("discover_welcome")}
+            </Text>
+            <Pressable>
+              {({ pressed }) => (
+                <HStack
+                  className={`border-2 bg-gray-200 border-green-500 max-w-56 
+                  gap-1 flex flex-row justify-around items-center py-2 px-5 rounded-lg ${
                     pressed
                       ? "bg-green-500 shadow-md shadow-gray-400"
-                      : "bg-gray-100"
+                      : "bg-white"
                   }`}
-              >
-                <Text
-                  size="xl"
-                  className={`font-bold text-green-400 px-3 max-w-24 text-center
+                >
+                  <Text
+                    size="md"
+                    className={`font-bold text-green-400 max-w-24 text-center
                      ${pressed ? "text-white" : ""}
                     `}
-                >
-                  {i18n.t("login")}
-                </Text>
-                <Text
-                  size="xl"
-                  className={`font-bold text-green-400 max-w-24 text-center
+                  >
+                    {i18n.t("login")}
+                  </Text>
+                  <Text
+                    size="md"
+                    className={`font-bold text-green-400 max-w-24 text-center
                     ${pressed ? "text-white" : ""}
                    `}
-                >
-                  -
-                </Text>
-                <Text
-                  size="xl"
-                  className={`font-bold text-green-400 px-3 max-w-24 text-center
+                  >
+                    -
+                  </Text>
+                  <Text
+                    size="md"
+                    className={`font-bold text-green-400  max-w-24 text-center
                     ${pressed ? "text-white" : ""}
                    `}
-                >
-                  {i18n.t("signup")}
-                </Text>
-              </HStack>
-            )}
-          </Pressable>
-        </Box>
-        <Box className="w-full h-20 bg-gray-100">
-          <Text size="lg" className="text-center">
-            ABC
-          </Text>
-        </Box>
-      </VStack>
-    </View>
+                  >
+                    {i18n.t("signup")}
+                  </Text>
+                </HStack>
+              )}
+            </Pressable>
+          </Box>
+          <Box className="w-full h-auto rounded-3xl bg-white px-8">
+            <Carousel />
+          </Box>
+        </VStack>
+      </View>
+    </SafeAreaView>
   );
 };
 

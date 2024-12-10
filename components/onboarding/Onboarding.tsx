@@ -11,8 +11,7 @@ interface Props {
 }
 
 const Onboarding = ({ onboardings }: Props) => {
-  const email = "phuoctho150420@gmail.com";
-  const role = "FREELANCER";
+  
 
   const scrollX = useRef(new Animated.Value(0)).current;
   const [currentIndex, setCurrentIndex] = useState(0);

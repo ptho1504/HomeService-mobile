@@ -4,68 +4,70 @@ import { Text } from "../ui/text";
 import LottieView from "lottie-react-native";
 import { VStack } from "../ui/vstack";
 import { Animated, StyleSheet } from "react-native";
+import { SafeAreaView } from "react-native-safe-area-context";
 const Loading = () => {
-  const translateX = useRef(new Animated.Value(-500)).current;
+  const translateXHome = useRef(new Animated.Value(-500)).current;
+  const translateXService = useRef(new Animated.Value(500)).current;
+
   useEffect(() => {
-    Animated.timing(translateX, {
+    // Animate "Home" from left to center
+    Animated.timing(translateXHome, {
+      toValue: 0,
+      duration: 1000,
+      useNativeDriver: true,
+    }).start();
+
+    // Animate "Service" from right to center
+    Animated.timing(translateXService, {
       toValue: 0,
       duration: 1000,
       useNativeDriver: true,
     }).start();
   }, []);
-
+  {
+  }
   return (
-    <Box className="flex-1 justify-start items-center bg-white">
-      {/* <LottieView
-        autoPlay
-        style={{
-          width: "100%",
-          height: "100%",
-          backgroundColor: "#fff",
-          position: "absolute",
-        }}
-        // Find more Lottie files at https://lottiefiles.com/featured
-        source={require("@/assets/lotties/splash.json")}
-      /> */}
-      <VStack className="my-[20%] ">
-        <Box className="flex-1 flex-row gap-2">
+    <SafeAreaView className="flex h-full">
+      <VStack space="lg" className="h-full flex items-center">
+        <LottieView
+          autoPlay
+          style={{
+            width: "100%",
+            height: "100%",
+            backgroundColor: "#fff",
+            position: "absolute",
+          }}
+          // Find more Lottie files at https://lottiefiles.com/featured
+          source={require("@/assets/lotties/splash.json")}
+        />
+        <Box className="h-full flex-row gap-2 my-[20%]">
+          {/* Animated "Home" */}
           <Animated.Text
+            className="text-black font-bold text-4xl"
             style={[
-              styles.text,
               {
-                transform: [{ translateX }],
+                transform: [{ translateX: translateXHome }],
               },
             ]}
           >
             Home
           </Animated.Text>
+
+          {/* Animated "Service" */}
           <Animated.Text
+            className="text-success-600 text-4xl font-bold"
             style={[
-              styles.text,
+              // styles.textSuccess,
               {
-                transform: [{ translateX }],
+                transform: [{ translateX: translateXService }],
               },
             ]}
-            className="text-success-600 font-extrabold"
           >
             Service
           </Animated.Text>
         </Box>
       </VStack>
-    </Box>
+    </SafeAreaView>
   );
 };
-const styles = StyleSheet.create({
-  container: {
-    justifyContent: "center",
-    alignItems: "center",
-    backgroundColor: "#f0f0f0",
-  },
-  text: {
-    fontSize: 30,
-    lineHeight: 36,
-    fontWeight: "bold",
-    color: "#000",
-  },
-});
 export default Loading;

@@ -10,7 +10,7 @@ import {
 import { SafeAreaView } from "react-native-safe-area-context";
 // import Swiper from "react-native-swiper";
 
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { OtpInput } from "react-native-otp-entry";
 import { useLoginMutation, useVerifyOtpMutation } from "@/services";
 import { router, useLocalSearchParams } from "expo-router";
@@ -23,6 +23,7 @@ import * as SecureStore from "expo-secure-store";
 import { LOCAL_STORAGE_JWT_KEY, LOCAL_STORAGE_OTP } from "@/constants";
 import { Button as ButtonReacNative } from "react-native";
 import { Text } from "@/components/ui/text";
+import { obfuscateEmail } from "@/utils/helper";
 // i18n.locale = getLocales()[0].languageCode ?? "vn";
 i18n.locale = "vn";
 i18n.enableFallback = true;
@@ -34,29 +35,40 @@ const VerifySignUp = () => {
   }>();
 
   const [isLoading, SetIsLoading] = useState(false);
-  const [otp, setOtp] = useState<string | null>(null);
+  const [otp, setOtp] = useState<string | undefined>(undefined);
+  const otpRef = useRef<any>(null);
   const [verifyOtp] = useVerifyOtpMutation();
   const dispatch = useDispatch();
 
-  // Handle Submit
-  const handleSubmit = async () => {
-    if (otp) {
-      SetIsLoading(true);
-      const response = await verifyOtp({ email, otp: otp });
-      console.log(response);
-      if (response.error) {
-        SetIsLoading(false);
-        // router.replace("/(auth)/verify");
-      } else if (response.data) {
-        // Save to Async storage
-
-        await SecureStore.setItemAsync(LOCAL_STORAGE_OTP, otp);
-
-        SetIsLoading(false);
-        router.replace(`/(auth)/register?email=${email}`);
+  // Handle handleSignUp
+  useEffect(() => {
+    const handleSignUp = async () => {
+      if (otp !== undefined) {
+        try {
+          if (otp.length == 6) {
+            SetIsLoading(true);
+            const response = await verifyOtp({ email, otp: otp });
+            console.log(response);
+            if (response.error) {
+              if (otpRef.current) {
+                otpRef.current.clear(); // Clears the input
+              }
+              // Set Toast to nofication
+              alert(response.error.data.message);
+            } else if (response.data) {
+              // Save to Async storage
+              await SecureStore.setItemAsync(LOCAL_STORAGE_OTP, otp);
+              router.replace(`/(auth)/register?email=${email}`);
+            }
+          }
+        } catch (error) {
+        } finally {
+          SetIsLoading(false);
+        }
       }
-    }
-  };
+    };
+    handleSignUp();
+  }, [otp]);
 
   // Handle Resend
   const handleResend = async () => {};
@@ -68,23 +80,18 @@ const VerifySignUp = () => {
     >
       <View className="flex h-full bg-white p-4 items-center">
         <StatusBar />
-        <Image
-          source={require("@/assets/images/verify_signup.jpg")}
-          resizeMode="contain"
-          className="w-60 h-60 mb-4"
-        />
         <Text className="text-3xl font-bold my-3">
           {i18n.t("enter_verify")}
         </Text>
         <Text className="text-xl font-font-normal">
-          We are automatically send OTP to
-        </Text>
-        <Text className="text-xl font-font-normal">
-          your email. Check your email{" "}
+          We are automatically send OTP to {" " + obfuscateEmail(email)} email.
+          Check your email
         </Text>
         {/* OTP */}
         <View className="my-5 w-full">
           <OtpInput
+            type="numeric"
+            ref={otpRef}
             numberOfDigits={6}
             onTextChange={(text) => setOtp(text)}
             focusColor={"#397e52"}
@@ -109,18 +116,6 @@ const VerifySignUp = () => {
             </Text>
           </TouchableOpacity>
         </View>
-
-        <Button
-          className="w-full self-end mt-2 bg-green-500 rounded-lg"
-          size="md"
-          onPress={handleSubmit}
-          variant="solid"
-          action="positive"
-          disabled={otp?.length != 6}
-        >
-          {isLoading && <ButtonSpinner color={"#D1D5DB"} />}
-          <ButtonText size="lg" className="text-white">{i18n.t("signup")}</ButtonText>
-        </Button>
       </View>
     </TouchableWithoutFeedback>
   );

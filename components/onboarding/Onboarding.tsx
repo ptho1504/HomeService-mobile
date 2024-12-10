@@ -11,8 +11,7 @@ interface Props {
 }
 
 const Onboarding = ({ onboardings }: Props) => {
-  const email = "phuoctho150420@gmail.com";
-  const role = "FREELANCER";
+  
 
   const scrollX = useRef(new Animated.Value(0)).current;
   const [currentIndex, setCurrentIndex] = useState(0);
@@ -58,8 +57,8 @@ const Onboarding = ({ onboardings }: Props) => {
             <TouchableOpacity
               className=""
               onPress={() => {
-                // router.replace('/(auth)/register');
-                router.replace('/(auth)/log-in');
+                // router.replace('/(auth)/log-in');
+                router.replace('/(customer)/(home)');
                 // router.push(`/(auth)/verify?email=${email}&role=${role}`);
               }}
             >

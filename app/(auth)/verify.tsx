@@ -7,7 +7,7 @@ import {
 import { SafeAreaView } from "react-native-safe-area-context";
 // import Swiper from "react-native-swiper";
 
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { OtpInput } from "react-native-otp-entry";
 import { useLoginMutation, useVerifyOtpMutation } from "@/services";
 import { router, useLocalSearchParams } from "expo-router";
@@ -19,6 +19,7 @@ import * as SecureStore from "expo-secure-store";
 import { LOCAL_STORAGE_JWT_KEY } from "@/constants";
 import { Keyboard } from "react-native";
 import { Text } from "@/components/ui/text";
+import { obfuscateEmail, useDebounce } from "@/utils/helper";
 
 // i18n.locale = getLocales()[0].languageCode ?? "vn";
 i18n.locale = "vn";
@@ -32,60 +33,71 @@ const Verify = () => {
   }>();
 
   const [isLoading, SetIsLoading] = useState(false);
-  const [otp, setOtp] = useState<string | null>(null);
+  const [otp, setOtp] = useState<string | undefined>(undefined);
+  const otpRef = useRef<any>(null);
   const [login] = useLoginMutation();
   const dispatch = useDispatch();
 
-  // Handle Submit
-  const handleSubmit = async () => {
-    if (otp) {
-      SetIsLoading(true);
-      const response = await login({ email, role: role, otp: otp });
-      if (response.error) {
-        SetIsLoading(false);
-        // router.replace("/(auth)/verify");
-      } else if (response.data) {
-        dispatch(setUser(response.data.items));
-        dispatch(authenticateUser(true));
+  useEffect(() => {
+    const handleLogin = async () => {
+      if (otp !== undefined) {
+        try {
+          if (otp.length == 6) {
+            SetIsLoading(true);
+            const response = await login({ email, role: role, otp: otp });
+            console.log(response);
+            if (response.error) {
+              if (otpRef.current) {
+                otpRef.current.clear(); // Clears the input
+              }
+              // Set Toast to nofication
+              alert(response.error.data.message);
 
-        // Save to Async storage
-        if (!response.data.items.jwt) {
-          console.error("JWT is missing!");
-          return;
+              setOtp(undefined);
+            } else if (response.data) {
+              dispatch(setUser(response.data.items));
+              dispatch(authenticateUser(true));
+
+              // Save to Async storage
+              if (!response.data.items.jwt) {
+                console.error("JWT is missing!");
+                return;
+              }
+              await SecureStore.setItemAsync(
+                LOCAL_STORAGE_JWT_KEY,
+                response.data.items.jwt!
+              );
+
+              router.replace("/(customer)/(home)");
+            }
+          }
+        } catch (error) {
+          console.error("Error during login:", error);
+        } finally {
+          SetIsLoading(false);
         }
-        await SecureStore.setItemAsync(
-          LOCAL_STORAGE_JWT_KEY,
-          response.data.items.jwt!
-        );
-
-        SetIsLoading(false);
-        router.replace("/(customer)/(home)");
       }
-    }
-  };
+    };
+    handleLogin();
+  }, [otp]);
+
   return (
     <TouchableWithoutFeedback
       className="flex h-full items-center justify-between bg-green-200"
       onPress={Keyboard.dismiss}
     >
       <View className="flex h-full bg-white p-4 items-center">
-        <Image
-          source={require("@/assets/images/verify.jpg")}
-          resizeMode="contain"
-          className="w-60 h-60 mb-4"
-        />
         <Text className="text-3xl font-bold my-3">
           {i18n.t("enter_verify")}
         </Text>
         <Text className="text-xl font-font-normal">
-          We are automatically send OTP to
-        </Text>
-        <Text className="text-xl font-font-normal">
-          your email. Check your email{" "}
+          We are automatically send OTP to {" " + obfuscateEmail(email)} email.
+          Check your email
         </Text>
         {/* OTP */}
         <View className="my-5 w-full">
           <OtpInput
+            ref={otpRef}
             numberOfDigits={6}
             onTextChange={(text) => setOtp(text)}
             focusColor={"#397e52"}
@@ -99,6 +111,10 @@ const Verify = () => {
                 borderRadius: 12,
               },
             }}
+            type="numeric"
+            textInputProps={{
+              accessibilityLabel: "One-Time Password",
+            }}
             autoFocus={false}
           />
         </View>
@@ -111,7 +127,7 @@ const Verify = () => {
             </Text>
           </TouchableOpacity>
         </View>
-        <TouchableWithoutFeedback>
+        {/* <TouchableWithoutFeedback>
           <Button
             className="w-full self-end mt-2 bg-green-500 rounded-lg"
             size="md"
@@ -121,9 +137,11 @@ const Verify = () => {
             disabled={otp?.length != 6}
           >
             {isLoading && <ButtonSpinner color={"#D1D5DB"} />}
-            <ButtonText size="lg" className="text-white">{i18n.t("verify")}</ButtonText>
+            <ButtonText size="lg" className="text-white">
+              {i18n.t("verify")}
+            </ButtonText>
           </Button>
-        </TouchableWithoutFeedback>
+        </TouchableWithoutFeedback> */}
       </View>
     </TouchableWithoutFeedback>
   );

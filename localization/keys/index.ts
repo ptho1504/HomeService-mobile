@@ -31,4 +31,5 @@ export enum LocalizationKey {
   RESEND = "resend",
   VERIFY = "verify",
   ENTER_VERIFY = "enter_verify",
+  DISCOVER_WELCOME = 'discover_welcome' 
 }

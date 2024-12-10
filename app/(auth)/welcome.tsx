@@ -14,6 +14,7 @@ import { SafeAreaView } from "react-native-safe-area-context";
 
 import { onboardings } from "@/constants";
 import Onboarding from "@/components/onboarding/Onboarding";
+import Loading from "@/components/loading/Loading";
 
 const Welcome = () => {
   return (

@@ -24,6 +24,7 @@ import { LOCAL_STORAGE_JWT_KEY, LOCAL_STORAGE_OTP } from "@/constants";
 import { Button as ButtonReacNative } from "react-native";
 import { Text } from "@/components/ui/text";
 import { obfuscateEmail } from "@/utils/helper";
+import { Spinner } from "@/components/ui/spinner";
 // i18n.locale = getLocales()[0].languageCode ?? "vn";
 i18n.locale = "vn";
 i18n.enableFallback = true;
@@ -105,9 +106,10 @@ const VerifySignUp = () => {
                 borderRadius: 12,
               },
             }}
+            autoFocus={true}
           />
         </View>
-
+        {isLoading && <Spinner size={"large"} />}
         <View className="my-3 flex items-center flex-row gap-3">
           <Text size="lg">{i18n.t("send_otp_text")}</Text>
           <TouchableOpacity onPress={handleResend}>

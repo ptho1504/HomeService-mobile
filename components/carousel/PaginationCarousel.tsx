@@ -54,7 +54,7 @@ const PaginationDot = ({
     const backgroundColor = interpolateColor(
       scrollX.value,
       [0, ITEM_WIDTH, 2 * ITEM_WIDTH],
-      ["#9095A7", "#9095A7", "#9095A7"]
+      ["#16A34A", "#16A34A", "#16A34A"]
     );
     return {
       backgroundColor: backgroundColor,

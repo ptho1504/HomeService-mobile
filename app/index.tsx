@@ -14,8 +14,8 @@ import { useDispatch } from "react-redux";
 import Loading from "@/components/loading/Loading";
 
 const App = () => {
-  const isAuthenticated = useSelector(selectIsAuthenticated);
-  // const isAuthenticated = false;
+  // const isAuthenticated = useSelector(selectIsAuthenticated);
+  const isAuthenticated = false;
   const dispatch = useDispatch();
   const [loading, setLoading] = useState(false);
 

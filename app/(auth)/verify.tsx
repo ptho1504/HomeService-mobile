@@ -20,6 +20,7 @@ import { LOCAL_STORAGE_JWT_KEY } from "@/constants";
 import { Keyboard } from "react-native";
 import { Text } from "@/components/ui/text";
 import { obfuscateEmail, useDebounce } from "@/utils/helper";
+import { Spinner } from "@/components/ui/spinner";
 
 // i18n.locale = getLocales()[0].languageCode ?? "vn";
 i18n.locale = "vn";
@@ -115,10 +116,10 @@ const Verify = () => {
             textInputProps={{
               accessibilityLabel: "One-Time Password",
             }}
-            autoFocus={false}
+            autoFocus={true}
           />
         </View>
-
+        {isLoading && <Spinner size={"large"} />}
         <View className="my-3 flex items-center flex-row gap-3">
           <Text size="lg">{i18n.t("send_otp_text")}</Text>
           <TouchableOpacity>

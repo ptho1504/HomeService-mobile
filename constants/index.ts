@@ -1,10 +1,18 @@
 import onboarding1 from "@/assets/images/onboarding1.png";
 import onboarding2 from "@/assets/images/onboarding2.png";
 import onboarding3 from "@/assets/images/onboarding3.png";
+import mk1 from "@/assets/images/mkt/mkt1.jpg";
+import mk2 from "@/assets/images/mkt/mkt2.jpg";
+import mk3 from "@/assets/images/mkt/mkt3.png";
+import mk4 from "@/assets/images/mkt/mkt4.png";
 export const images = {
   onboarding1,
   onboarding2,
   onboarding3,
+  mk1,
+  mk2,
+  mk3,
+  mk4,
 };
 import { getLocales } from "expo-localization";
 import { i18n, Language } from "@/localization";
@@ -40,19 +48,25 @@ export const carousels: CarouselItem[] = [
     id: 1,
     title: "Title 1",
     description: i18n.t("onboard_1_decription"),
-    poster: images.onboarding1,
+    poster: images.mk1,
   },
   {
     id: 2,
     title: "Title 2",
     description: i18n.t("onboard_2_decription"),
-    poster: images.onboarding2,
+    poster: images.mk2,
   },
   {
     id: 3,
     title: "Title 3",
     description: i18n.t("onboard_3_decription"),
-    poster: images.onboarding3,
+    poster: images.mk3,
+  },
+  {
+    id: 4,
+    title: "Title 4",
+    description: i18n.t("onboard_3_decription"),
+    poster: images.mk4,
   },
 ];
 

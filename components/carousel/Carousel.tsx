@@ -25,6 +25,7 @@ const Carousel = () => {
         onScroll={(event) => {
           scrollX.value = event.nativeEvent.contentOffset.x;
         }}
+        showsHorizontalScrollIndicator={false}
       >
         {carousels.map((item) => (
           <CardCarousel

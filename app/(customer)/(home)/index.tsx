@@ -9,6 +9,8 @@ import {
   SafeAreaView,
   TouchableWithoutFeedback,
   Image,
+  ScrollView,
+  RefreshControl,
 } from "react-native";
 import { useSelector } from "react-redux";
 import * as SecureStore from "expo-secure-store";
@@ -18,19 +20,37 @@ import Ionicons from "@expo/vector-icons/Ionicons";
 import { Text } from "@/components/ui/text";
 import FlagVN from "@/components/svg/FlagVN";
 import { Pressable } from "@/components/ui/pressable";
-import { i18n } from "@/localization";
+import { i18n, Language } from "@/localization";
 import { HStack } from "@/components/ui/hstack";
 import Carousel from "@/components/carousel/Carousel";
+import ListServices from "@/components/list-services/ListServices";
+
+i18n.locale = "vn";
+i18n.enableFallback = true;
+i18n.defaultLocale = Language.VIETNAMESE;
 
 const Home = () => {
   const currentUser = useSelector(selectUser);
   // console.log("currentUser", currentUser);
+  const [refreshing, setRefreshing] = React.useState(false);
 
+  const onRefresh = React.useCallback(() => {
+    setRefreshing(true);
+    setTimeout(() => {
+      setRefreshing(false);
+    }, 2000);
+  }, []);
   return (
-    <SafeAreaView className="relative flex h-full">
-      <View>
+    <SafeAreaView className="relative flex-1">
+      <ScrollView
+        className="h-full"
+        contentContainerStyle={{ flexGrow: 1 }}
+        refreshControl={
+          <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+        }
+      >
         <Image
-          className="h-full w-full absolute opacity-30"
+          className="h-full w-full absolute top-0 left-0 opacity-30"
           source={require("@/assets/images/bg2.jpg")}
         />
         <VStack space="2xl" className="px-5 h-full flex items-center">
@@ -95,11 +115,19 @@ const Home = () => {
               )}
             </Pressable>
           </Box>
-          <Box className="w-full h-auto rounded-3xl bg-white px-8">
+          {/* Carousel */}
+          <Box className="w-full h-auto rounded-3xl bg-white px-7">
             <Carousel />
           </Box>
+          {/* Service */}
+          <Box className="p-4 w-full h-auto rounded-3xl bg-white">
+            <Text size="2xl" className="font-bold">
+              {i18n.t("service")}
+            </Text>
+            <ListServices />
+          </Box>
         </VStack>
-      </View>
+      </ScrollView>
     </SafeAreaView>
   );
 };

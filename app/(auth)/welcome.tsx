@@ -5,6 +5,7 @@ import {
   Button,
   Image,
   ImageSourcePropType,
+  StatusBar,
   StyleSheet,
   Text,
   TouchableOpacity,
@@ -18,8 +19,9 @@ import Loading from "@/components/loading/Loading";
 
 const Welcome = () => {
   return (
-    <SafeAreaView className="flex h-full items-center justify-between bg-red-700">
+    <Box className="flex h-full items-center justify-between bg-red-700">
       {/* Onboards */}
+
       <View className="py-24 bg-white flex items-center justify-between">
         <View className="flex h- justify-center flex-row gap-2">
           <Text className="text-black text-3xl font-extrabold">Home</Text>
@@ -29,7 +31,7 @@ const Welcome = () => {
         </View>
         <Onboarding onboardings={onboardings} />
       </View>
-    </SafeAreaView>
+    </Box>
   );
 };
 

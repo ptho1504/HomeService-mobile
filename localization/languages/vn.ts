@@ -38,4 +38,6 @@ export const vn = {
   [LocalizationKey.HAVE_ACCOUNT]: "Bạn đã có tài khoản ?",
   [LocalizationKey.ENTER_VERIFY]: "Nhập mã xác nhận",
   [LocalizationKey.DISCOVER_WELCOME]: "Khám phá các dịch vụ kể từ hôm nay",
+  [LocalizationKey.SERVICE]: "Dịch vụ",
+  [LocalizationKey.ACCOUNT]: "Tài khoản",
 };

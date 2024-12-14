@@ -1,17 +1,17 @@
-import React, { useEffect, useState } from "react";
-import { Redirect } from "expo-router";
-import { Text, View } from "react-native";
-import { useSelector } from "react-redux";
+import React, { useEffect, useState } from 'react';
+import { Redirect } from 'expo-router';
+import { Text, View } from 'react-native';
+import { useSelector } from 'react-redux';
 import {
   authenticateUser,
   selectIsAuthenticated,
   setUser,
-} from "@/store/reducers";
-import * as SecureStore from "expo-secure-store";
-import { LOCAL_STORAGE_JWT_KEY } from "@/constants";
-import { useVerifyJwtForUserMutation } from "@/services";
-import { useDispatch } from "react-redux";
-import Loading from "@/components/loading/Loading";
+} from '@/store/reducers';
+import * as SecureStore from 'expo-secure-store';
+import { LOCAL_STORAGE_JWT_KEY } from '@/constants';
+import { useVerifyJwtForUserMutation } from '@/services';
+import { useDispatch } from 'react-redux';
+import Loading from '@/components/loading/Loading';
 
 const App = () => {
   // const isAuthenticated = useSelector(selectIsAuthenticated);
@@ -33,7 +33,7 @@ const App = () => {
       const response = await verifyJwtForUser({ jwt });
 
       if (response.error) {
-        const message = response.error.data?.message || "Unknown error";
+        const message = response.error.data?.message || 'Unknown error';
         console.error(message);
         return;
       } else if (response.data) {
@@ -41,7 +41,7 @@ const App = () => {
         dispatch(authenticateUser(true));
       }
     } catch (error) {
-      console.error("Error retrieving token:", error);
+      console.error('Error retrieving token:', error);
     } finally {
       setLoading(false);
     }
@@ -55,9 +55,9 @@ const App = () => {
     return <Loading />;
   }
 
-  if (isAuthenticated) {
-    return <Redirect href={"/(customer)/(home)"} />;
-  }
+  // if (isAuthenticated) {
+  //   return <Redirect href={"/(customer)/(home)"} />;
+  // }
 
   return <Redirect href="/(auth)/welcome" />;
 };

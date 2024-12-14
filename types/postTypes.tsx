@@ -5,7 +5,8 @@ export type RootStackParamList = {
   UpcomingWork: { status: string };
   PackageWork: { status: string };
   PastWork: { status: string };
-  PostDetail: { post: PostModel | null };
+  NewPost: { status: string };
+  RequestPost: { status: string };
 };
 
 export interface HouseCleaningOption {
@@ -18,6 +19,12 @@ export interface Package {
   key: string;
   value: string;
   month: number;
+}
+
+export interface CreateTakePostModel {
+  id: string;
+  freelancerId: string;
+  status: string;
 }
 
 export interface CreatePostModel {
@@ -75,6 +82,7 @@ export interface TakePostModel {
   freelancer: UserModel;
   createdAt: number[]; // [Year, Month, Day, Hour, Minute, Second, Millisecond]
   updatedAt: number[];
+  post: PostModel;
 }
 
 export interface WorkScheduleModel {

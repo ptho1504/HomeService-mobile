@@ -31,6 +31,7 @@ import {
 } from '@/components/ui/toast';
 import PostInfo from '@/components/post/PostInfo';
 import PostAddress from '@/components/post/PostAddress';
+import { LinearGradient } from 'expo-linear-gradient';
 
 const options: HouseCleaningOption[] = [
   { area: 60, totalFreelancers: 2, duration: 3 },
@@ -108,12 +109,17 @@ const Checkout = () => {
 
   return (
     <SafeAreaView className="flex h-full">
+      <LinearGradient
+        // Background Linear Gradient
+        colors={['#ebf7eb', 'transparent', '#ffffff']}
+        className="absolute h-[1000px] left-0 right-0 top-0"
+      />
       <ScrollView>
         <Box className="overflow-y-auto m-3">
           <VStack space="md">
             <PostAddress canChange={true} />
             <PostInfo workType={workType} postForm={postForm} />
-            <Card size="md" variant="elevated">
+            <Card size="md" variant="elevated" className="shadow-2xl">
               <VStack space="md">
                 <Heading>Hình thức thanh toán</Heading>
                 <VStack
@@ -163,7 +169,7 @@ const Checkout = () => {
                 </VStack>
               </VStack>
             </Card>
-            <Card size="md" variant="elevated">
+            <Card size="md" variant="elevated" className="shadow-2xl">
               <VStack space="md">
                 <Heading>Ghi chú cho Freelancers</Heading>
                 <Text className="text-gray-500">
@@ -198,13 +204,13 @@ const Checkout = () => {
         <VStack space="md">
           <Box className="flex flex-row justify-between items-center">
             <Text className="text-xl font-semibold">Tổng cộng:</Text>
-            <Text className="text-xl font-semibold text-green-600">
+            <Text className="text-xl font-semibold text-success-400">
               {postForm?.price.toLocaleString()} VND
             </Text>
           </Box>
           <Button
             size="xl"
-            className="bg-green-500 flex flex-row items-center justify-center"
+            className="bg-success-300 flex flex-row items-center justify-center"
             action="positive"
             onPress={handlePost}
           >

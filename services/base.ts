@@ -41,5 +41,5 @@ const baseQueryWithInterceptor = async (
 export const API = createApi({
   baseQuery: baseQueryWithInterceptor,
   endpoints: () => ({}),
-  tagTypes: ['Posts'],
+  tagTypes: ['Posts', 'PostsByCustomerId', 'TakePostsByFreelancerId'],
 });

@@ -95,7 +95,7 @@ const ScrollPickerModal = ({
             <ButtonText>Hủy</ButtonText>
           </Button>
           <Button
-            className="bg-green-600"
+            className="bg-success-400"
             action="positive"
             onPress={handleApplyTime}
           >

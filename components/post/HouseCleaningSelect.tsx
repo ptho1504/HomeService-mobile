@@ -7,6 +7,7 @@ import { Card } from '../ui/card';
 import { VStack } from '../ui/vstack';
 import { HStack } from '../ui/hstack';
 import { HouseCleaningOption } from '@/types/postTypes';
+import { Grid, GridItem } from '../ui/grid';
 
 export const houseCleaningOptions: HouseCleaningOption[] = [
   { area: 40, totalFreelancers: 1, duration: 2 },
@@ -27,67 +28,50 @@ const HouseCleaningSelect = ({ selectedOption, handleOptionSelect }: Props) => {
     <Card size="md" variant="elevated">
       <VStack space="md">
         <Heading>Thời lượng và diện tích</Heading>
-        <Text className="text-gray-500">
+        <Text className="text-secondary-500">
           Vui lòng ước tính chính xác diện tích cần dọn đẹp.
         </Text>
-        <ScrollView horizontal showsHorizontalScrollIndicator={false}>
-          <VStack space="sm">
-            <HStack space="sm" className="justify-between items-center">
-              {houseCleaningOptions.slice(0, 3).map((option, index) => (
+        <VStack space="sm">
+          <Grid
+            className="gap-4"
+            _extra={{
+              className: 'grid-cols-12',
+            }}
+          >
+            {houseCleaningOptions.map((option, index) => (
+              <GridItem
+                key={index}
+                _extra={{
+                  className: 'col-span-5',
+                }}
+              >
                 <Pressable
                   key={index}
                   onPress={() => handleOptionSelect(option)}
                   className={`border rounded-lg p-4 ${
                     selectedOption === option
-                      ? 'border-green-500 bg-green-50'
-                      : 'border-gray-300 bg-white'
+                      ? 'border-success-500 bg-success-0'
+                      : 'border-secondary-300 bg-white'
                   }`}
                 >
                   <VStack>
                     <Text
                       size="lg"
                       className={`font-semibold ${
-                        selectedOption === option ? 'text-green-600' : ''
+                        selectedOption === option ? 'text-success-600' : ''
                       }`}
                     >
                       Tối đa {option.area}m²
                     </Text>
-                    <Text size="md" className="text-gray-500">
+                    <Text size="md" className="text-secondary-500">
                       {option.totalFreelancers} người / {option.duration} giờ
                     </Text>
                   </VStack>
                 </Pressable>
-              ))}
-            </HStack>
-            <HStack space="sm" className="justify-between items-center">
-              {houseCleaningOptions.slice(3).map((option, index) => (
-                <Pressable
-                  key={index + 3} // Đảm bảo key là duy nhất
-                  onPress={() => handleOptionSelect(option)}
-                  className={`border rounded-lg p-4 ${
-                    selectedOption === option
-                      ? 'border-green-500 bg-green-50'
-                      : 'border-gray-300 bg-white'
-                  }`}
-                >
-                  <VStack>
-                    <Text
-                      size="lg"
-                      className={`font-semibold ${
-                        selectedOption === option ? 'text-green-600' : ''
-                      }`}
-                    >
-                      Tối đa {option.area}m²
-                    </Text>
-                    <Text size="md" className="text-gray-500">
-                      {option.totalFreelancers} người / {option.duration} giờ
-                    </Text>
-                  </VStack>
-                </Pressable>
-              ))}
-            </HStack>
-          </VStack>
-        </ScrollView>
+              </GridItem>
+            ))}
+          </Grid>
+        </VStack>
       </VStack>
     </Card>
   );

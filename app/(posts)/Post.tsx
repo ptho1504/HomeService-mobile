@@ -4,7 +4,7 @@ import React, { useEffect } from 'react';
 import { SafeAreaView } from 'react-native';
 import { WorkType } from '@/constants';
 import { Box } from '@/components/ui/box';
-import { useGetPostsByUserIdQuery } from '@/services/post';
+import { useGetPostsByCustomerIdQuery } from '@/services/post';
 import {
   Toast,
   ToastDescription,
@@ -14,12 +14,13 @@ import {
 import PostSkeleton from '@/components/activity/PostSkeleton';
 import PostList from '@/components/activity/PostList';
 import { PostModel } from '@/types/postTypes';
+import { LinearGradient } from 'expo-linear-gradient';
 
 const userId = 'USER-1';
 
 const Post = () => {
   const { workType } = useLocalSearchParams();
-  const { data, error, isFetching } = useGetPostsByUserIdQuery({
+  const { data, error, isFetching } = useGetPostsByCustomerIdQuery({
     id: userId,
     workId: workType === WorkType.BABYSITTING.key ? 'WORK-2' : 'WORK-1',
   });
@@ -70,12 +71,17 @@ const Post = () => {
 
   return (
     <SafeAreaView className="flex h-full">
+      <LinearGradient
+        // Background Linear Gradient
+        colors={['#ebf7eb', 'transparent', '#ffffff']}
+        className="absolute h-[1000px] left-0 right-0 top-0"
+      />
       {isFetching ? <PostSkeleton /> : <PostList posts={posts} />}
       <Box className="sticky bottom-0 p-4">
         <Button
           onPress={() => router.push(`/PostForm?workType=${workType}`)}
           size="xl"
-          className="bg-green-500 flex flex-row items-center justify-center"
+          className="bg-success-300 flex flex-row items-center justify-center"
           action="positive"
         >
           <ButtonText>

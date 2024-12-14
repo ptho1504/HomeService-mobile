@@ -24,12 +24,12 @@ const PostOption = ({ chooseFreelancers, toggleSwitch }: Props) => {
         <VStack space="lg">
           <HStack space="sm" className="items-center justify-between">
             <HStack space="sm" className="items-center">
-              <Text className="text-green-600 text-md">
+              <Text className="text-success-400 text-md">
                 <Ionicons name="people-outline" size={24} />
               </Text>
               <Text className="text-lg font-medium">Tự chọn freelancers</Text>
 
-              <Text className="text-green-600 text-md">
+              <Text className="text-success-400 text-md">
                 <Ionicons name="help-circle-outline" size={16} />
               </Text>
             </HStack>

@@ -41,6 +41,7 @@ import {
   ToastTitle,
   useToast,
 } from '@/components/ui/toast';
+import { LinearGradient } from 'expo-linear-gradient';
 
 const userId = 'USER-1';
 const workId = 'WORK-1';
@@ -225,6 +226,11 @@ const HouseCleaningForm = () => {
 
   return (
     <SafeAreaView className="flex h-full">
+      <LinearGradient
+        // Background Linear Gradient
+        colors={['#ebf7eb', 'transparent', '#ffffff']}
+        className="absolute h-[1000px] left-0 right-0 top-0"
+      />
       <ScrollView>
         <Box className="overflow-y-auto m-3">
           <VStack space="md">
@@ -274,7 +280,7 @@ const HouseCleaningForm = () => {
         <Button
           onPress={navigateToCheckout}
           size="xl"
-          className="bg-green-500 flex flex-row items-center justify-between"
+          className="bg-success-300 flex flex-row items-center justify-between"
           action="positive"
         >
           <ButtonText>{price.toLocaleString()} VND</ButtonText>

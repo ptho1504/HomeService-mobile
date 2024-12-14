@@ -49,7 +49,7 @@ const PostInfo = ({ workType, postForm, showStatus }: Props) => {
 
   return (
     <>
-      <Card size="md" variant="elevated">
+      <Card size="md" variant="elevated" className="shadow-2xl">
         <VStack space="md">
           <Heading>Thông tin chi tiết</Heading>
           <VStack

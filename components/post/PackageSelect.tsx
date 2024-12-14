@@ -59,14 +59,14 @@ const PackageSelect = ({ selectedPackage, handlePackageSelect }: Props) => {
                 onPress={() => handlePackageSelect(pack)}
                 className={`border rounded-lg p-4 ${
                   selectedPackage === pack
-                    ? 'border-green-500 bg-green-50'
+                    ? 'border-success-400 bg-success-0'
                     : 'border-gray-300 bg-white'
                 }`}
               >
                 <Text
                   size="lg"
                   className={`font-semibold ${
-                    selectedPackage === pack ? 'text-green-600' : ''
+                    selectedPackage === pack ? 'text-success-400' : ''
                   }`}
                 >
                   {pack.value}

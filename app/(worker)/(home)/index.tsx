@@ -5,40 +5,45 @@ import {
   ToastTitle,
   useToast,
 } from '@/components/ui/toast';
-import { PackageName } from '@/constants';
+import { TakePostStatus } from '@/constants';
+import {
+  useGetPostsByFreelancerIdQuery,
+  useGetPostsQuery,
+} from '@/services/post';
 import React, { useEffect } from 'react';
 import { SafeAreaView } from 'react-native';
-import { Button, ButtonText } from '@/components/ui/button';
-import { router } from 'expo-router';
+
 import PostList from '@/components/activity/PostList';
 import PostSkeleton from '@/components/activity/PostSkeleton';
-import { PostModel, RootStackParamList } from '@/types/postTypes';
+import {
+  PostModel,
+  RootStackParamList,
+  TakePostModel,
+} from '@/types/postTypes';
 import { RouteProp } from '@react-navigation/native';
-import { useGetPostsByCustomerIdQuery } from '@/services/post';
 import { useSelector } from 'react-redux';
 import { selectUser } from '@/store/reducers';
 import { LinearGradient } from 'expo-linear-gradient';
+import { isPostModel } from '@/components/post/PostInfo';
 
 interface Props {
   route:
-    | RouteProp<RootStackParamList, 'UpcomingWork'>
-    | RouteProp<RootStackParamList, 'PackageWork'>
-    | RouteProp<RootStackParamList, 'PastWork'>;
+    | RouteProp<RootStackParamList, 'NewPost'>
+    | RouteProp<RootStackParamList, 'RequestPost'>;
 }
 
 const Posts = ({ route }: Props) => {
-  const currentUser = useSelector(selectUser);
-  const userId = currentUser?.id ? currentUser.id : '';
   const { status } = route.params;
-  const query =
-    status === 'UPCOMING'
-      ? { id: userId, packageName: PackageName._1DAY.key }
-      : status === 'PACKAGE'
-      ? { id: userId, packageName: PackageName._1MONTH.key }
-      : { id: userId };
-  const { data, error, isFetching } = useGetPostsByCustomerIdQuery(query);
-
+  const currentUser = useSelector(selectUser);
   const toast = useToast();
+
+  const { data, error, isFetching } =
+    status === 'NEW'
+      ? useGetPostsQuery({ freelancerId: currentUser?.id ?? '' })
+      : useGetPostsByFreelancerIdQuery({
+          id: currentUser?.id ?? '',
+          workStatus: TakePostStatus.PENDING.key,
+        });
 
   useEffect(() => {
     if (error || (data && data.returnCode !== 1000)) {
@@ -60,26 +65,20 @@ const Posts = ({ route }: Props) => {
     }
   }, []);
 
-  let posts: PostModel[] = data?.items ? data?.items : [];
+  let posts = data?.items ? data?.items : [];
 
   return (
-    <SafeAreaView className="flex h-full bg-[#ebf7eb]">
+    <SafeAreaView className="flex h-full">
       <LinearGradient
         // Background Linear Gradient
         colors={['#ebf7eb', 'transparent', '#ffffff']}
         className="absolute h-[1000px] left-0 right-0 top-0"
       />
-      {isFetching ? <PostSkeleton /> : <PostList posts={posts} />}
-      <Box className="sticky bottom-0 p-4 bg-white">
-        <Button
-          onPress={() => router.push('../(home)')}
-          size="xl"
-          className="bg-success-300 flex flex-row items-center justify-center"
-          action="positive"
-        >
-          <ButtonText>Đăng việc mới</ButtonText>
-        </Button>
-      </Box>
+      {isFetching ? (
+        <PostSkeleton />
+      ) : (
+        <PostList posts={posts} takePostStatus={status} />
+      )}
     </SafeAreaView>
   );
 };

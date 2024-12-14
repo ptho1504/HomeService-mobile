@@ -60,7 +60,7 @@ const WorkSchedule = ({
       <Card size="md" variant="elevated">
         <VStack space="md">
           <Heading>Lịch làm việc</Heading>
-          <Text className="text-gray-500">
+          <Text className="text-secondary-400">
             Chọn ngày làm việc và thời gian phù hợp.
           </Text>
 
@@ -77,8 +77,8 @@ const WorkSchedule = ({
                           workSchedules.some(schedule => {
                             return schedule.date.getTime() === day.getTime();
                           })
-                            ? 'bg-green-50 border-green-500'
-                            : 'bg-white border-gray-300'
+                            ? 'bg-success-0 border-success-400'
+                            : 'bg-white border-secondary-300'
                         }`}
                       >
                         <Text
@@ -86,8 +86,8 @@ const WorkSchedule = ({
                             workSchedules.some(schedule => {
                               return schedule.date.getTime() === day.getTime();
                             })
-                              ? 'text-green-600'
-                              : 'text-gray-700'
+                              ? 'text-success-500'
+                              : 'text-secondary-600'
                           }`}
                         >
                           {day.toLocaleDateString('vi-VN', {
@@ -99,8 +99,8 @@ const WorkSchedule = ({
                             workSchedules.some(schedule => {
                               return schedule.date.getTime() === day.getTime();
                             })
-                              ? 'text-green-600'
-                              : 'text-gray-700'
+                              ? 'text-success-600'
+                              : 'text-secondary-700'
                           }`}
                         >
                           {day.getDate()}
@@ -115,8 +115,8 @@ const WorkSchedule = ({
                           daysOfWeek.some(dayOfWeek => {
                             return dayOfWeek === day;
                           })
-                            ? 'bg-green-50 border-green-500'
-                            : 'bg-white border-gray-300'
+                            ? 'bg-success-0 border-success-400'
+                            : 'bg-white border-secondary-300'
                         }`}
                       >
                         <Text
@@ -124,8 +124,8 @@ const WorkSchedule = ({
                             daysOfWeek.some(dayOfWeek => {
                               return dayOfWeek === day;
                             })
-                              ? 'text-green-600'
-                              : 'text-gray-700'
+                              ? 'text-success-600'
+                              : 'text-secondary-700'
                           }`}
                         >
                           {day}
@@ -139,8 +139,8 @@ const WorkSchedule = ({
               <Pressable onPress={() => setShowCalendarModal(true)}>
                 {({ pressed }) => (
                   <Box
-                    className={`flex flex-row justify-between items-center p-2 border border-gray-400 rounded-lg ${
-                      pressed && 'opacity-50'
+                    className={`flex flex-row justify-between items-center p-2 border border-secondary-400 rounded-lg ${
+                      pressed && 'opacity-0'
                     }`}
                   >
                     <HStack space="md" className="items-center">
@@ -162,7 +162,7 @@ const WorkSchedule = ({
             {/* Chọn giờ làm việc */}
             <HStack
               space="sm"
-              className="items-center border border-gray-400 p-2 rounded-lg justify-between"
+              className="items-center border border-secondary-400 p-2 rounded-lg justify-between"
             >
               <HStack space="sm" className="items-center">
                 <Text className="text-cyan-600 text-md">
@@ -172,7 +172,10 @@ const WorkSchedule = ({
               </HStack>
 
               <Pressable onPress={() => setShowPickerModal(true)}>
-                <HStack space="md" className="px-4 py-2 bg-gray-100 rounded-lg">
+                <HStack
+                  space="md"
+                  className="px-4 py-2 bg-secondary-100 rounded-lg"
+                >
                   <Text className="font-medium">
                     {selectedHour < 10 ? '0' + selectedHour : selectedHour}
                   </Text>

@@ -26,7 +26,7 @@ interface Props {
 
 const PostAddress = ({ canChange }: Props) => {
   return (
-    <Card size="md" variant="elevated">
+    <Card size="md" variant="elevated" className="shadow-2xl">
       <VStack space="md">
         <Heading>Địa chỉ làm việc</Heading>
         <VStack
@@ -54,7 +54,7 @@ const PostAddress = ({ canChange }: Props) => {
             {canChange && (
               <Button
                 action="positive"
-                className="rounded-2xl bg-green-600"
+                className="rounded-2xl bg-success-300"
                 size="sm"
               >
                 <ButtonText>Thay đổi</ButtonText>

@@ -59,14 +59,14 @@ const Babysitting = ({
                     onPress={() => handleSelectNumOfBaby(option)}
                     className={`border rounded-lg py-4 px-6 ${
                       numOfBaby === option
-                        ? 'border-green-500 bg-green-50'
-                        : 'border-gray-300 bg-white'
+                        ? 'border-success-400 bg-success-0'
+                        : 'border-gray-400 bg-white'
                     }`}
                   >
                     <Text
                       size="lg"
                       className={`font-semibold ${
-                        numOfBaby === option ? 'text-green-600' : ''
+                        numOfBaby === option ? 'text-success-400' : ''
                       }`}
                     >
                       {option} trẻ
@@ -98,15 +98,15 @@ const Babysitting = ({
                           onPress={() => handleAddBaby(childIndex, age.key)}
                           className={`border rounded-lg py-4 px-6 ${
                             ages[childIndex] === age.key
-                              ? 'border-green-500 bg-green-50'
-                              : 'border-gray-300 bg-white'
+                              ? 'border-success-400 bg-success-0'
+                              : 'border-gray-400 bg-white'
                           }`}
                         >
                           <Text
                             size="lg"
                             className={`font-semibold ${
                               ages[childIndex] === age.key
-                                ? 'text-green-600'
+                                ? 'text-success-400'
                                 : ''
                             }`}
                           >
@@ -144,15 +144,15 @@ const Babysitting = ({
                     onPress={() => handleSelectDuration(option)}
                     className={`border rounded-lg p-4 ${
                       duration === option
-                        ? 'border-green-500 bg-green-50'
-                        : 'border-gray-300 bg-white'
+                        ? 'border-success-400 bg-success-0'
+                        : 'border-gray-400 bg-white'
                     }`}
                   >
                     <VStack>
                       <Text
                         size="lg"
                         className={`font-semibold ${
-                          duration === option ? 'text-green-600' : ''
+                          duration === option ? 'text-success-400' : ''
                         }`}
                       >
                         {option} giờ

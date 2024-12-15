@@ -55,7 +55,7 @@ const Home = () => {
         />
         <VStack space="2xl" className="px-5 h-full flex items-center">
           {/* Hello And change languae */}
-          <Box className="w-full m-5 px-8 py-2 flex flex-row justify-center h-auto bg-green-300 rounded-full">
+          <Box className="w-full m-5 px-8 py-2 flex flex-row justify-between h-auto bg-green-300 rounded-full">
             <VStack>
               <Text size="xl" className="px-4 w-full text-white font-semibold">
                 Xin chào 👋,

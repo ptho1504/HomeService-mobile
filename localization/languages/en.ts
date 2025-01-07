@@ -41,4 +41,12 @@ export const en = {
     "Explore services and experiences from today? ",
   [LocalizationKey.SERVICE]: "Service",
   [LocalizationKey.ACCOUNT]: "Account",
+  [LocalizationKey.REPUTATION]: "Reputation Point",
+  [LocalizationKey.PHONE]: "Phone",
+  [LocalizationKey.EMAIL]: "Email",
+  [LocalizationKey.FINANCE]: "Finance",
+  [LocalizationKey.ADDRESSES]: "Addresses",
+  [LocalizationKey.ADD_ADDRESSES]: "Add Addresses",
+  [LocalizationKey.NO_ADDRESSES]: "You should add address",
+  [LocalizationKey.LOG_OUT]: "Logout",
 };

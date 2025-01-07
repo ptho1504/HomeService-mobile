@@ -34,4 +34,12 @@ export enum LocalizationKey {
   DISCOVER_WELCOME = "discover_welcome",
   SERVICE = "service",
   ACCOUNT = "account",
+  REPUTATION = "reputation",
+  PHONE = "phone",
+  EMAIL = "email",
+  FINANCE = "finance",
+  ADDRESSES = "addresses",
+  ADD_ADDRESSES = "add_addresses",
+  NO_ADDRESSES = "no_addresses",
+  LOG_OUT = "log_out",
 }

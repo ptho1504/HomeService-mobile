@@ -40,4 +40,12 @@ export const vn = {
   [LocalizationKey.DISCOVER_WELCOME]: "Khám phá các dịch vụ kể từ hôm nay",
   [LocalizationKey.SERVICE]: "Dịch vụ",
   [LocalizationKey.ACCOUNT]: "Tài khoản",
+  [LocalizationKey.REPUTATION]: "Điểm uy tín",
+  [LocalizationKey.PHONE]: "Số điện thoại",
+  [LocalizationKey.EMAIL]: "Email",
+  [LocalizationKey.FINANCE]: "Tài chính",
+  [LocalizationKey.ADDRESSES]: "Danh sách địa chỉ",
+  [LocalizationKey.ADD_ADDRESSES]: "Thêm địa chỉ mới",
+  [LocalizationKey.NO_ADDRESSES]: "Bạn cần thêm địa chỉ mới",
+  [LocalizationKey.LOG_OUT]: "Đăng xuất",
 };

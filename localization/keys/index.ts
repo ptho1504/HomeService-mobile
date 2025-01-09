@@ -42,4 +42,7 @@ export enum LocalizationKey {
   ADD_ADDRESSES = "add_addresses",
   NO_ADDRESSES = "no_addresses",
   LOG_OUT = "log_out",
+  SAVE = "save",
+  EDIT_PROFILE = "edit_profile",
+  USERNAME = "username",
 }

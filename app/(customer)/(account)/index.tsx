@@ -49,6 +49,8 @@ const Home = () => {
 
   const handleEdit = () => {
     console.log("Edit mode");
+
+    router.push("/(customer)/(account)/edit-profile");
   };
 
   const handleFinance = () => {
@@ -132,7 +134,8 @@ const Home = () => {
                       {currentUser?.name}
                     </Text>
                     <Pressable onPress={handleEdit}>
-                      <View className="bg-[#66B584] rounded-md">
+                      {/* <View className="bg-[#66B584] rounded-md"> */}
+                      <View className="bg-red-500 rounded-md">
                         <Text className="text-md text-white px-2 py-1">
                           Cập nhập
                         </Text>

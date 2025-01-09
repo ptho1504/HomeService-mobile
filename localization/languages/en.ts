@@ -49,4 +49,7 @@ export const en = {
   [LocalizationKey.ADD_ADDRESSES]: "Add Addresses",
   [LocalizationKey.NO_ADDRESSES]: "You should add address",
   [LocalizationKey.LOG_OUT]: "Logout",
+  [LocalizationKey.SAVE]: "Save",
+  [LocalizationKey.EDIT_PROFILE]: "Edit Profile",
+  [LocalizationKey.USERNAME]: "Your name",
 };

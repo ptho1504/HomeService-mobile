@@ -48,4 +48,7 @@ export const vn = {
   [LocalizationKey.ADD_ADDRESSES]: "Thêm địa chỉ mới",
   [LocalizationKey.NO_ADDRESSES]: "Bạn cần thêm địa chỉ mới",
   [LocalizationKey.LOG_OUT]: "Đăng xuất",
+  [LocalizationKey.SAVE]: "Lưu",
+  [LocalizationKey.EDIT_PROFILE]: "Thay đổi thông tin cá nhân",
+  [LocalizationKey.USERNAME]: "Họ và tên",
 };

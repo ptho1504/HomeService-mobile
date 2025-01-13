@@ -78,7 +78,7 @@ const Onboarding = ({ onboardings }: Props) => {
             <TouchableOpacity
               className=""
               onPress={() => {
-                router.replace('/(auth)/log-in');
+                router.replace('/(customer)/(home)');
               }}
             >
               <Text className="text-white text-lg font-semibold my-4 py-3 px-12 bg-green-600 rounded-full shadow-lg shadow-green-500">

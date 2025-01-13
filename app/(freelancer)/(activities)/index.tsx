@@ -12,7 +12,7 @@ import { SafeAreaView } from 'react-native';
 import { Button, ButtonText } from '@/components/ui/button';
 import { router } from 'expo-router';
 import PostList from '@/components/activity/PostList';
-import PostSkeleton from '@/components/activity/PostSkeleton';
+import PostSkeleton from '@/components/skeleton/PostSkeleton';
 import {
   PostModel,
   RootStackParamList,
@@ -41,7 +41,8 @@ const Posts = ({ route }: Props) => {
       : status === 'PACKAGE'
       ? { id: userId, packageName: PackageName._1MONTH.key }
       : { id: userId };
-  const { data, error, isFetching } = useGetPostsByFreelancerIdQuery(query);
+  const { data, error, isFetching, refetch } =
+    useGetPostsByFreelancerIdQuery(query);
 
   const toast = useToast();
 
@@ -57,7 +58,7 @@ const Posts = ({ route }: Props) => {
               <ToastTitle>
                 Lấy thông tin các bài đăng công việc thất bại
               </ToastTitle>
-              <ToastDescription>{data?.message}</ToastDescription>
+              <ToastDescription>{error.data.message}</ToastDescription>
             </Toast>
           );
         },
@@ -74,7 +75,11 @@ const Posts = ({ route }: Props) => {
         colors={['#ebf7eb', 'transparent', '#ffffff']}
         className="absolute h-[1000px] left-0 right-0 top-0"
       />
-      {isFetching ? <PostSkeleton /> : <PostList posts={takePosts} />}
+      {isFetching ? (
+        <PostSkeleton />
+      ) : (
+        <PostList posts={takePosts} refetch={refetch} />
+      )}
       <Box className="sticky bottom-0 p-4">
         <Button
           onPress={() => router.push('../(home)')}

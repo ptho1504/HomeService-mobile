@@ -1,5 +1,5 @@
 import React from 'react';
-import { SafeAreaView, ScrollView } from 'react-native';
+import { Pressable, SafeAreaView, ScrollView } from 'react-native';
 import { VStack } from '@/components/ui/vstack';
 import { HStack } from '@/components/ui/hstack';
 import { Card } from '@/components/ui/card';
@@ -8,9 +8,9 @@ import { Heading } from '@/components/ui/heading';
 import { Box } from '@/components/ui/box';
 import Ionicons from '@expo/vector-icons/Ionicons';
 
-import { PaymentType, TakePostStatus } from '@/constants';
+import { PaymentType, PostStatus, TakePostStatus, UserRole } from '@/constants';
 
-import PostInfo from '@/components/post/PostInfo';
+import PostInfo, { isPostModel } from '@/components/post/PostInfo';
 import PostAddress from '@/components/post/PostAddress';
 import PaymentStatusBadge from '@/components/badge/PaymentStatusBadge';
 import { useSelector } from 'react-redux';
@@ -28,6 +28,8 @@ import {
   ToastTitle,
   useToast,
 } from '@/components/ui/toast';
+import FreelancerInfo from '@/components/post/FreelancerInfo';
+import { Divider } from '@/components/ui/divider';
 
 const PostDetail = () => {
   const { takePostStatus } = useLocalSearchParams();
@@ -173,6 +175,12 @@ const PostDetail = () => {
                     </VStack>
                   </Card>
                 )}
+
+                <FreelancerInfo
+                  workType={post.work.name}
+                  postForm={post}
+                  showStatus={true}
+                />
               </VStack>
             </Box>
           </ScrollView>
@@ -213,6 +221,41 @@ const PostDetail = () => {
               )}
             </Box>
           )}
+
+          {[
+            PostStatus.CANCELED.key,
+            PostStatus.COMPLETED.key,
+            PostStatus.FAILED.key,
+          ].includes(post.status) &&
+            currentUser?.role === UserRole.CUSTOMER && (
+              <Box className="sticky bg-white p-4 rounded-t-lg shadow-lg">
+                <Button
+                  size="xl"
+                  action="positive"
+                  className="bg-success-300"
+                  onPress={() => actionPost(Mode.TAKE.key)}
+                >
+                  <ButtonText>Đăng lại</ButtonText>
+                </Button>
+              </Box>
+            )}
+
+          {isPostModel(post) &&
+            [PostStatus.INITIAL.key].includes(post.status) &&
+            currentUser?.role === UserRole.CUSTOMER &&
+            post.chooseFreelancer && (
+              <Box className="sticky bg-white p-4 rounded-t-lg shadow-lg">
+                <Button
+                  size="xl"
+                  action="positive"
+                  className="bg-success-300"
+                  onPress={() => actionPost(Mode.TAKE.key)}
+                >
+                  <ButtonText>Chọn Freelancer</ButtonText>
+                </Button>
+              </Box>
+            )}
+
           <TakePostDialog
             showAlertDialog={showAlertDialog}
             setShowAlertDialog={setShowAlertDialog}

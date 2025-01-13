@@ -7,6 +7,8 @@ export type RootStackParamList = {
   PastWork: { status: string };
   NewPost: { status: string };
   RequestPost: { status: string };
+  Chat: { status: string };
+  Notifications: { status: string };
 };
 
 export interface HouseCleaningOption {

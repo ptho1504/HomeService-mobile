@@ -72,7 +72,7 @@ const Verify = () => {
               if (role === UserRole.CUSTOMER) {
                 router.replace('/(customer)/(home)');
               } else {
-                router.replace('/(worker)/(home)');
+                router.replace('/(freelancer)/(home)');
               }
             }
           }

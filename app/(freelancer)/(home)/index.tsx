@@ -14,7 +14,7 @@ import React, { useEffect } from 'react';
 import { SafeAreaView } from 'react-native';
 
 import PostList from '@/components/activity/PostList';
-import PostSkeleton from '@/components/activity/PostSkeleton';
+import PostSkeleton from '@/components/skeleton/PostSkeleton';
 import {
   PostModel,
   RootStackParamList,
@@ -37,7 +37,7 @@ const Posts = ({ route }: Props) => {
   const currentUser = useSelector(selectUser);
   const toast = useToast();
 
-  const { data, error, isFetching } =
+  const { data, error, isFetching, refetch } =
     status === 'NEW'
       ? useGetPostsQuery({ freelancerId: currentUser?.id ?? '' })
       : useGetPostsByFreelancerIdQuery({
@@ -57,7 +57,7 @@ const Posts = ({ route }: Props) => {
               <ToastTitle>
                 Lấy thông tin các bài đăng công việc thất bại
               </ToastTitle>
-              <ToastDescription>{data?.message}</ToastDescription>
+              <ToastDescription>{error.data.message}</ToastDescription>
             </Toast>
           );
         },
@@ -77,7 +77,7 @@ const Posts = ({ route }: Props) => {
       {isFetching ? (
         <PostSkeleton />
       ) : (
-        <PostList posts={posts} takePostStatus={status} />
+        <PostList posts={posts} takePostStatus={status} refetch={refetch} />
       )}
     </SafeAreaView>
   );

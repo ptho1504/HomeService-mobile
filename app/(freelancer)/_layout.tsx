@@ -28,7 +28,7 @@ export default function Layout() {
           headerShown: true,
           headerShadowVisible: false,
           tabBarIcon: ({ color }) => (
-            <Ionicons size={28} name="home-outline" color={color} />
+            <Ionicons size={24} name="home-outline" color={color} />
           ),
         }}
       />
@@ -39,7 +39,7 @@ export default function Layout() {
           headerShown: true,
           headerShadowVisible: false,
           tabBarIcon: ({ color }) => (
-            <Ionicons size={28} name="clipboard-outline" color={color} />
+            <Ionicons size={24} name="clipboard-outline" color={color} />
           ),
         }}
       />
@@ -47,19 +47,21 @@ export default function Layout() {
         name="(notifications)"
         options={{
           title: i18n.t('chat'),
-          headerShown: false,
+          headerShown: true,
+          headerShadowVisible: false,
           tabBarIcon: ({ color }) => (
-            <Ionicons name="chatbox-outline" size={24} color={color} />
+            <Ionicons name="notifications-outline" size={24} color={color} />
           ),
         }}
       />
       <Tabs.Screen
         name="(profile)"
         options={{
-          title: i18n.t('activities'),
-          headerShown: false,
+          title: i18n.t('profile'),
+          headerShown: true,
+          headerShadowVisible: false,
           tabBarIcon: ({ color }) => (
-            <FontAwesome size={28} name="user" color={color} />
+            <Ionicons name="person-outline" size={24} color={color} />
           ),
         }}
       />

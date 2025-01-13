@@ -11,7 +11,7 @@ import {
   ToastTitle,
   useToast,
 } from '@/components/ui/toast';
-import PostSkeleton from '@/components/activity/PostSkeleton';
+import PostSkeleton from '@/components/skeleton/PostSkeleton';
 import PostList from '@/components/activity/PostList';
 import { PostModel } from '@/types/postTypes';
 import { LinearGradient } from 'expo-linear-gradient';
@@ -20,7 +20,7 @@ const userId = 'USER-1';
 
 const Post = () => {
   const { workType } = useLocalSearchParams();
-  const { data, error, isFetching } = useGetPostsByCustomerIdQuery({
+  const { data, error, isFetching, refetch } = useGetPostsByCustomerIdQuery({
     id: userId,
     workId: workType === WorkType.BABYSITTING.key ? 'WORK-2' : 'WORK-1',
   });
@@ -38,7 +38,7 @@ const Post = () => {
               <ToastTitle>
                 Lấy thông tin các bài đăng công việc thất bại
               </ToastTitle>
-              <ToastDescription>{data?.message}</ToastDescription>
+              <ToastDescription>{error.data.message}</ToastDescription>
             </Toast>
           );
         },
@@ -76,7 +76,11 @@ const Post = () => {
         colors={['#ebf7eb', 'transparent', '#ffffff']}
         className="absolute h-[1000px] left-0 right-0 top-0"
       />
-      {isFetching ? <PostSkeleton /> : <PostList posts={posts} />}
+      {isFetching ? (
+        <PostSkeleton />
+      ) : (
+        <PostList posts={posts} refetch={refetch} />
+      )}
       <Box className="sticky bottom-0 p-4">
         <Button
           onPress={() => router.push(`/PostForm?workType=${workType}`)}

@@ -56,7 +56,7 @@ const App = () => {
   }
 
   // if (isAuthenticated) {
-  //   return <Redirect href={"/(customer)/(home)"} />;
+  //   return <Redirect href={'/(customer)/(home)'} />;
   // }
 
   return <Redirect href="/(auth)/welcome" />;

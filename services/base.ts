@@ -14,9 +14,9 @@ const baseQuery = fetchBaseQuery({
     const token = await SecureStore.getItemAsync('jwt');
     // console.log("token in base APi", token);
 
-    if (token) {
-      headers.set('authorization', `Bearer ${token}`);
-    }
+    // if (token) {
+    //   headers.set('authorization', `Bearer ${token}`);
+    // }
     return headers;
   },
 });

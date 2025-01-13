@@ -45,4 +45,7 @@ export enum LocalizationKey {
   SAVE = "save",
   EDIT_PROFILE = "edit_profile",
   USERNAME = "username",
+  BANKS = "banks",
+  ACCOUNT_NUMBER = "account_number",
+  PLACEHOLDER_ACCOUNT_NUMBER = "placeholder_account_number",
 }

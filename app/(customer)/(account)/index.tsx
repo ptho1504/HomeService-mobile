@@ -22,19 +22,21 @@ import AntDesign from "@expo/vector-icons/AntDesign";
 import { HStack } from "@/components/ui/hstack";
 import ListAddress from "@/components/account/ListAddress";
 import { useDispatch } from "react-redux";
-import { router } from "expo-router";
+import { router, useFocusEffect } from "expo-router";
+import RequiredAuthenticationModal from "@/components/authentication/RequiredAuthenticationModal";
 i18n.locale = "vn";
 i18n.enableFallback = true;
 i18n.defaultLocale = Language.VIETNAMESE;
 
 const Home = () => {
   const currentUser = useSelector(selectUser);
+  const isAuthenticated = useSelector(selectIsAuthenticated);
+  // const isAuthenticated = true;
   const dispatch = useDispatch();
 
   // console.log("currentUser", currentUser);
 
   const [refreshing, setRefreshing] = React.useState(false);
-  const isAuthenticated = true;
   const [showModal, setShowModal] = React.useState(!isAuthenticated);
   const [showModalEdit, setShowModalEdit] = useState(false);
 
@@ -45,7 +47,6 @@ const Home = () => {
     }, 2000);
   }, []);
 
-  console.log(currentUser?.addresses);
 
   const handleEdit = () => {
     console.log("Edit mode");
@@ -73,8 +74,29 @@ const Home = () => {
     router.replace("/(customer)/(home)");
   };
 
+  useEffect(() => {
+    if (isAuthenticated) {
+      setShowModal(false);
+    }
+  }, [isAuthenticated]);
+  useFocusEffect(
+    React.useCallback(() => {
+      if (isAuthenticated) {
+        setShowModal(false); // Hide the modal if authenticated
+      } else {
+        setShowModal(true); // Show the modal if not authenticated
+      }
+    }, [isAuthenticated])
+  );
+
   return (
     <>
+      {!isAuthenticated && (
+        <RequiredAuthenticationModal
+          showModal={showModal}
+          setShowModal={setShowModal}
+        />
+      )}
       {isAuthenticated && (
         <SafeAreaView className="h-full w-full flex items-center bg-white">
           <ScrollView

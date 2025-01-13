@@ -8,6 +8,9 @@ import { Pressable } from "../ui/pressable";
 import MaterialIcons from "@expo/vector-icons/MaterialIcons";
 import { WorkType } from "@/constants";
 import { Href, router } from "expo-router";
+import { useSelector } from "react-redux";
+import { selectIsAuthenticated } from "@/store/reducers";
+import RequiredAuthenticationModal from "../authentication/RequiredAuthenticationModal";
 
 const OFFSET = 45;
 const ITEM_WIDTH = Dimensions.get("window").width - OFFSET * 2;
@@ -35,6 +38,8 @@ const services: IService[] = [
 ];
 
 export default function ListServices() {
+  const isAuthenticated = useSelector(selectIsAuthenticated);
+  const [showModal, setShowModal] = React.useState(false);
   return (
     <ScrollView
       horizontal
@@ -45,7 +50,13 @@ export default function ListServices() {
         return (
           <Pressable
             key={item.id}
-            onPress={() => router.push(item.href)}
+            onPress={() => {
+              if (!isAuthenticated) {
+                setShowModal(true);
+              } else {
+                router.push(item.href);
+              }
+            }}
             className="flex py-2"
           >
             {({ pressed }) => (
@@ -65,6 +76,12 @@ export default function ListServices() {
           </Pressable>
         );
       })}
+      {!isAuthenticated && (
+        <RequiredAuthenticationModal
+          showModal={showModal}
+          setShowModal={setShowModal}
+        />
+      )}
     </ScrollView>
   );
 }

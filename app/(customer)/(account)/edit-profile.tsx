@@ -10,6 +10,7 @@ import {
   SafeAreaView,
   TextInput,
   Alert,
+  StyleSheet,
 } from "react-native";
 import React, { useState } from "react";
 import { Box } from "@/components/ui/box";
@@ -30,6 +31,7 @@ import * as ImagePicker from "expo-image-picker";
 import { BankModel } from "@/types/userTypes";
 import { useGetBanksQuery } from "@/services";
 import { Picker } from "@react-native-picker/picker";
+import { BankAccount } from "@/types/types";
 
 i18n.locale = "vn";
 i18n.enableFallback = true;
@@ -55,6 +57,9 @@ const EditProfile = () => {
 
   // State
   const [avt, setAvt] = useState<string | undefined>(currentUser?.avatar);
+  const [selectedBank, SetSelectedBank] = useState(
+    currentUser?.bankAccount?.bank || undefined
+  );
   const { data: banks, isLoading, error } = useGetBanksQuery();
 
   const [userForEdit] = useState({
@@ -65,9 +70,8 @@ const EditProfile = () => {
     bank: currentUser?.bankAccount,
     ...currentUser,
   });
-  // Call api
-  //   const [update, { isLoading }] = useUpdateUserMutation ();
-  console.log(currentUser?.bankAccount);
+
+  // console.log("SelectedBank", selectedBank);
 
   const formik = useFormik({
     initialValues: userForEdit,
@@ -98,9 +102,19 @@ const EditProfile = () => {
       }
     },
   });
+  const handleBankChange = (itemValue: BankModel) => {
+    // console.log(itemValue);
+    const selected: BankModel | undefined = banks!.items.find(
+      (bank) => bank.fiName === itemValue.fiName
+    );
+    if (selected !== undefined) {
+      SetSelectedBank(selected);
+    }
+    formik.setFieldValue("bank", itemValue);
+  };
 
   const handleUpdateAvatar = async () => {
-    console.log("Handle update avt");
+    // console.log("Handle update avt");
     const permissionResult =
       await ImagePicker.requestMediaLibraryPermissionsAsync();
 
@@ -184,14 +198,15 @@ const EditProfile = () => {
                   </Box>
                 )}
                 {!currentUser?.avatar && (
-                  <Box className="relative w-12 h-12 rounded-full bg-black flex items-center justify-center border border-gray-300">
+                  <Box className="w-20 h-20 rounded-full bg-black flex items-center justify-center border border-gray-300">
                     <Text className="text-white text-lg font-bold">
                       {currentUser?.name[0]?.toUpperCase()}
                     </Text>
-                    <Ionicons name="camera-outline" size={24} color="black" />
+                    <Ionicons name="camera-outline" size={24} color="white" />
                   </Box>
                 )}
               </Pressable>
+
               {/* Body */}
               <VStack space="md">
                 {/* Name */}
@@ -213,9 +228,12 @@ const EditProfile = () => {
 
                 {/* Phone */}
                 <View className="px-10 flex flex-col gap-2">
-                  <Text className="text-md font-nomral text-gray-500">
+                  <TextInput
+                    className="text-md font-nomral text-gray-500"
+                    keyboardType="numeric"
+                  >
                     {i18n.t("phone")}
-                  </Text>
+                  </TextInput>
                   <TextInput
                     value={formik.values.phoneNumber}
                     onChangeText={formik.handleChange("phoneNumber")}
@@ -247,21 +265,64 @@ const EditProfile = () => {
                 </View>
 
                 {/* Bank  */}
-                <Picker
-                  selectedValue={formik.values.bank}
-                  onValueChange={(itemValue, itemIndex) =>
-                    formik.handleChange("bank")
-                  }
-                >
-                  {banks &&
-                    banks.map((bank, index) => (
-                      <Picker.Item
-                        key={index}
-                        label={bank.fiName}
-                        value={bank.fiName}
-                      />
-                    ))}
-                </Picker>
+                <View className="px-10 flex flex-col gap-2">
+                  <Text className="text-md font-nomral text-gray-500">
+                    {i18n.t("banks")}
+                  </Text>
+                  <View className="flex flex-row w-full items-center justify-between px-5 border border-gray-400 rounded-md font-normal">
+                    <Image
+                      className="h-12 w-12"
+                      source={{
+                        uri:
+                          selectedBank?.logo ||
+                          "https://img.bankhub.dev/rounded/ocb.png",
+                      }}
+                      alt="Banks Logo"
+                    />
+                    <Picker
+                      // selectedValue={formik.values.bank}
+                      // onValueChange={async (itemValue) => {
+                      //   console.log(itemValue);
+                      //   // formik.setFieldValue("bank", itemValue);
+                      //   SetSelectedBank(itemValue);
+                      // }}
+                      onValueChange={handleBankChange}
+                      style={styles.picker}
+                    >
+                      {banks?.items &&
+                        banks.items.map((bank, index) => (
+                          <Picker.Item
+                            key={index}
+                            label={bank.fiName}
+                            value={bank}
+                          />
+                        ))}
+                    </Picker>
+                  </View>
+                </View>
+
+                {/* STK */}
+                {selectedBank && (
+                  <View className="px-10 flex flex-col gap-2">
+                    <TextInput
+                      className="text-md font-nomral text-gray-500"
+                      keyboardType="numeric"
+                    >
+                      {i18n.t("account_number")}
+                    </TextInput>
+                    <TextInput
+                      value={formik.values.bankAccount?.accountNumber}
+                      // onChangeText={formik.handleChange("phoneNumber")}
+                      className="border border-gray-400 px-5 rounded-md font-normal text-lg"
+                      placeholder={i18n.t("placeholder_account_number")}
+                    />
+                    {formik.errors.phoneNumber && (
+                      <Text className="text-md font-medium text-error-500">
+                        {formik.errors.bankAccount}
+                      </Text>
+                    )}
+                  </View>
+                )}
               </VStack>
             </View>
           </VStack>
@@ -270,5 +331,16 @@ const EditProfile = () => {
     </SafeAreaView>
   );
 };
+const styles = StyleSheet.create({
+  picker: {
+    borderWidth: 1,
+    borderColor: "#d1d5db", // Tailwind's border-gray-400
+    borderRadius: 8,
+    // paddingHorizontal: 16, // Tailwind's px-5
+    fontSize: 18, // Tailwind's text-lg
+    // backgroundColor: "#f87171", // Tailwind's bg-red-500
+    width: "90%",
+  },
+});
 
 export default EditProfile;

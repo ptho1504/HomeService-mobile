@@ -52,4 +52,7 @@ export const en = {
   [LocalizationKey.SAVE]: "Save",
   [LocalizationKey.EDIT_PROFILE]: "Edit Profile",
   [LocalizationKey.USERNAME]: "Your name",
+  [LocalizationKey.BANKS]: "Banks",
+  [LocalizationKey.ACCOUNT_NUMBER]: "Account Number",
+  [LocalizationKey.PLACEHOLDER_ACCOUNT_NUMBER]: "Account Number",
 };

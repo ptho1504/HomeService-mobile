@@ -51,4 +51,7 @@ export const vn = {
   [LocalizationKey.SAVE]: "Lưu",
   [LocalizationKey.EDIT_PROFILE]: "Thay đổi thông tin cá nhân",
   [LocalizationKey.USERNAME]: "Họ và tên",
+  [LocalizationKey.BANKS]: "Ngân hàng",
+  [LocalizationKey.ACCOUNT_NUMBER]: "Số tài khoản",
+  [LocalizationKey.PLACEHOLDER_ACCOUNT_NUMBER]: "Nhập số tài khoản",
 };

@@ -78,7 +78,7 @@ const Posts = ({ route }: Props) => {
       {isFetching ? (
         <PostSkeleton />
       ) : (
-        <PostList posts={takePosts} refetch={refetch} />
+        <PostList posts={takePosts} refetch={refetch} status={status} />
       )}
       <Box className="sticky bottom-0 p-4">
         <Button

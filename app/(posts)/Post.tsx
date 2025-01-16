@@ -70,7 +70,7 @@ const Post = () => {
     : [];
 
   return (
-    <SafeAreaView className="flex h-full">
+    <SafeAreaView className="flex h-full relative">
       <LinearGradient
         // Background Linear Gradient
         colors={['#ebf7eb', 'transparent', '#ffffff']}
@@ -81,7 +81,7 @@ const Post = () => {
       ) : (
         <PostList posts={posts} refetch={refetch} />
       )}
-      <Box className="sticky bottom-0 p-4">
+      <Box className="fixed bottom-0 p-4">
         <Button
           onPress={() => router.push(`/PostForm?workType=${workType}`)}
           size="xl"

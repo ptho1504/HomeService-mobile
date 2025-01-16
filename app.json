@@ -15,7 +15,9 @@
       "adaptiveIcon": {
         "foregroundImage": "./assets/images/adaptive-icon.png",
         "backgroundColor": "#ffffff"
-      }
+      },
+      "package": "com.homeService",
+      "googleServicesFile": "./google-services.json"
     },
     "web": {
       "bundler": "metro",
@@ -23,6 +25,7 @@
       "favicon": "./assets/images/favicon.png"
     },
     "plugins": [
+      "@react-native-firebase/app",
       "expo-router",
       [
         "expo-splash-screen",
@@ -44,7 +47,7 @@
         "origin": false
       },
       "eas": {
-        "projectId": "7fb2b81e-da05-4d4d-9088-5f5808583f4a"
+        "projectId": "8ea08770-cb56-4ee1-979b-e55e33c00402"
       }
     },
     "runtimeVersion": {

@@ -45,7 +45,7 @@ import {
   useToast,
 } from '@/components/ui/toast';
 import { isPostModel } from '@/components/post/PostInfo';
-import TakePostDialog from '@/components/post/TakePostDialog';
+import TakePostDialog from '@/components/dialog/TakePostDialog';
 import { useGetUsersQuery } from '@/services';
 import { UserModel } from '@/types/userTypes';
 import UserSkeleton from '@/components/skeleton/UserSkeleton';
@@ -72,7 +72,11 @@ const FreelancerList = () => {
         className="py-2"
       >
         {({ pressed }) => (
-          <Card className={`rounded-xl shadow-lg ${pressed && 'opacity-75'}`}>
+          <Box
+            className={`rounded-xl shadow-lg flex flex-row justify-between items-center p-3 bg-white ${
+              pressed && 'opacity-75'
+            }`}
+          >
             <HStack space="md" className="items-center">
               <Image
                 size="sm"
@@ -85,14 +89,15 @@ const FreelancerList = () => {
                 alt={`${freelancer.name}`}
                 className="rounded-full"
               />
-              <VStack space="md">
-                <HStack space="sm" className="items-center">
-                  <Text className="text-lg font-medium">{freelancer.name}</Text>
-                </HStack>
+              <VStack space="sm">
+                <Text className="text-lg font-medium">{freelancer.name}</Text>
                 <Text className="text-info-400">{5} sao</Text>
               </VStack>
             </HStack>
-          </Card>
+            <Text className="text-secondary-400">
+              <Ionicons name="chevron-forward-outline" size={20} />
+            </Text>
+          </Box>
         )}
       </Pressable>
     );

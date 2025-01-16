@@ -300,7 +300,7 @@ const LogIn = () => {
                   variant="outline"
                   action="secondary"
                   className="bg-white flex flex-row items-center border border-gray-200 py-5"
-                  isPressed={false}
+                  onPress={() => router.push('/(auth)/GoogleLogin')}
                 >
                   <GoogleSvg />
                   <ButtonText className="h-6 text-black text-lg flex items-center">

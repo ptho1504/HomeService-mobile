@@ -151,6 +151,19 @@ const postApi = API.injectEndpoints({
         );
       },
     }),
+
+    uploadImages: build.mutation<
+      Response<PostModel>,
+      { id: string; workType: string; formData: FormData }
+    >({
+      query: ({ id, workType, formData }) => {
+        return {
+          url: `${baseUrl}/${id}/uploadImages?type=${workType}`,
+          method: 'PUT',
+          body: formData,
+        };
+      },
+    }),
   }),
 });
 
@@ -160,4 +173,5 @@ export const {
   useCreatePostMutation,
   useGetPostsQuery,
   useTakePostMutation,
+  useUploadImagesMutation,
 } = postApi;

@@ -17,6 +17,12 @@ export interface HouseCleaningOption {
   duration: number;
 }
 
+export interface ImageModel {
+  uri?: string;
+  type?: string;
+  name?: string;
+}
+
 export interface Package {
   key: string;
   value: string;

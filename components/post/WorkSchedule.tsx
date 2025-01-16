@@ -14,7 +14,7 @@ import {
 import Ionicons from '@expo/vector-icons/Ionicons';
 import { HStack } from '../ui/hstack';
 import { PackageName } from '@/constants';
-import ScrollPickerModal from './ScrollPickerModal';
+import ScrollPickerModal from '../modal/ScrollPickerModal';
 import { Box } from '../ui/box';
 
 const initDaysOfWeek: string[] = [

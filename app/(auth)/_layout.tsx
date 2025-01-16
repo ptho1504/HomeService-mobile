@@ -1,5 +1,5 @@
-import { Stack } from "expo-router";
-import "react-native-reanimated";
+import { Stack } from 'expo-router';
+import 'react-native-reanimated';
 
 export default function Layout() {
   return (
@@ -14,6 +14,7 @@ export default function Layout() {
       <Stack.Screen name="verify" options={{ headerShown: true }} />
       <Stack.Screen name="verify_signup" options={{ headerShown: true }} />
       <Stack.Screen name="register" options={{ headerShown: true }} />
+      <Stack.Screen name="GoogleLogin" options={{ headerShown: false }} />
     </Stack>
   );
 }

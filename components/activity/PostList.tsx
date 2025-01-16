@@ -28,6 +28,7 @@ import {
   PostStatus,
   TakePostStatus,
   UserRole,
+  WorkScheduleStatus,
   WorkType,
 } from '@/constants';
 import moment from 'moment';
@@ -50,11 +51,12 @@ import { Heading } from '../ui/heading';
 import { useTakePostMutation } from '@/services/post';
 import { Toast, ToastDescription, ToastTitle, useToast } from '../ui/toast';
 import { isPostModel } from '../post/PostInfo';
-import TakePostDialog from '../post/TakePostDialog';
+import TakePostDialog from '../dialog/TakePostDialog';
 
 interface Props {
   posts?: PostModel[] | TakePostModel[];
   takePostStatus?: string;
+  status?: string;
   refetch: (options?: {
     force?: boolean;
     throwOnError?: boolean;
@@ -82,7 +84,7 @@ export const Mode = {
   },
 };
 
-const PostList = ({ posts, takePostStatus, refetch }: Props) => {
+const PostList = ({ posts, takePostStatus, status, refetch }: Props) => {
   const [mode, setMode] = React.useState(Mode.TAKE.key);
   const [selectedPost, setSelectedPost] = React.useState<PostModel>();
   const [takePost, { isLoading, error, data }] = useTakePostMutation();
@@ -104,6 +106,11 @@ const PostList = ({ posts, takePostStatus, refetch }: Props) => {
 
   const chooseFreelancer = (id: string) => {
     router.push(`/(choose-freelancer)/FreelancerList?postId=${id}`);
+  };
+
+  const doWork = (post: PostModel, workType: string) => {
+    dispatch(setPost(post));
+    router.push(`/(work)?workType=${workType}&status=${status}`);
   };
 
   const actionPost = (post: PostModel, mode: string) => {
@@ -194,29 +201,33 @@ const PostList = ({ posts, takePostStatus, refetch }: Props) => {
             </Box>
             <Divider className="my-4" />
             <VStack space="md">
-              <HStack space="md" className="items-center">
-                <Text className="text-cyan-600">
-                  <Ionicons size={20} name="calendar-outline" />
-                </Text>
-                <HStack space="sm">
-                  {convertToPost(post).packageName !==
-                    PackageName._1DAY.key && (
-                    <Text className="font-medium">
-                      Ngày làm thứ {convertToPost(post).numOfWorkedDay + 1}/
-                      {convertToPost(post).totalWorkDay}:
-                    </Text>
-                  )}
-                  <Text>
-                    {normalizeDate(
-                      convertToPost(post).workSchedules[
-                        convertToPost(post).numOfWorkedDay
-                      ].date,
-                      '/',
-                      false,
-                    )}
+              {convertToPost(post).numOfWorkedDay <
+                convertToPost(post).totalWorkDay && (
+                <HStack space="md" className="items-center">
+                  <Text className="text-cyan-600">
+                    <Ionicons size={20} name="calendar-outline" />
                   </Text>
+                  <HStack space="sm">
+                    {convertToPost(post).packageName !==
+                      PackageName._1DAY.key && (
+                      <Text className="font-medium">
+                        Ngày làm thứ {convertToPost(post).numOfWorkedDay + 1}/
+                        {convertToPost(post).totalWorkDay}:
+                      </Text>
+                    )}
+                    <Text>
+                      {normalizeDate(
+                        convertToPost(post).workSchedules[
+                          convertToPost(post).numOfWorkedDay
+                        ].date,
+                        '/',
+                        false,
+                      )}
+                    </Text>
+                  </HStack>
                 </HStack>
-              </HStack>
+              )}
+
               <HStack space="md" className="items-center">
                 <Text className="text-info-500">
                   <Ionicons size={20} name="time-outline" />
@@ -361,34 +372,41 @@ const PostList = ({ posts, takePostStatus, refetch }: Props) => {
               )}
 
             {!isPostModel(post) &&
+              convertToPost(post).workSchedules.length >
+                convertToPost(post).numOfWorkedDay &&
               currentUser?.role === UserRole.FREELANCER &&
-              convertToPost(post).status === PostStatus.SCHEDULED.key && (
+              [
+                WorkScheduleStatus.INITIAL.key,
+                WorkScheduleStatus.DOING.key,
+              ].includes(
+                convertToPost(post).workSchedules[
+                  convertToPost(post).numOfWorkedDay
+                ].status,
+              ) && (
                 <Box>
                   <Divider className="my-4" />
                   <HStack space="md" className="justify-end">
                     <Button
                       action="positive"
                       className="rounded-lg bg-success-300"
-                      onPress={() => actionPost(post.post, Mode.ACCEPT.key)}
+                      onPress={() =>
+                        doWork(
+                          post.post,
+                          convertToPost(post).workSchedules[
+                            convertToPost(post).numOfWorkedDay
+                          ].status === WorkScheduleStatus.INITIAL.key
+                            ? 'start'
+                            : 'end',
+                        )
+                      }
                     >
-                      <Text className="text-white text-lg">Bắt đầu làm</Text>
-                    </Button>
-                  </HStack>
-                </Box>
-              )}
-
-            {!isPostModel(post) &&
-              currentUser?.role === UserRole.FREELANCER &&
-              convertToPost(post).status === PostStatus.DOING.key && (
-                <Box>
-                  <Divider className="my-4" />
-                  <HStack space="md" className="justify-end">
-                    <Button
-                      action="positive"
-                      className="rounded-lg bg-success-300"
-                      onPress={() => actionPost(post.post, Mode.ACCEPT.key)}
-                    >
-                      <Text className="text-white text-lg">Kết thúc</Text>
+                      <Text className="text-white text-lg">
+                        {convertToPost(post).workSchedules[
+                          convertToPost(post).numOfWorkedDay
+                        ].status === WorkScheduleStatus.INITIAL.key
+                          ? 'Bắt đầu làm'
+                          : 'Hoàn thành công việc'}
+                      </Text>
                     </Button>
                   </HStack>
                 </Box>
@@ -428,7 +446,7 @@ const PostList = ({ posts, takePostStatus, refetch }: Props) => {
 
   return (
     <>
-      <VStack className="mx-3 my-1" space="md">
+      <VStack className="mx-3 my-1 flex-1" space="md">
         <FlatList
           data={posts}
           renderItem={renderItem}
@@ -436,7 +454,7 @@ const PostList = ({ posts, takePostStatus, refetch }: Props) => {
           refreshControl={
             <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
           }
-          className="bg-none"
+          className="bg-none h-full"
           // onEndReached={loadMore}
           // onEndReachedThreshold={0.5}
           // ListFooterComponent={

@@ -20,7 +20,7 @@ import { router, useLocalSearchParams } from 'expo-router';
 import { LinearGradient } from 'expo-linear-gradient';
 import { useTakePostMutation } from '@/services/post';
 import { Mode } from '@/components/activity/PostList';
-import TakePostDialog from '@/components/post/TakePostDialog';
+import TakePostDialog from '@/components/dialog/TakePostDialog';
 import { CreateTakePostModel } from '@/types/postTypes';
 import {
   Toast,

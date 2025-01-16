@@ -8,7 +8,7 @@ import { Heading } from '@/components/ui/heading';
 import { CreatePostModel, HouseCleaningOption } from '@/types/postTypes';
 import { Box } from '@/components/ui/box';
 import Ionicons from '@expo/vector-icons/Ionicons';
-import ScrollPickerModal from '@/components/post/ScrollPickerModal';
+import ScrollPickerModal from '@/components/modal/ScrollPickerModal';
 import { Button, ButtonSpinner, ButtonText } from '@/components/ui/button';
 import {
   Radio,
@@ -42,7 +42,7 @@ const options: HouseCleaningOption[] = [
   { area: 400, totalFreelancers: 4, duration: 8 },
 ];
 
-const addressId = '9b18beec-a0da-4b40-a377-b8adc0612b2a';
+const addressId = '08d44b77-8c12-49f4-8ce4-7e94ecafe2fd';
 
 const Checkout = () => {
   const dispatch = useDispatch();

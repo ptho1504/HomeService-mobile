@@ -12,6 +12,10 @@ export default function ListLayout() {
         name="FreelancerList"
         options={{ headerShown: true, title: 'Chọn freelancers' }}
       />
+      <Stack.Screen
+        name="Freelancer"
+        options={{ headerShown: true, title: 'Thông tin Freelancer' }}
+      />
     </Stack>
   );
 }

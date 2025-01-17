@@ -23,6 +23,19 @@ export interface UserModel {
   freelancerWorkServices: FreelancerWorkModel[];
 }
 
+export interface NotificationModel {
+  view: boolean;
+  notification: {
+    createdAt: number[],
+    title: string,
+    content: string,
+    post: {
+      id: string
+    },
+
+  }
+}
+
 export interface BankAccountModel {
   accountNumber: string;
   bank: BankModel;

@@ -2,7 +2,7 @@ import { createApi } from '@reduxjs/toolkit/query';
 import { API } from '../base';
 import { Address, BankAccount } from '@/types/types';
 import { FreelancerWorkModel } from '@/types/workTypes';
-import { UserModel } from '@/types/userTypes';
+import { NotificationModel, UserModel } from '@/types/userTypes';
 import { Response } from '@/types/response';
 
 const baseUrl = '/users';
@@ -12,6 +12,7 @@ const usersApi = API.injectEndpoints({
     // getUser: build.query<User, string>({
     //   query: (id) => `users/${id}`,
     // }),
+
     getUsers: build.query<
       Response<UserModel[]>,
       {
@@ -41,7 +42,20 @@ const usersApi = API.injectEndpoints({
         return `${baseUrl}?${params.toString()}`;
       },
     }),
+
+    getNotification: build.query<
+      Response<NotificationModel[]>,
+      {
+        id: string,
+      }
+    >({
+      query: ({ id }) => {
+        // Kết hợp base URL và query string
+        return `${baseUrl}/${id}/notifications`;
+      },
+    }),
+
   }),
 });
 
-export const { useGetUsersQuery } = usersApi;
+export const { useGetUsersQuery, useGetNotificationQuery } = usersApi;

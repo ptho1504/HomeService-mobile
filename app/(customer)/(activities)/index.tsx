@@ -38,6 +38,7 @@ const Posts = ({ route }: Props) => {
       : status === 'PACKAGE'
       ? { id: userId, packageName: PackageName._1MONTH.key }
       : { id: userId };
+      
   const { data, error, isFetching, refetch } =
     useGetPostsByCustomerIdQuery(query);
 

@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { Redirect } from 'expo-router';
+import { Redirect, router } from 'expo-router';
 import { authenticateUser, setUser } from '@/store/reducers';
 import * as SecureStore from 'expo-secure-store';
 import { LOCAL_STORAGE_JWT_KEY } from '@/constants';
@@ -7,18 +7,14 @@ import { useVerifyJwtForUserMutation } from '@/services';
 import { useDispatch } from 'react-redux';
 import Loading from '@/components/loading/Loading';
 import * as Notifications from 'expo-notifications';
-import { View, Text, Button } from 'react-native';
-import {
-  registerForPushNotificationsAsync,
-  sendPushNotification,
-} from '@/utils/firebaseUtil';
+import { registerForPushNotificationsAsync } from '@/utils/firebaseUtil';
 
 const App = () => {
   // const isAuthenticated = useSelector(selectIsAuthenticated);
   const isAuthenticated = false;
   const dispatch = useDispatch();
   const [loading, setLoading] = useState(false);
-  const [expoPushToken, setExpoPushToken] = useState('');
+  
   const [notification, setNotification] = useState<
     Notifications.Notification | undefined
   >(undefined);
@@ -38,6 +34,8 @@ const App = () => {
 
       const response = await verifyJwtForUser({ jwt });
 
+      console.info({ response });
+
       if (response.error) {
         const message = response.error.data?.message || 'Unknown error';
         console.error(message);
@@ -52,18 +50,27 @@ const App = () => {
       setLoading(false);
     }
   };
-
+  const getFirstTime = async () => {
+    setLoading(false);
+    try {
+      const firsttime = await SecureStore.getItemAsync('FT');
+      if (!firsttime) {
+        await SecureStore.setItemAsync('FT', 'false');
+        return router.replace('/(auth)/welcome');
+      } else {
+        if (firsttime === 'false') {
+          return <Redirect href="/(auth)/welcome" />;
+        }
+      }
+    } catch (error) {
+      console.error('Error retrieving token:', error);
+    } finally {
+      setLoading(false);
+    }
+  };
   useEffect(() => {
     getToken();
-  }, []);
-
-  useEffect(() => {
-    registerForPushNotificationsAsync()
-      .then(token => {
-        console.log(token);
-        setExpoPushToken(token ?? '');
-      })
-      .catch((error: any) => setExpoPushToken(`${error}`));
+    getFirstTime();
 
     notificationListener.current =
       Notifications.addNotificationReceivedListener(notification => {
@@ -85,30 +92,6 @@ const App = () => {
     };
   }, []);
 
-  // return (
-  //   <View
-  //     style={{ flex: 1, alignItems: 'center', justifyContent: 'space-around' }}
-  //   >
-  //     <Text>Your Expo push token: {expoPushToken}</Text>
-  //     <View style={{ alignItems: 'center', justifyContent: 'center' }}>
-  //       <Text>
-  //         Title: {notification && notification.request.content.title}{' '}
-  //       </Text>
-  //       <Text>Body: {notification && notification.request.content.body}</Text>
-  //       <Text>
-  //         Data:{' '}
-  //         {notification && JSON.stringify(notification.request.content.data)}
-  //       </Text>
-  //     </View>
-  //     <Button
-  //       title="Press to Send Notification"
-  //       onPress={async () => {
-  //         await sendPushNotification(expoPushToken);
-  //       }}
-  //     />
-  //   </View>
-  // );
-
   if (loading) {
     return <Loading />;
   }
@@ -117,7 +100,7 @@ const App = () => {
   //   return <Redirect href={'/(customer)/(home)'} />;
   // }
 
-  return <Redirect href="/(auth)/welcome" />;
+  return <Redirect href={'/(customer)/(home)'} />;
 };
 export const screenOptions = {
   headerShown: false, // Hides the header

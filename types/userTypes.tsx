@@ -5,6 +5,7 @@ export interface AdminModel {
 }
 
 export interface UserModel {
+  jwt: string;
   id: string;
   name: string;
   email: string;

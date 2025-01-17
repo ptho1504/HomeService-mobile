@@ -9,6 +9,7 @@ export interface LoginRequest {
   email: string;
   role: 'FREELANCER' | 'CUSTOMER';
   otp: string;
+  firebaseToken: string;
 }
 
 export interface LoginResponse {
@@ -35,6 +36,7 @@ export interface SignUpRequest {
   name: string;
   role: string;
   otp: string;
+  firebaseToken: string;
 }
 
 export interface SignUpResponse {

@@ -1,4 +1,4 @@
-import { Box } from '@/components/ui/box';
+import { Box } from "@/components/ui/box";
 import {
   Toast,
   ToastDescription,
@@ -9,7 +9,7 @@ import { PackageName } from '@/constants';
 import React, { useEffect } from 'react';
 import { SafeAreaView } from 'react-native';
 import { Button, ButtonText } from '@/components/ui/button';
-import { router } from 'expo-router';
+import { router, useFocusEffect } from 'expo-router';
 import PostList from '@/components/activity/PostList';
 import PostSkeleton from '@/components/skeleton/PostSkeleton';
 import { PostModel, RootStackParamList } from '@/types/postTypes';
@@ -21,33 +21,35 @@ import { LinearGradient } from 'expo-linear-gradient';
 
 interface Props {
   route:
-    | RouteProp<RootStackParamList, 'UpcomingWork'>
-    | RouteProp<RootStackParamList, 'PackageWork'>
-    | RouteProp<RootStackParamList, 'PastWork'>;
+    | RouteProp<RootStackParamList, "UpcomingWork">
+    | RouteProp<RootStackParamList, "PackageWork">
+    | RouteProp<RootStackParamList, "PastWork">;
 }
 
 const Posts = ({ route }: Props) => {
   const currentUser = useSelector(selectUser);
-  const userId = currentUser?.id ? currentUser.id : '';
+  // const isAuthenticated = useSelector(selectIsAuthenticated);
+  const isAuthenticated = true;
+  const userId = currentUser?.id ? currentUser.id : "";
   const { status } = route.params;
   const query =
-    status === 'UPCOMING'
+    status === "UPCOMING"
       ? { id: userId, packageName: PackageName._1DAY.key }
-      : status === 'PACKAGE'
+      : status === "PACKAGE"
       ? { id: userId, packageName: PackageName._1MONTH.key }
       : { id: userId };
   const { data, error, isFetching, refetch } =
     useGetPostsByCustomerIdQuery(query);
 
   const toast = useToast();
-
+  const [showModal, setShowModal] = React.useState(!isAuthenticated);
   useEffect(() => {
     if (error || (data && data.returnCode !== 1000)) {
       toast.show({
-        placement: 'top',
+        placement: "top",
         duration: 3000,
         render: ({ id }) => {
-          const uniqueToastId = 'toast-' + id;
+          const uniqueToastId = "toast-" + id;
           return (
             <Toast nativeID={uniqueToastId} action="error" variant="outline">
               <ToastTitle>
@@ -62,7 +64,20 @@ const Posts = ({ route }: Props) => {
   }, []);
 
   let posts: PostModel[] = data?.items ? data?.items : [];
-
+  useEffect(() => {
+    if (isAuthenticated) {
+      setShowModal(false);
+    }
+  }, [isAuthenticated]);
+  useFocusEffect (
+    React.useCallback(() => {
+      if (isAuthenticated) {
+        setShowModal(false); // Hide the modal if authenticated
+      } else {
+        setShowModal(true); // Show the modal if not authenticated
+      }
+    }, [isAuthenticated])
+  );
   return (
     <SafeAreaView className="flex h-full bg-[#ebf7eb]">
       <LinearGradient

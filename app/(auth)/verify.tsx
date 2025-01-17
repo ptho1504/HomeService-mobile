@@ -21,6 +21,7 @@ import { Keyboard } from 'react-native';
 import { Text } from '@/components/ui/text';
 import { obfuscateEmail, useDebounce } from '@/utils/helper';
 import { Spinner } from '@/components/ui/spinner';
+import { registerForPushNotificationsAsync } from '@/utils/firebaseUtil';
 
 // i18n.locale = getLocales()[0].languageCode ?? "vn";
 i18n.locale = 'vn';
@@ -35,9 +36,19 @@ const Verify = () => {
 
   const [isLoading, SetIsLoading] = useState(false);
   const [otp, setOtp] = useState<string | undefined>(undefined);
+  const [expoPushToken, setExpoPushToken] = useState('');
   const otpRef = useRef<any>(null);
   const [login] = useLoginMutation();
   const dispatch = useDispatch();
+
+  useEffect(() => {
+    registerForPushNotificationsAsync()
+      .then(token => {
+        console.log(token);
+        setExpoPushToken(token ?? '');
+      })
+      .catch((error: any) => setExpoPushToken(`${error}`));
+  }, []);
 
   useEffect(() => {
     const handleLogin = async () => {
@@ -45,7 +56,12 @@ const Verify = () => {
         try {
           if (otp.length == 6) {
             SetIsLoading(true);
-            const response = await login({ email, role: role, otp: otp });
+            const response = await login({
+              email,
+              role: role,
+              otp: otp,
+              firebaseToken: expoPushToken,
+            });
             console.log(response);
             if (response.error) {
               if (otpRef.current) {

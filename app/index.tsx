@@ -2,19 +2,20 @@ import React, { useEffect, useRef, useState } from 'react';
 import { Redirect, router } from 'expo-router';
 import { authenticateUser, setUser } from '@/store/reducers';
 import * as SecureStore from 'expo-secure-store';
-import { LOCAL_STORAGE_JWT_KEY } from '@/constants';
+import { LOCAL_STORAGE_JWT_KEY, UserRole } from '@/constants';
 import { useVerifyJwtForUserMutation } from '@/services';
 import { useDispatch } from 'react-redux';
 import Loading from '@/components/loading/Loading';
 import * as Notifications from 'expo-notifications';
 import { registerForPushNotificationsAsync } from '@/utils/firebaseUtil';
+import { UserModel } from '@/types/userTypes';
 
 const App = () => {
   // const isAuthenticated = useSelector(selectIsAuthenticated);
   const isAuthenticated = false;
   const dispatch = useDispatch();
   const [loading, setLoading] = useState(false);
-  
+
   const [notification, setNotification] = useState<
     Notifications.Notification | undefined
   >(undefined);
@@ -41,8 +42,14 @@ const App = () => {
         console.error(message);
         return;
       } else if (response.data) {
-        dispatch(setUser(response.data.items));
+        const user: UserModel = response.data.items;
+        dispatch(setUser(user));
         dispatch(authenticateUser(true));
+        if (user.role === UserRole.CUSTOMER) {
+          router.replace('/(customer)/(home)');
+        } else {
+          router.replace('/(freelancer)/(home)');
+        }
       }
     } catch (error) {
       console.error('Error retrieving token:', error);
@@ -56,10 +63,10 @@ const App = () => {
       const firsttime = await SecureStore.getItemAsync('FT');
       if (!firsttime) {
         await SecureStore.setItemAsync('FT', 'false');
-        return router.replace('/(auth)/welcome');
+        router.replace('/(auth)/welcome');
       } else {
-        if (firsttime === 'false') {
-          return <Redirect href="/(auth)/welcome" />;
+        if (firsttime !== 'false') {
+          router.replace('/(auth)/welcome');
         }
       }
     } catch (error) {
@@ -95,10 +102,6 @@ const App = () => {
   if (loading) {
     return <Loading />;
   }
-
-  // if (isAuthenticated) {
-  //   return <Redirect href={'/(customer)/(home)'} />;
-  // }
 
   return <Redirect href={'/(customer)/(home)'} />;
 };

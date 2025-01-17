@@ -1,4 +1,4 @@
-import { Box } from "@/components/ui/box";
+import { Box } from '@/components/ui/box';
 import {
   Toast,
   ToastDescription,
@@ -21,21 +21,21 @@ import { LinearGradient } from 'expo-linear-gradient';
 
 interface Props {
   route:
-    | RouteProp<RootStackParamList, "UpcomingWork">
-    | RouteProp<RootStackParamList, "PackageWork">
-    | RouteProp<RootStackParamList, "PastWork">;
+    | RouteProp<RootStackParamList, 'UpcomingWork'>
+    | RouteProp<RootStackParamList, 'PackageWork'>
+    | RouteProp<RootStackParamList, 'PastWork'>;
 }
 
 const Posts = ({ route }: Props) => {
   const currentUser = useSelector(selectUser);
   // const isAuthenticated = useSelector(selectIsAuthenticated);
   const isAuthenticated = true;
-  const userId = currentUser?.id ? currentUser.id : "";
+  const userId = currentUser?.id ? currentUser.id : '';
   const { status } = route.params;
   const query =
-    status === "UPCOMING"
+    status === 'UPCOMING'
       ? { id: userId, packageName: PackageName._1DAY.key }
-      : status === "PACKAGE"
+      : status === 'PACKAGE'
       ? { id: userId, packageName: PackageName._1MONTH.key }
       : { id: userId };
   const { data, error, isFetching, refetch } =
@@ -46,10 +46,10 @@ const Posts = ({ route }: Props) => {
   useEffect(() => {
     if (error || (data && data.returnCode !== 1000)) {
       toast.show({
-        placement: "top",
+        placement: 'top',
         duration: 3000,
         render: ({ id }) => {
-          const uniqueToastId = "toast-" + id;
+          const uniqueToastId = 'toast-' + id;
           return (
             <Toast nativeID={uniqueToastId} action="error" variant="outline">
               <ToastTitle>
@@ -69,14 +69,14 @@ const Posts = ({ route }: Props) => {
       setShowModal(false);
     }
   }, [isAuthenticated]);
-  useFocusEffect (
+  useFocusEffect(
     React.useCallback(() => {
       if (isAuthenticated) {
         setShowModal(false); // Hide the modal if authenticated
       } else {
         setShowModal(true); // Show the modal if not authenticated
       }
-    }, [isAuthenticated])
+    }, [isAuthenticated]),
   );
   return (
     <SafeAreaView className="flex h-full bg-[#ebf7eb]">

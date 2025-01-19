@@ -10,7 +10,7 @@ export interface UserModel {
   name: string;
   email: string;
   avatar: string;
-  balance: string;
+  balance: number;
   dob: Date;
   phoneNumber?: string;
   reputationPoint?: string;
@@ -24,16 +24,24 @@ export interface UserModel {
 }
 
 export interface NotificationModel {
+  id: string;
   view: boolean;
   notification: {
-    createdAt: number[],
-    title: string,
-    content: string,
+    id: string;
+    createdAt: number[];
+    title: string;
+    content: string;
     post: {
-      id: string
-    },
+      id: string;
+    };
+  };
+}
 
-  }
+export interface PaymentHistoryModel {
+  id: string;
+  refId: string;
+  amount: number;
+  createdAt: number[];
 }
 
 export interface BankAccountModel {

@@ -12,7 +12,7 @@ import {
   useToast,
 } from '@/components/ui/toast';
 import PostSkeleton from '@/components/skeleton/PostSkeleton';
-import PostList from '@/components/activity/PostList';
+import PostList from '@/components/list/PostList';
 import { PostModel } from '@/types/postTypes';
 import { LinearGradient } from 'expo-linear-gradient';
 

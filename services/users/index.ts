@@ -2,7 +2,11 @@ import { createApi } from '@reduxjs/toolkit/query';
 import { API } from '../base';
 import { Address, BankAccount } from '@/types/types';
 import { FreelancerWorkModel } from '@/types/workTypes';
-import { NotificationModel, UserModel } from '@/types/userTypes';
+import {
+  NotificationModel,
+  PaymentHistoryModel,
+  UserModel,
+} from '@/types/userTypes';
 import { Response } from '@/types/response';
 
 const baseUrl = '/users';
@@ -46,7 +50,7 @@ const usersApi = API.injectEndpoints({
     getNotification: build.query<
       Response<NotificationModel[]>,
       {
-        id: string,
+        id: string;
       }
     >({
       query: ({ id }) => {
@@ -55,7 +59,49 @@ const usersApi = API.injectEndpoints({
       },
     }),
 
+    getPaymentHistories: build.query<
+      Response<PaymentHistoryModel[]>,
+      {
+        id: string;
+      }
+    >({
+      query: ({ id }) => {
+        // Kết hợp base URL và query string
+        return `${baseUrl}/${id}/paymentHistories`;
+      },
+    }),
+
+    viewNotification: build.mutation<
+      Response<NotificationModel>,
+      { userId: string; id: string }
+    >({
+      query: ({ id, userId }) => {
+        return {
+          url: `${baseUrl}/notifications/${id}`,
+          method: 'PUT',
+        };
+      },
+      async onQueryStarted(arg, { queryFulfilled, dispatch }) {
+        console.log(arg);
+        const { data } = await queryFulfilled;
+        dispatch(
+          usersApi.util.updateQueryData(
+            'getNotification',
+            { id: arg.userId },
+            draft => {
+              console.log(draft.items);
+              draft.items = [];
+            },
+          ),
+        );
+      },
+    }),
   }),
 });
 
-export const { useGetUsersQuery, useGetNotificationQuery } = usersApi;
+export const {
+  useGetUsersQuery,
+  useGetNotificationQuery,
+  useViewNotificationMutation,
+  useGetPaymentHistoriesQuery,
+} = usersApi;

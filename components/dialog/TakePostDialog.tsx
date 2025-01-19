@@ -7,7 +7,7 @@ import { Grid, GridItem } from '../ui/grid';
 import { VStack } from '../ui/vstack';
 import { Package } from '@/types/postTypes';
 import { isLoading } from 'expo-font';
-import { Mode } from '../activity/PostList';
+import { Mode } from '../list/PostList';
 import {
   AlertDialog,
   AlertDialogBackdrop,

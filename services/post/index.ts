@@ -37,6 +37,17 @@ const postApi = API.injectEndpoints({
       },
     }),
 
+    getPostById: build.query<
+      Response<PostModel>,
+      {
+        id: string;
+      }
+    >({
+      query: ({ id }) => {
+        return `${baseUrl}/${id}`;
+      },
+    }),
+
     getPostsByCustomerId: build.query<
       Response<PostModel[]>,
       {
@@ -174,4 +185,5 @@ export const {
   useGetPostsQuery,
   useTakePostMutation,
   useUploadImagesMutation,
+  useGetPostByIdQuery,
 } = postApi;

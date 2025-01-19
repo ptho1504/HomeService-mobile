@@ -13,7 +13,7 @@ import {
 import React, { useEffect } from 'react';
 import { SafeAreaView } from 'react-native';
 
-import PostList from '@/components/activity/PostList';
+import PostList from '@/components/list/PostList';
 import PostSkeleton from '@/components/skeleton/PostSkeleton';
 import {
   PostModel,

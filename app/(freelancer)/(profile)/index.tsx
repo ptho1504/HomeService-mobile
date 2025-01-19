@@ -55,6 +55,7 @@ const Profile = () => {
 
   const handleFinance = () => {
     console.log('Finace Mode');
+    router.push('/(profile)/PaymentHistory');
   };
 
   const handleAdd = () => {

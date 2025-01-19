@@ -11,10 +11,9 @@ import { registerForPushNotificationsAsync } from '@/utils/firebaseUtil';
 import { UserModel } from '@/types/userTypes';
 
 const App = () => {
-  // const isAuthenticated = useSelector(selectIsAuthenticated);
-  const isAuthenticated = false;
   const dispatch = useDispatch();
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true); // Ensure the app waits for initialization
+  const [initialized, setInitialized] = useState(false);
 
   const [notification, setNotification] = useState<
     Notifications.Notification | undefined
@@ -22,20 +21,17 @@ const App = () => {
   const notificationListener = useRef<Notifications.EventSubscription>();
   const responseListener = useRef<Notifications.EventSubscription>();
 
-  // Call Api
+  // Call API
   const [verifyJwtForUser] = useVerifyJwtForUserMutation();
 
   const getToken = async () => {
     try {
-      setLoading(true);
       const jwt = await SecureStore.getItemAsync(LOCAL_STORAGE_JWT_KEY);
       if (!jwt) {
         return;
       }
 
       const response = await verifyJwtForUser({ jwt });
-
-      console.info({ response });
 
       if (response.error) {
         const message = response.error.data?.message || 'Unknown error';
@@ -53,31 +49,37 @@ const App = () => {
       }
     } catch (error) {
       console.error('Error retrieving token:', error);
-    } finally {
-      setLoading(false);
     }
   };
+
   const getFirstTime = async () => {
-    setLoading(false);
     try {
       const firsttime = await SecureStore.getItemAsync('FT');
       if (!firsttime) {
         await SecureStore.setItemAsync('FT', 'false');
         router.replace('/(auth)/welcome');
-      } else {
-        if (firsttime !== 'false') {
-          router.replace('/(auth)/welcome');
-        }
+      } else if (firsttime !== 'false') {
+        router.replace('/(auth)/welcome');
       }
     } catch (error) {
       console.error('Error retrieving token:', error);
-    } finally {
-      setLoading(false);
     }
   };
+
   useEffect(() => {
-    getToken();
-    getFirstTime();
+    const initializeApp = async () => {
+      try {
+        await getToken();
+        await getFirstTime();
+      } catch (error) {
+        console.error('Initialization error:', error);
+      } finally {
+        setInitialized(true); // Signal that initialization is complete
+        setLoading(false);
+      }
+    };
+
+    initializeApp();
 
     notificationListener.current =
       Notifications.addNotificationReceivedListener(notification => {
@@ -103,8 +105,13 @@ const App = () => {
     return <Loading />;
   }
 
-  return <Redirect href={'/(customer)/(home)'} />;
+  if (initialized) {
+    return <Redirect href={'/(customer)/(home)'} />;
+  }
+
+  return null; // Prevent rendering until initialization is complete
 };
+
 export const screenOptions = {
   headerShown: false, // Hides the header
 };

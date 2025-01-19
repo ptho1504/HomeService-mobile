@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { Pressable, SafeAreaView, ScrollView } from 'react-native';
 import { VStack } from '@/components/ui/vstack';
 import { HStack } from '@/components/ui/hstack';
@@ -18,10 +18,10 @@ import { selectPost, selectUser } from '@/store/reducers';
 import { Button, ButtonSpinner, ButtonText } from '@/components/ui/button';
 import { router, useLocalSearchParams } from 'expo-router';
 import { LinearGradient } from 'expo-linear-gradient';
-import { useTakePostMutation } from '@/services/post';
-import { Mode } from '@/components/activity/PostList';
+import { useGetPostByIdQuery, useTakePostMutation } from '@/services/post';
+import { Mode } from '@/components/list/PostList';
 import TakePostDialog from '@/components/dialog/TakePostDialog';
-import { CreateTakePostModel } from '@/types/postTypes';
+import { CreateTakePostModel, PostModel } from '@/types/postTypes';
 import {
   Toast,
   ToastDescription,
@@ -30,15 +30,35 @@ import {
 } from '@/components/ui/toast';
 import FreelancerInfo from '@/components/post/FreelancerInfo';
 import { Divider } from '@/components/ui/divider';
+import PostDetailSkeleton from '@/components/skeleton/PostDetailSkeleton';
 
 const PostDetail = () => {
-  const { takePostStatus } = useLocalSearchParams();
+  const { takePostStatus, id } = useLocalSearchParams();
   const [mode, setMode] = React.useState(Mode.TAKE.key);
-  const post = useSelector(selectPost);
+  const [post, setPost] = useState<PostModel>();
+
   const [showAlertDialog, setShowAlertDialog] = React.useState(false);
   const [takePost, { isLoading, error, data }] = useTakePostMutation();
+  const {
+    refetch,
+    isFetching,
+    error: postError,
+    data: postData,
+  } = useGetPostByIdQuery({ id: id as string });
   const currentUser = useSelector(selectUser);
   const toast = useToast();
+  const currentPost = useSelector(selectPost);
+
+  useEffect(() => {
+    const fetchPost = () => {
+      if (currentPost) {
+        setPost(currentPost);
+      } else if (!postError && postData?.returnCode === 1000) {
+        setPost(postData.items);
+      }
+    };
+    fetchPost();
+  }, [postData]);
 
   const actionPost = (mode: string) => {
     setMode(mode);
@@ -97,6 +117,18 @@ const PostDetail = () => {
     }
     setShowAlertDialog(false);
   };
+
+  if (isFetching || !post) {
+    return <PostDetailSkeleton />;
+  }
+
+  // if (!post) {
+  //   return (
+  //     <Box>
+  //       <Text>Lấy thông tin bài đăng thất bại</Text>
+  //     </Box>
+  //   );
+  // }
 
   return (
     <SafeAreaView className="flex h-full">

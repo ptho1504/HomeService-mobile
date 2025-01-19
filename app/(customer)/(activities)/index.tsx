@@ -10,7 +10,7 @@ import React, { useEffect } from 'react';
 import { SafeAreaView } from 'react-native';
 import { Button, ButtonText } from '@/components/ui/button';
 import { router, useFocusEffect } from 'expo-router';
-import PostList from '@/components/activity/PostList';
+import PostList from '@/components/list/PostList';
 import PostSkeleton from '@/components/skeleton/PostSkeleton';
 import { PostModel, RootStackParamList } from '@/types/postTypes';
 import { RouteProp } from '@react-navigation/native';
@@ -38,7 +38,7 @@ const Posts = ({ route }: Props) => {
       : status === 'PACKAGE'
       ? { id: userId, packageName: PackageName._1MONTH.key }
       : { id: userId };
-      
+
   const { data, error, isFetching, refetch } =
     useGetPostsByCustomerIdQuery(query);
 

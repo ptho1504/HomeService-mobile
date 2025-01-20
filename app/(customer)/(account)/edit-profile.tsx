@@ -225,7 +225,10 @@ const EditProfile = () => {
           // className="flex h-full"
           onPress={Keyboard.dismiss}
         >
-          <ScrollView className="flex h-full w-full">
+          <ScrollView
+            className="flex h-full w-full"
+            // contentContainerStyle={{ flexGrow: 1 }}
+          >
             <VStack className="h-full flex w-full">
               {/* header */}
               <HStack className="flex flex-row items-center">

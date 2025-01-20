@@ -105,7 +105,7 @@ const Home = () => {
             // showsVerticalScrollIndicator={false}
             className="h-full flex w-full"
           >
-            <VStack space="xl" className="h-full flex w-full ">
+            <VStack space="xl" className="h-full flex w-full px-2">
               {/* Title */}
               <Box className="flex w-full">
                 <Text className="text-2xl font-bold text-center">
@@ -114,7 +114,9 @@ const Home = () => {
               </Box>
 
               {/* Avatar */}
-              <Box className="border border-gray-100 w-full p-4 flex flex-row items-center gap-4">
+              <Box className="
+              rounded-lg bg-success-200
+              border border-gray-100 w-full p-4 flex flex-row items-center gap-4">
                 {/* Avatar */}
                 <Pressable className="" onPress={() => setShowModalEdit(true)}>
                   {currentUser?.avatar && (
@@ -136,7 +138,7 @@ const Home = () => {
                     </Box>
                   )}
                   {!currentUser?.avatar && (
-                    <Box className="relative w-16 h-16 rounded-full bg-black flex items-center justify-center border border-gray-300">
+                    <Box className="relative w-16 h-16  rounded-full bg-black flex items-center justify-center border border-gray-300">
                       <Text className="text-white text-3xl font-bold">
                         {currentUser?.name[0]?.toUpperCase()}
                       </Text>
@@ -153,12 +155,12 @@ const Home = () => {
                 <VStack className="w-full">
                   {/* Name */}
                   <HStack className="flex items-center gap-5 w-[70%]">
-                    <Text className="text-xl font-bold">
+                    <Text className="text-xl font-bold text-white">
                       {currentUser?.name}
                     </Text>
                     <Pressable onPress={handleEdit}>
                       {/* <View className="bg-[#66B584] rounded-md"> */}
-                      <View className="bg-red-500 rounded-md">
+                      <View className="bg-success-400 rounded-md">
                         <Text className="text-md text-white px-2 py-1">
                           Cập nhập
                         </Text>
@@ -168,21 +170,21 @@ const Home = () => {
 
                   {/* Reputation */}
                   <HStack>
-                    <Text className="text-lg text-gray-500 font-semibold">
+                    <Text className="text-lg text-white font-medium">
                       {i18n.t("reputation")}: {currentUser?.reputationPoint}
                     </Text>
                   </HStack>
 
                   {/* Phone */}
                   <HStack>
-                    <Text className="text-lg text-gray-500 font-semibold">
-                      {i18n.t("phone")}: {currentUser?.phoneNumber}
+                    <Text className="text-lg text-white font-medium">
+                      {i18n.t("phone")}: {currentUser?.phoneNumber || "Chưa có"}
                     </Text>
                   </HStack>
 
                   {/* Phone */}
                   <HStack className="w-full ">
-                    <Text className="text-lg overflow-hidden text-gray-500 font-semibold">
+                    <Text className="text-lg overflow-hidden text-white font-medium">
                       {i18n.t("email")}: {currentUser?.email}
                     </Text>
                   </HStack>
@@ -191,28 +193,32 @@ const Home = () => {
 
               {/* Finance */}
               <Pressable
-                className="border border-gray-100 p-4 flex flex-row items-center gap-4 justify-between hover:opacity-50"
+                className=" rounded-lg border border-gray-100 bg-success-200 p-4 flex flex-row items-center gap-4 justify-between hover:opacity-50"
                 onPress={handleFinance}
               >
                 <Box className="flex flex-row gap-2 items-center">
-                  <Ionicons name="wallet-outline" size={32} color="black" />
-                  <Text className="text-xl font-bold">{i18n.t("finance")}</Text>
+                  <Ionicons name="wallet-outline" size={32} color="white" />
+                  <Text className="text-xl font-bold text-white">
+                    {i18n.t("finance")}
+                  </Text>
                 </Box>
                 <Ionicons
                   name="arrow-forward-circle-outline"
                   size={32}
-                  color="black"
+                  color="#fff"
                 />
               </Pressable>
 
               {/* Logout */}
               <Pressable
-                className="border border-gray-100 p-4 flex flex-row items-center gap-4 justify-between hover:opacity-50"
+                className="rounded-lg border border-gray-100 bg-success-200 p-4 flex flex-row items-center gap-4 justify-between hover:opacity-50"
                 onPress={handleLogout}
               >
                 <Box className="flex flex-row gap-2 items-center">
-                  <Ionicons name="log-out-outline" size={32} color="black" />
-                  <Text className="text-xl font-bold">{i18n.t("log_out")}</Text>
+                  <Ionicons name="log-out-outline" size={32} color="white" />
+                  <Text className="text-xl font-bold text-white">
+                    {i18n.t("log_out")}
+                  </Text>
                 </Box>
               </Pressable>
 

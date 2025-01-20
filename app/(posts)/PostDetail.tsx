@@ -8,7 +8,13 @@ import { Heading } from '@/components/ui/heading';
 import { Box } from '@/components/ui/box';
 import Ionicons from '@expo/vector-icons/Ionicons';
 
-import { PaymentType, PostStatus, TakePostStatus, UserRole } from '@/constants';
+import {
+  PaymentType,
+  PostStatus,
+  TakePostStatus,
+  UserRole,
+  WorkScheduleStatus,
+} from '@/constants';
 
 import PostInfo, { isPostModel } from '@/components/post/PostInfo';
 import PostAddress from '@/components/post/PostAddress';
@@ -31,16 +37,18 @@ import {
 import FreelancerInfo from '@/components/post/FreelancerInfo';
 import { Divider } from '@/components/ui/divider';
 import PostDetailSkeleton from '@/components/skeleton/PostDetailSkeleton';
+import { useViewNotificationMutation } from '@/services';
 
 const PostDetail = () => {
-  const { takePostStatus, id } = useLocalSearchParams();
+  const { takePostStatus, id, notificationId, status } = useLocalSearchParams();
   const [mode, setMode] = React.useState(Mode.TAKE.key);
   const [post, setPost] = useState<PostModel>();
 
   const [showAlertDialog, setShowAlertDialog] = React.useState(false);
   const [takePost, { isLoading, error, data }] = useTakePostMutation();
+  const [viewNotification, { isLoading: notiLoading, error: notiError }] =
+    useViewNotificationMutation();
   const {
-    refetch,
     isFetching,
     error: postError,
     data: postData,
@@ -50,10 +58,39 @@ const PostDetail = () => {
   const currentPost = useSelector(selectPost);
 
   useEffect(() => {
-    const fetchPost = () => {
-      if (currentPost) {
+    const fetchPost = async () => {
+      if (currentPost && !id) {
         setPost(currentPost);
       } else if (!postError && postData?.returnCode === 1000) {
+        if (notificationId) {
+          const res = await viewNotification({
+            userId: currentUser?.id ?? '',
+            id: notificationId as string,
+          });
+          if (error || res.data?.returnCode != 1000) {
+            console.log(res.error.data.message);
+            toast.show({
+              placement: 'top',
+              duration: 3000,
+              render: ({ id }) => {
+                const uniqueToastId = 'toast-' + id;
+                return (
+                  <Toast
+                    nativeID={uniqueToastId}
+                    action="error"
+                    variant="outline"
+                  >
+                    <ToastTitle>Xem thông báo thất bại</ToastTitle>
+                    <ToastDescription>
+                      {res.error.data.message}
+                    </ToastDescription>
+                  </Toast>
+                );
+              },
+            });
+          }
+        }
+
         setPost(postData.items);
       }
     };
@@ -116,6 +153,10 @@ const PostDetail = () => {
       router.back();
     }
     setShowAlertDialog(false);
+  };
+
+  const doWork = (post: PostModel, workType: string) => {
+    router.push(`/(work)?workType=${workType}&status=${status}`);
   };
 
   if (isFetching || !post) {
@@ -217,7 +258,7 @@ const PostDetail = () => {
             </Box>
           </ScrollView>
           {takePostStatus && (
-            <Box className="sticky bg-white p-4 rounded-t-lg shadow-lg">
+            <Box className="sticky p-4">
               {takePostStatus === 'REQUEST' ? (
                 <HStack space="md" className="justify-center">
                   <VStack className="w-1/2">
@@ -260,7 +301,7 @@ const PostDetail = () => {
             PostStatus.FAILED.key,
           ].includes(post.status) &&
             currentUser?.role === UserRole.CUSTOMER && (
-              <Box className="sticky bg-white p-4 rounded-t-lg shadow-lg">
+              <Box className="sticky p-4">
                 <Button
                   size="xl"
                   action="positive"
@@ -276,7 +317,7 @@ const PostDetail = () => {
             [PostStatus.INITIAL.key].includes(post.status) &&
             currentUser?.role === UserRole.CUSTOMER &&
             post.chooseFreelancer && (
-              <Box className="sticky bg-white p-4 rounded-t-lg shadow-lg">
+              <Box className="sticky p-4">
                 <Button
                   size="xl"
                   action="positive"
@@ -284,6 +325,37 @@ const PostDetail = () => {
                   onPress={() => actionPost(Mode.TAKE.key)}
                 >
                   <ButtonText>Chọn Freelancer</ButtonText>
+                </Button>
+              </Box>
+            )}
+
+          {post.workSchedules.length > post.numOfWorkedDay &&
+            currentUser?.role === UserRole.FREELANCER &&
+            [
+              WorkScheduleStatus.INITIAL.key,
+              WorkScheduleStatus.DOING.key,
+            ].includes(post.workSchedules[post.numOfWorkedDay].status) && (
+              <Box className="sticky p-4">
+                <Button
+                  size="xl"
+                  action="positive"
+                  className="bg-success-300"
+                  onPress={() =>
+                    doWork(
+                      post,
+                      post.workSchedules[post.numOfWorkedDay].status ===
+                        WorkScheduleStatus.INITIAL.key
+                        ? 'start'
+                        : 'end',
+                    )
+                  }
+                >
+                  <ButtonText>
+                    {post.workSchedules[post.numOfWorkedDay].status ===
+                    WorkScheduleStatus.INITIAL.key
+                      ? 'Bắt đầu làm'
+                      : 'Hoàn thành công việc'}
+                  </ButtonText>
                 </Button>
               </Box>
             )}

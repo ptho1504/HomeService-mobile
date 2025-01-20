@@ -5,6 +5,7 @@ import { FreelancerWorkModel } from '@/types/workTypes';
 import {
   NotificationModel,
   PaymentHistoryModel,
+  TransactionModel,
   UserModel,
 } from '@/types/userTypes';
 import { Response } from '@/types/response';
@@ -57,6 +58,7 @@ const usersApi = API.injectEndpoints({
         // Kết hợp base URL và query string
         return `${baseUrl}/${id}/notifications`;
       },
+      providesTags: (result, error, { id }) => [{ type: 'Notifications', id }],
     }),
 
     getPaymentHistories: build.query<
@@ -69,11 +71,14 @@ const usersApi = API.injectEndpoints({
         // Kết hợp base URL và query string
         return `${baseUrl}/${id}/paymentHistories`;
       },
+      providesTags: (result, error, { id }) => [
+        { type: 'PaymentHistories', id },
+      ],
     }),
 
     viewNotification: build.mutation<
       Response<NotificationModel>,
-      { userId: string; id: string }
+      Partial<{ userId: string; id: string }>
     >({
       query: ({ id, userId }) => {
         return {
@@ -81,20 +86,34 @@ const usersApi = API.injectEndpoints({
           method: 'PUT',
         };
       },
-      async onQueryStarted(arg, { queryFulfilled, dispatch }) {
-        console.log(arg);
-        const { data } = await queryFulfilled;
-        dispatch(
-          usersApi.util.updateQueryData(
-            'getNotification',
-            { id: arg.userId },
-            draft => {
-              console.log(draft.items);
-              draft.items = [];
-            },
-          ),
-        );
+      invalidatesTags: (result, error, notification) => [
+        { type: 'Notifications', id: notification.userId }, // Đánh dấu các cache liên quan cần làm mới
+      ],
+    }),
+
+    recharge: build.mutation<Response<string>, Partial<TransactionModel>>({
+      query: (rechargeModel: TransactionModel) => {
+        const { userId, ...data } = rechargeModel;
+        return {
+          url: `${baseUrl}/${userId}/recharge`,
+          method: 'PUT',
+          body: data,
+        };
       },
+    }),
+
+    withdraw: build.mutation<Response<UserModel>, Partial<TransactionModel>>({
+      query: (withdrawModel: TransactionModel) => {
+        const { userId, ...data } = withdrawModel;
+        return {
+          url: `${baseUrl}/${userId}/withdraw`,
+          method: 'PUT',
+          body: data,
+        };
+      },
+      invalidatesTags: (result, error, transactionModel) => [
+        { type: 'PaymentHistories', id: transactionModel.userId }, // Đánh dấu các cache liên quan cần làm mới
+      ],
     }),
   }),
 });
@@ -104,4 +123,6 @@ export const {
   useGetNotificationQuery,
   useViewNotificationMutation,
   useGetPaymentHistoriesQuery,
+  useRechargeMutation,
+  useWithdrawMutation,
 } = usersApi;

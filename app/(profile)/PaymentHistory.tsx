@@ -9,7 +9,12 @@ import { PackageName } from '@/constants';
 import React, { useEffect } from 'react';
 import { SafeAreaView } from 'react-native';
 import { Button, ButtonText } from '@/components/ui/button';
-import { router, useFocusEffect } from 'expo-router';
+import {
+  router,
+  useFocusEffect,
+  useLocalSearchParams,
+  useRouter,
+} from 'expo-router';
 import PostList from '@/components/list/PostList';
 import PostSkeleton from '@/components/skeleton/PostSkeleton';
 import { PostModel, RootStackParamList } from '@/types/postTypes';
@@ -30,7 +35,9 @@ import { HStack } from '@/components/ui/hstack';
 
 const PaymentHistory = () => {
   const currentUser = useSelector(selectUser);
+  const router = useRouter();
   const userId = currentUser?.id ? currentUser.id : '';
+  const { status } = useLocalSearchParams();
 
   const { data, error, isFetching, refetch } = useGetPaymentHistoriesQuery({
     id: userId,
@@ -38,9 +45,20 @@ const PaymentHistory = () => {
 
   const toast = useToast();
 
-  const handleRecharge = async () => {};
+  const handleRecharge = () => {
+    router.push('/(profile)/Transaction?type=recharge');
+  };
 
-  const handleWithdraw = async () => {};
+  const handleWithdraw = () => {
+    router.push('/(profile)/Transaction?type=withdraw');
+  };
+
+  // useEffect(() => {
+  //   if (status && status === 'PAID') {
+  //     console.log(status);
+  //     refetch();
+  //   }
+  // }, [status]);
 
   useEffect(() => {
     if (error || (data && data.returnCode !== 1000)) {
@@ -69,7 +87,7 @@ const PaymentHistory = () => {
         colors={['#ebf7eb', 'transparent', '#ffffff']}
         className="absolute h-[1000px] left-0 right-0 top-0"
       />
-      <VStack space="md" className="bg-success-300 m-5 p-4 rounded-md">
+      <VStack space="lg" className="bg-success-300 m-5 p-5 rounded-md">
         <Text className="text-2xl font-bold text-white">Số dư tài khoản</Text>
         <Box className="items-center bg-white rounded-md p-2">
           <Text className="text-2xl mt-1 font-bold text-success-300">
@@ -77,9 +95,9 @@ const PaymentHistory = () => {
           </Text>
         </Box>
       </VStack>
-      <VStack space="md" className="mx-5 bg-white rounded-md shadow p-4">
+
+      <VStack space="md" className="mx-5 bg-white rounded-md shadow p-4 h-1/2">
         <Heading>Lịch sử giao dịch</Heading>
-        <Divider></Divider>
         {isFetching ? (
           <PaymentHistorySkeleton />
         ) : (
@@ -90,7 +108,7 @@ const PaymentHistory = () => {
         )}
       </VStack>
 
-      <Box className="absolute w-full bottom-0 p-4 bg-white">
+      <Box className="absolute w-full bottom-0 p-4">
         <HStack space="md" className="justify-center">
           <VStack className="w-1/2">
             <Button

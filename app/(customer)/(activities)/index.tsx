@@ -91,7 +91,7 @@ const Posts = ({ route }: Props) => {
       ) : (
         <PostList posts={posts} refetch={refetch} />
       )}
-      <Box className="sticky bottom-0 p-4 bg-white">
+      <Box className="sticky bottom-0 p-4">
         <Button
           onPress={() => router.push('../(home)')}
           size="xl"

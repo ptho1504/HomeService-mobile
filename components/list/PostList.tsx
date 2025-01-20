@@ -52,6 +52,7 @@ import { useTakePostMutation } from '@/services/post';
 import { Toast, ToastDescription, ToastTitle, useToast } from '../ui/toast';
 import { isPostModel } from '../post/PostInfo';
 import TakePostDialog from '../dialog/TakePostDialog';
+import { useViewNotificationMutation } from '@/services';
 
 interface Props {
   posts?: PostModel[] | TakePostModel[];
@@ -98,9 +99,11 @@ const PostList = ({ posts, takePostStatus, status, refetch }: Props) => {
   const navigateToPostDetail = (post: PostModel) => {
     dispatch(setPost(post));
     if (takePostStatus) {
-      router.push(`/(posts)/PostDetail?takePostStatus=${takePostStatus}`);
+      router.push(
+        `/(posts)/PostDetail?takePostStatus=${takePostStatus}&&status=${status}`,
+      );
     } else {
-      router.push('/(posts)/PostDetail');
+      router.push(`/(posts)/PostDetail?status=${status}`);
     }
   };
 

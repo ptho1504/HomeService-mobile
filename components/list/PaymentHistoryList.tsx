@@ -16,6 +16,18 @@ import { Mode } from './PostList';
 import { useSelector } from 'react-redux';
 import { selectUser } from '@/store/reducers';
 import { Divider } from '../ui/divider';
+import { ButtonText, Button } from '../ui/button';
+import { Icon, CloseIcon } from '../ui/icon';
+import {
+  ModalBackdrop,
+  ModalContent,
+  ModalHeader,
+  ModalCloseButton,
+  ModalBody,
+  ModalFooter,
+  Modal,
+} from '../ui/modal';
+import { HStack } from '../ui/hstack';
 
 interface Props {
   paymentHitories: PaymentHistoryModel[] | undefined;
@@ -26,41 +38,9 @@ interface Props {
 }
 
 const PaymentHistoryList = ({ paymentHitories, refetch }: Props) => {
-  const router = useRouter();
-  const currentUser = useSelector(selectUser);
   const [refreshing, setRefreshing] = useState(false);
-  const [viewNotification, { isLoading, error, data }] =
-    useViewNotificationMutation();
-  const toast = useToast();
-
-  const handleViewNotification = async (
-    userNotification: NotificationModel,
-  ) => {
-    const res = await viewNotification({
-      userId: currentUser?.id ?? '',
-      id: userNotification.id,
-    });
-    if (error || res.data?.returnCode != 1000) {
-      console.log(res.error.data.message);
-      toast.show({
-        placement: 'top',
-        duration: 3000,
-        render: ({ id }) => {
-          const uniqueToastId = 'toast-' + id;
-          return (
-            <Toast nativeID={uniqueToastId} action="error" variant="outline">
-              <ToastTitle>Xem thông báo thất bại</ToastTitle>
-              <ToastDescription>{res.error.data.message}</ToastDescription>
-            </Toast>
-          );
-        },
-      });
-    } else {
-      router.push(
-        `/(posts)/PostDetail?id=${userNotification.notification.post.id}`,
-      );
-    }
-  };
+  const [showModal, setShowModal] = useState(false);
+  const [paymentHistory, setPaymentHistory] = useState<PaymentHistoryModel>();
 
   const onRefresh = useCallback(() => {
     setRefreshing(true);
@@ -85,13 +65,19 @@ const PaymentHistoryList = ({ paymentHitories, refetch }: Props) => {
     );
   }
 
+  const viewDetail = (item: PaymentHistoryModel) => {
+    setPaymentHistory(item);
+    setShowModal(true);
+  };
+
   const renderItem = ({ item }: { item: PaymentHistoryModel }) => (
-    <Pressable className="mt-2">
+    <Pressable className="mb-3" onPress={() => viewDetail(item)}>
       {({ pressed }) => (
         <VStack space="md">
+          <Divider></Divider>
           <Box
             className={`${
-              pressed ? 'opacity-75' : ''
+              pressed ? 'opacity-50' : ''
             } flex flex-row justify-between items-center`}
           >
             <VStack space="xs">
@@ -113,21 +99,81 @@ const PaymentHistoryList = ({ paymentHitories, refetch }: Props) => {
               {Math.abs(item.amount).toLocaleString()} VND
             </Text>
           </Box>
-          <Divider></Divider>
         </VStack>
       )}
     </Pressable>
   );
 
   return (
-    <FlatList
-      data={paymentHitories}
-      keyExtractor={item => item.id}
-      renderItem={renderItem}
-      refreshControl={
-        <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
-      }
-    />
+    <>
+      <FlatList
+        data={paymentHitories}
+        keyExtractor={item => item.id}
+        renderItem={renderItem}
+        refreshControl={
+          <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+        }
+      />
+      {paymentHistory && (
+        <Modal
+          isOpen={showModal}
+          onClose={() => {
+            setShowModal(false);
+          }}
+          size="md"
+        >
+          <ModalBackdrop />
+          <ModalContent>
+            <ModalHeader>
+              <Heading size="lg" className="text-typography-950 mb-4">
+                Chi tiết giao dịch
+              </Heading>
+              <ModalCloseButton
+                onPress={() => {
+                  setShowModal(false);
+                }}
+              >
+                <Icon
+                  as={CloseIcon}
+                  size="md"
+                  className="stroke-background-400 group-[:hover]/modal-close-button:stroke-background-700 group-[:active]/modal-close-button:stroke-background-900 group-[:focus-visible]/modal-close-button:stroke-background-900"
+                />
+              </ModalCloseButton>
+            </ModalHeader>
+            <ModalBody>
+              <VStack space="md">
+                <HStack>
+                  <Text className="text-md font-medium">Mã giao dịch : </Text>
+                  <Text>{paymentHistory.refId}</Text>
+                </HStack>
+                <HStack className="items-center">
+                  <Text className="text-md font-medium">
+                    {paymentHistory.amount > 0 ? 'Nạp' : 'Rút'} tiền :{' '}
+                  </Text>
+                  <Text
+                    className={`font-medium ${
+                      paymentHistory.amount > 0
+                        ? 'text-success-400'
+                        : 'text-error-400'
+                    }`}
+                  >
+                    {Math.abs(paymentHistory.amount).toLocaleString()} VND
+                  </Text>
+                </HStack>
+                <HStack>
+                  <Text className="text-md font-medium">Ngày giao dịch : </Text>
+                  <Text>
+                    {moment(
+                      normalizeDateTime(paymentHistory.createdAt),
+                    )?.format('DD/MM/YYYY HH:mm:ss')}
+                  </Text>
+                </HStack>
+              </VStack>
+            </ModalBody>
+          </ModalContent>
+        </Modal>
+      )}
+    </>
   );
 };
 

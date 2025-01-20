@@ -12,6 +12,14 @@ export default function ProfileLayout() {
         name="PaymentHistory"
         options={{ headerShown: true, title: 'Lịch sử giao dịch' }}
       />
+      <Stack.Screen
+        name="Transaction"
+        options={{ headerShown: true, title: 'Giao dịch' }}
+      />
+      <Stack.Screen
+        name="PaymentQr"
+        options={{ headerShown: false, title: 'Mã thanh toán' }}
+      />
     </Stack>
   );
 }

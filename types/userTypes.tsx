@@ -37,6 +37,13 @@ export interface NotificationModel {
   };
 }
 
+export interface TransactionModel {
+  userId: string;
+  amount: number;
+  successUrl?: string;
+  cancelUrl?: string;
+}
+
 export interface PaymentHistoryModel {
   id: string;
   refId: string;

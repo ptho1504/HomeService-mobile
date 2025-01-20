@@ -55,4 +55,7 @@ export const en = {
   [LocalizationKey.BANKS]: "Banks",
   [LocalizationKey.ACCOUNT_NUMBER]: "Account Number",
   [LocalizationKey.PLACEHOLDER_ACCOUNT_NUMBER]: "Account Number",
+  [LocalizationKey.WORKS]: "My list services",
+  [LocalizationKey.ADD_WORKING]: "Add a service",
+  [LocalizationKey.LIST_WORKS]: "List services",
 };

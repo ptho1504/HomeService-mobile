@@ -1,7 +1,7 @@
 import Ionicons from "@expo/vector-icons/Ionicons";
 import { router, Stack } from "expo-router";
 
-export default function ProfileLayout() {
+export default function ServiceLayout() {
   return (
     <Stack
       screenOptions={{
@@ -15,7 +15,20 @@ export default function ProfileLayout() {
         }}
       />
       <Stack.Screen
-        name="edit-profile"
+        name="add-service"
+        options={{
+          headerShown: false,
+        }}
+      />
+      <Stack.Screen
+        name="do-test"
+        options={{
+          headerShown: false,
+        }}
+      />
+
+      <Stack.Screen
+        name="result-test"
         options={{
           headerShown: false,
         }}

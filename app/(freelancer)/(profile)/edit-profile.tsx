@@ -225,7 +225,7 @@ const EditProfile = () => {
         colors={["#ebf7eb", "transparent", "#ffffff"]}
         className="absolute h-[1000px] left-0 right-0 top-0"
       >
-        <SafeAreaView className="h-full w-full flex items-center ">
+        <SafeAreaView className="h-full w-full flex items-center bg-white">
           <TouchableWithoutFeedback
             // className="flex h-full"
             onPress={Keyboard.dismiss}
@@ -240,7 +240,7 @@ const EditProfile = () => {
                   <TouchableOpacity
                     onPress={() => router.back()}
                     // className="bg-white flex rounded-full w-16 h-16 items-center justify-center"
-                    className="px-2 "
+                    className="px-2 bg-white"
                   >
                     <Ionicons name="arrow-back" size={28} color="black" />
                   </TouchableOpacity>

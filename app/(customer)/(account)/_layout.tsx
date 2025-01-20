@@ -20,6 +20,12 @@ export default function AccountLayout() {
           headerShown: false,
         }}
       />
+      <Stack.Screen
+        name="add-address"
+        options={{
+          headerShown: false,
+        }}
+      />
     </Stack>
   );
 }

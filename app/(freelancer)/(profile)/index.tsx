@@ -1,30 +1,31 @@
-import { Button, ButtonText } from '@/components/ui/button';
-import { LOCAL_STORAGE_JWT_KEY } from '@/constants';
+import { Button, ButtonText } from "@/components/ui/button";
+import { LOCAL_STORAGE_JWT_KEY } from "@/constants";
 import {
   clearAuthState,
   selectIsAuthenticated,
   selectUser,
   setIsAuthenticated,
   setUser,
-} from '@/store/reducers';
-import React, { useEffect, useState } from 'react';
-import { SafeAreaView, ScrollView, View } from 'react-native';
-import { useSelector } from 'react-redux';
-import * as SecureStore from 'expo-secure-store';
-import { Box } from '@/components/ui/box';
-import { VStack } from '@/components/ui/vstack';
-import Ionicons from '@expo/vector-icons/Ionicons';
-import { Text } from '@/components/ui/text';
-import { Pressable } from '@/components/ui/pressable';
-import { i18n, Language } from '@/localization';
-import { Image } from '@/components/ui/image';
-import AntDesign from '@expo/vector-icons/AntDesign';
-import { HStack } from '@/components/ui/hstack';
-import ListAddress from '@/components/account/ListAddress';
-import { useDispatch } from 'react-redux';
-import { router, useFocusEffect } from 'expo-router';
-import RequiredAuthenticationModal from '@/components/authentication/RequiredAuthenticationModal';
-i18n.locale = 'vn';
+} from "@/store/reducers";
+import React, { useEffect, useState } from "react";
+import { SafeAreaView, ScrollView, View } from "react-native";
+import { useSelector } from "react-redux";
+import * as SecureStore from "expo-secure-store";
+import { Box } from "@/components/ui/box";
+import { VStack } from "@/components/ui/vstack";
+import Ionicons from "@expo/vector-icons/Ionicons";
+import { Text } from "@/components/ui/text";
+import { Pressable } from "@/components/ui/pressable";
+import { i18n, Language } from "@/localization";
+import { Image } from "@/components/ui/image";
+import AntDesign from "@expo/vector-icons/AntDesign";
+import { HStack } from "@/components/ui/hstack";
+import ListAddress from "@/components/account/ListAddress";
+import { useDispatch } from "react-redux";
+import { router, useFocusEffect } from "expo-router";
+import RequiredAuthenticationModal from "@/components/authentication/RequiredAuthenticationModal";
+import ListWorking from "@/components/account/ListWorking";
+i18n.locale = "vn";
 i18n.enableFallback = true;
 i18n.defaultLocale = Language.VIETNAMESE;
 
@@ -48,30 +49,31 @@ const Profile = () => {
   }, []);
 
   const handleEdit = () => {
-    console.log('Edit mode');
+    console.log("Edit mode");
 
-    router.push('/(customer)/(account)/edit-profile');
+    router.push("/(freelancer)/(profile)/edit-profile");
   };
 
   const handleFinance = () => {
-    console.log('Finace Mode');
-    router.push('/(profile)/PaymentHistory');
+    console.log("Finace Mode");
+    router.push("/(profile)/PaymentHistory");
   };
-
+  
   const handleAdd = () => {
-    console.log('Add address');
+    console.log("Add a servuce");
+    router.push("/(services)/add-service");
   };
 
   const handleLogout = async () => {
-    console.log('Handle Logout');
+    console.log("Handle Logout");
     dispatch(clearAuthState());
 
     dispatch(setUser(null));
     dispatch(setIsAuthenticated(false));
-    await SecureStore.deleteItemAsync('jwt');
+    await SecureStore.deleteItemAsync("jwt");
     // console.log("JWT successfully deleted.");
     setShowModal(false);
-    router.replace('/(customer)/(home)');
+    router.replace("/(customer)/(home)");
   };
 
   useEffect(() => {
@@ -86,7 +88,7 @@ const Profile = () => {
       } else {
         setShowModal(true); // Show the modal if not authenticated
       }
-    }, [isAuthenticated]),
+    }, [isAuthenticated])
   );
 
   return (
@@ -104,16 +106,20 @@ const Profile = () => {
             // showsVerticalScrollIndicator={false}
             className="h-full flex w-full"
           >
-            <VStack space="xl" className="h-full flex w-full ">
+            <VStack space="xl" className="h-full flex w-full px-2">
               {/* Title */}
               <Box className="flex w-full">
                 <Text className="text-2xl font-bold text-center">
-                  {i18n.t('account')}
+                  {i18n.t("account")}
                 </Text>
               </Box>
 
               {/* Avatar */}
-              <Box className="border border-gray-100 w-full p-4 flex flex-row items-center gap-4">
+              <Box
+                className="
+              rounded-lg bg-success-200
+              border border-gray-100 w-full p-4 flex flex-row items-center gap-4"
+              >
                 {/* Avatar */}
                 <Pressable className="" onPress={() => setShowModalEdit(true)}>
                   {currentUser?.avatar && (
@@ -135,7 +141,7 @@ const Profile = () => {
                     </Box>
                   )}
                   {!currentUser?.avatar && (
-                    <Box className="relative w-16 h-16 rounded-full bg-black flex items-center justify-center border border-gray-300">
+                    <Box className="relative w-16 h-16  rounded-full bg-black flex items-center justify-center border border-gray-300">
                       <Text className="text-white text-3xl font-bold">
                         {currentUser?.name[0]?.toUpperCase()}
                       </Text>
@@ -151,13 +157,13 @@ const Profile = () => {
                 {/* In4 */}
                 <VStack className="w-full">
                   {/* Name */}
-                  <HStack className="flex items-center gap-5">
-                    <Text className="text-xl font-bold">
+                  <HStack className="flex items-center gap-5 w-[70%]">
+                    <Text className="text-xl font-bold text-white">
                       {currentUser?.name}
                     </Text>
                     <Pressable onPress={handleEdit}>
                       {/* <View className="bg-[#66B584] rounded-md"> */}
-                      <View className="bg-red-500 rounded-md">
+                      <View className="bg-success-400 rounded-md">
                         <Text className="text-md text-white px-2 py-1">
                           Cập nhập
                         </Text>
@@ -167,22 +173,22 @@ const Profile = () => {
 
                   {/* Reputation */}
                   <HStack>
-                    <Text className="text-lg text-gray-500 font-semibold">
-                      {i18n.t('reputation')}: {currentUser?.reputationPoint}
+                    <Text className="text-lg text-white font-medium">
+                      {i18n.t("reputation")}: {currentUser?.reputationPoint}
                     </Text>
                   </HStack>
 
                   {/* Phone */}
                   <HStack>
-                    <Text className="text-lg text-gray-500 font-semibold">
-                      {i18n.t('phone')}: {currentUser?.phoneNumber}
+                    <Text className="text-lg text-white font-medium">
+                      {i18n.t("phone")}: {currentUser?.phoneNumber || "Chưa có"}
                     </Text>
                   </HStack>
 
                   {/* Phone */}
                   <HStack className="w-full ">
-                    <Text className="text-lg overflow-hidden text-gray-500 font-semibold">
-                      {i18n.t('email')}: {currentUser?.email}
+                    <Text className="text-lg overflow-hidden text-white font-medium">
+                      {i18n.t("email")}: {currentUser?.email}
                     </Text>
                   </HStack>
                 </VStack>
@@ -190,28 +196,32 @@ const Profile = () => {
 
               {/* Finance */}
               <Pressable
-                className="border border-gray-100 p-4 flex flex-row items-center gap-4 justify-between hover:opacity-50"
+                className=" rounded-lg border border-gray-100 bg-success-200 p-4 flex flex-row items-center gap-4 justify-between hover:opacity-50"
                 onPress={handleFinance}
               >
                 <Box className="flex flex-row gap-2 items-center">
-                  <Ionicons name="wallet-outline" size={32} color="black" />
-                  <Text className="text-xl font-bold">{i18n.t('finance')}</Text>
+                  <Ionicons name="wallet-outline" size={32} color="white" />
+                  <Text className="text-xl font-bold text-white">
+                    {i18n.t("finance")}
+                  </Text>
                 </Box>
                 <Ionicons
                   name="arrow-forward-circle-outline"
                   size={32}
-                  color="black"
+                  color="#fff"
                 />
               </Pressable>
 
               {/* Logout */}
               <Pressable
-                className="border border-gray-100 p-4 flex flex-row items-center gap-4 justify-between hover:opacity-50"
+                className="rounded-lg border border-gray-100 bg-success-200 p-4 flex flex-row items-center gap-4 justify-between hover:opacity-50"
                 onPress={handleLogout}
               >
                 <Box className="flex flex-row gap-2 items-center">
-                  <Ionicons name="log-out-outline" size={32} color="black" />
-                  <Text className="text-xl font-bold">{i18n.t('log_out')}</Text>
+                  <Ionicons name="log-out-outline" size={32} color="white" />
+                  <Text className="text-xl font-bold text-white">
+                    {i18n.t("log_out")}
+                  </Text>
                 </Box>
               </Pressable>
 
@@ -220,7 +230,7 @@ const Profile = () => {
               <Box className="border border-gray-100 p-4 flex items-center gap-4">
                 <View className="flex flex-row items-center justify-between w-full">
                   <Text className="text-xl font-bold ">
-                    {i18n.t('addresses')}
+                    {i18n.t("workings")}
                   </Text>
                   <Pressable
                     className="flex flex-row items-center"
@@ -228,26 +238,14 @@ const Profile = () => {
                   >
                     <Ionicons name="add-sharp" size={32} color="#66B584" />
                     <Text className="text-lg font-bold text-[#66B584]">
-                      {i18n.t('add_addresses')}
+                      {i18n.t("add_workings")}
                     </Text>
                   </Pressable>
                 </View>
 
-                {/* List Addresses */}
+                {/* List Working */}
                 <View className="flex items-center w-full px-4 gap-3">
-                  {currentUser?.addresses ? (
-                    <>
-                      {[1, 2, 3].map((item, index) => (
-                        <ListAddress key={index} address={item as any} />
-                      ))}
-                    </>
-                  ) : (
-                    <View>
-                      <Text className="text-lg font-semibold">
-                        {i18n.t('no_addresses')}
-                      </Text>
-                    </View>
-                  )}
+                  <ListWorking />
                 </View>
               </Box>
             </VStack>

@@ -9,6 +9,8 @@ import { useGetNotificationQuery } from '@/services';
 import { LinearGradient } from 'expo-linear-gradient';
 import NotificationList from '@/components/list/NotificationList';
 import NotificationSkeleton from '@/components/skeleton/NotificationSkeleton';
+import { useSelector } from 'react-redux';
+import { selectUser } from '@/store/reducers';
 
 i18n.locale = 'vn';
 i18n.enableFallback = true;
@@ -33,9 +35,10 @@ type NotificationListProps = {
 
 const Notifications = ({ route }: Props) => {
   const { status } = route.params;
+  const user = useSelector(selectUser);
 
   const { data, error, isFetching, refetch } = useGetNotificationQuery({
-    id: 'USER-1',
+    id: user?.id ?? '',
   });
 
   return (

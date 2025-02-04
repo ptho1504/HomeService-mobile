@@ -33,6 +33,13 @@ export default function PostsLayout() {
           headerShown: true,
         }}
       />
+      <Stack.Screen
+        name="FreelancerTakePosts"
+        options={{
+          title: 'Danh sách freelancers',
+          headerShown: true,
+        }}
+      />
     </Stack>
   );
 }

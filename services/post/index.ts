@@ -37,6 +37,33 @@ const postApi = API.injectEndpoints({
       },
     }),
 
+    getFreelancerTakePosts: build.query<
+      Response<TakePostModel[]>,
+      {
+        id: string;
+        page?: number;
+        size?: number;
+        takePostStatus?: string;
+      }
+    >({
+      query: ({ id, page, size, takePostStatus }) => {
+        // Tạo query string từ các tham số truyền vào
+        const params = new URLSearchParams();
+
+        if (page !== undefined) {
+          params.append('index', page.toString());
+        }
+        if (size !== undefined) {
+          params.append('size', size.toString());
+        }
+        if (takePostStatus) {
+          params.append('takePostStatus', takePostStatus);
+        }
+        // Kết hợp base URL và query string
+        return `${baseUrl}/${id}/freelancers?${params.toString()}`;
+      },
+    }),
+
     getPostById: build.query<
       Response<PostModel>,
       {
@@ -186,4 +213,5 @@ export const {
   useTakePostMutation,
   useUploadImagesMutation,
   useGetPostByIdQuery,
+  useGetFreelancerTakePostsQuery,
 } = postApi;

@@ -49,6 +49,7 @@ import TakePostDialog from '@/components/dialog/TakePostDialog';
 import { useGetUsersQuery } from '@/services';
 import { UserModel } from '@/types/userTypes';
 import UserSkeleton from '@/components/skeleton/UserSkeleton';
+import { renderStar } from '@/components/post/FreelancerInfo';
 
 const FreelancerList = () => {
   const { postId } = useLocalSearchParams();
@@ -91,7 +92,7 @@ const FreelancerList = () => {
               />
               <VStack space="sm">
                 <Text className="text-lg font-medium">{freelancer.name}</Text>
-                <Text className="text-info-400">{5} sao</Text>
+                <HStack space="xs">{renderStar(4.55)}</HStack>
               </VStack>
             </HStack>
             <Text className="text-secondary-400">

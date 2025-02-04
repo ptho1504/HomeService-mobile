@@ -48,4 +48,7 @@ export enum LocalizationKey {
   BANKS = "banks",
   ACCOUNT_NUMBER = "account_number",
   PLACEHOLDER_ACCOUNT_NUMBER = "placeholder_account_number",
+  WORKS = "workings",
+  LIST_WORKS = "list_workings",
+  ADD_WORKING = "add_workings",
 }

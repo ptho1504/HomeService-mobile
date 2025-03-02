@@ -8,6 +8,7 @@ import {
   TransactionModel,
   UserModel,
 } from '@/types/userTypes';
+
 import { Response } from '@/types/response';
 
 const baseUrl = '/users';

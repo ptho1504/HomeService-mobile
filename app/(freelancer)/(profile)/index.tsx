@@ -60,8 +60,9 @@ const Profile = () => {
   };
   
   const handleAdd = () => {
-    console.log("Add a servuce");
+    console.log("Add a service");
     router.push("/(services)/add-service");
+    // router.push("/(services)/do-test");
   };
 
   const handleLogout = async () => {
@@ -108,11 +109,11 @@ const Profile = () => {
           >
             <VStack space="xl" className="h-full flex w-full px-2">
               {/* Title */}
-              <Box className="flex w-full">
+              {/* <Box className="flex w-full">
                 <Text className="text-2xl font-bold text-center">
                   {i18n.t("account")}
                 </Text>
-              </Box>
+              </Box> */}
 
               {/* Avatar */}
               <Box

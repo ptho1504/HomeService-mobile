@@ -54,7 +54,7 @@ export const vn = {
   [LocalizationKey.BANKS]: 'Ngân hàng',
   [LocalizationKey.ACCOUNT_NUMBER]: 'Số tài khoản',
   [LocalizationKey.PLACEHOLDER_ACCOUNT_NUMBER]: 'Nhập số tài khoản',
-  [LocalizationKey.WORKS]: 'Danh sách dịch vụ của tôi',
+  [LocalizationKey.WORKS]: 'Dịch vụ của tôi',
   [LocalizationKey.ADD_WORKING]: 'Thêm dịch vụ',
   [LocalizationKey.LIST_WORKS]: 'Danh sách dịch vụ',
 };

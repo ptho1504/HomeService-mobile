@@ -42,6 +42,7 @@ import {
   AlertDialogFooter,
   AlertDialogHeader,
 } from "@/components/ui/alert-dialog";
+import { i18n } from "@/localization";
 
 const convertAnswers = (
   questions: QuestionModel[],
@@ -72,10 +73,10 @@ const DoTest = () => {
   const navigation = useNavigation();
   // Hiển thị cảnh báo nếu goback
   usePreventRemove(!registerProcess.isRegisterDone, ({ data }) => {
-    Alert.alert("Xác nhận", "Bạn có chắc muốn quay lại?", [
-      { text: "Hủy", style: "cancel" },
+    Alert.alert(i18n.t("word_confirm"), i18n.t("st_confirm_goback"), [
+      { text: i18n.t("word_cancel"), style: "cancel" },
       {
-        text: "Đồng ý",
+        text: i18n.t("word_yes"),
         style: "default",
         onPress: () => navigation.dispatch(data.action),
       },
@@ -161,7 +162,7 @@ const DoTest = () => {
       Object.keys(answers).length < sortedQuestions.length;
 
     if (isNotFulfillTest) {
-      showToast("Lưu ý", "Vui lòng hoàn thành bài kiểm tra", "warning");
+      showToast(i18n.t("word_warning"), i18n.t("st_please_fullfil_test"), "warning");
       return;
     }
 
@@ -179,7 +180,7 @@ const DoTest = () => {
       const result = await submitTest({ testId: testId, answer: answer });
     } catch (e) {
       console.log(e);
-      showToast("Lỗi hệ thống", " Vui lòng thử lại sau", "error");
+      showToast(i18n.t("word_failure"), i18n.t("st_try_again"), "error");
     }
 
     console.log("complete submit");
@@ -190,7 +191,9 @@ const DoTest = () => {
       return;
     }
 
-    if (resultTestData) {
+    if (resultTestData?.items) {
+
+      console.log(resultTestData.items);
       dispatch(
         setTestResult({
           testResultId: resultTestData.items.id,
@@ -205,7 +208,7 @@ const DoTest = () => {
       router.push("/(services)/result-test");
     } else {
       if (errorTestData) {
-        showToast("Thất bại", errorTestData.data.message, "error");
+        showToast(i18n.t("word_failure"), i18n.t("st_try_again"), "error");
       }
     }
   }, [isLoadingSubmitTest]);
@@ -232,7 +235,7 @@ const DoTest = () => {
 
       {error && (
         <Text size="lg" className="text-red-800 text-center mt-5">
-          Đã xảy ra lỗi. Vui lòng thử lại.
+          {i18n.t("st_system_error")}
         </Text>
       )}
 
@@ -240,7 +243,7 @@ const DoTest = () => {
         <VStack className="mt-5">
           <Spinner size="large" color={colors.emerald[600]} />
           <Text size="lg" className="text-green-800 text-center">
-            Đang nộp bài kiểm tra
+          {i18n.t("wait_for_submitting")}
           </Text>
         </VStack>
       )}
@@ -269,7 +272,7 @@ const DoTest = () => {
               className="w-64 h-14"
               onPress={handleOpenAlert}
             >
-              <ButtonText className="font-semibold text-lg">Nộp bài</ButtonText>
+              <ButtonText className="font-semibold text-lg">{i18n.t("word_submit")}</ButtonText>
             </Button>
           </Center>
         </VStack>
@@ -285,11 +288,11 @@ const DoTest = () => {
         <AlertDialogContent>
           <AlertDialogHeader>
             <Heading className="text-typography-950 font-semibold" size="md">
-              Nộp bài kiểm tra
+            {i18n.t("word_submitting_test")}
             </Heading>
           </AlertDialogHeader>
           <AlertDialogBody className="mt-3 mb-4">
-            <Text size="sm">Bạn chắc chắn nộp bài kiểm tra!</Text>
+            <Text size="sm">{i18n.t("st_you_are_sure_submit")}</Text>
           </AlertDialogBody>
           <AlertDialogFooter className="">
             <Button
@@ -298,7 +301,7 @@ const DoTest = () => {
               onPress={handleCloseAlert}
               size="sm"
             >
-              <ButtonText>Quay lại</ButtonText>
+              <ButtonText>{i18n.t("word_goback")}</ButtonText>
             </Button>
             <Button
               size="sm"
@@ -308,7 +311,7 @@ const DoTest = () => {
                 handleSubmit();
               }}
             >
-              <ButtonText>Nộp bài</ButtonText>
+              <ButtonText>{i18n.t("word_submit")}</ButtonText>
             </Button>
           </AlertDialogFooter>
         </AlertDialogContent>
@@ -332,7 +335,7 @@ const QuestionItem = ({
 }) => (
   <View className="mb-5 p-3">
     <Text className="text-xl font-semibold mb-2">
-      Câu {questionNumber}: {item.content}
+    {i18n.t("word_question")} {questionNumber}: {item.content}
     </Text>
 
     {item.type === "MULTICHOICE" && (
@@ -365,7 +368,7 @@ const QuestionItem = ({
     {item.type === "ESSAY" && (
       <TextInput
         className="border border-gray-300 p-3 rounded-lg mt-2 bg-white text-lg"
-        placeholder="Nhập câu trả lời của bạn..."
+        placeholder= {i18n.t("st_enter_your_answer")}
         multiline
         value={answers[item.id] || ""}
         onChangeText={(text) => onEssayChange(item.id, text)}

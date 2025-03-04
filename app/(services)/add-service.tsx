@@ -49,6 +49,7 @@ import {
   ToastTitle,
   useToast,
 } from "@/components/ui/toast";
+import { WorkType } from "@/constants";
 
 i18n.locale = "vn";
 i18n.enableFallback = true;
@@ -177,13 +178,13 @@ const AddService = () => {
         })
       );
 
-      dispatch(setRegisterProcess({isRegisterDone: false}));
+      dispatch(setRegisterProcess({ isRegisterDone: false }));
 
       router.push({
         pathname: "/(services)/do-test",
       });
     } else {
-      showToast("Thât bại", "Vui lòng chọn lại dịch vụ", "error");
+      showToast(i18n.t("word_failure"), i18n.t("st_try_again"), "error");
     }
   };
 
@@ -196,7 +197,7 @@ const AddService = () => {
 
         {hasErrorSystem ? (
           <Text size="lg" className="text-red-800 text-center mt-5">
-            Đã xảy ra lỗi. Vui lòng thử lại.
+            {i18n.t("st_system_error")}
           </Text>
         ) : fetchingAll || fetchingFreelancer ? (
           <HStack>
@@ -219,7 +220,10 @@ const AddService = () => {
                       alt={service.name}
                     />
                     <Heading size="md" className="mb-1">
-                      {service.name}
+                      {WorkType[service.name as keyof typeof WorkType].key ===
+                      "BABYSITTING"
+                        ? i18n.t("job_babysitting")
+                        : i18n.t("job_homecleaning")}
                     </Heading>
                     {/* <Text className="text-sm font-normal mb-2 text-typography-700">
                       May 15, 2023
@@ -230,7 +234,7 @@ const AddService = () => {
                         size="sm"
                         className="font-semibold text-green-600 no-underline"
                       >
-                        Tham gia ngay
+                        {i18n.t("word_join_now")}
                       </Text>
                       <Icon
                         as={ArrowRightIcon}
@@ -243,7 +247,7 @@ const AddService = () => {
               ))
             ) : (
               <Text size="lg" className="text-green-800 text-center mt-5">
-                Bạn đã tham gia tất cả dịch vụ có sẵn.
+                {i18n.t("st_all_job_registered")}
               </Text>
             )}
           </ScrollView>
@@ -259,11 +263,11 @@ const AddService = () => {
           <AlertDialogContent>
             <AlertDialogHeader>
               <Heading className="text-typography-950 font-semibold" size="md">
-                Bạn muốn tham gia dịch vụ này?
+                {i18n.t("st_you_are_ready_join")}
               </Heading>
             </AlertDialogHeader>
             <AlertDialogBody className="mt-3 mb-4">
-              <Text size="sm">Sẵn sàng làm bài kiểm tra!</Text>
+              <Text size="sm">{i18n.t("st_ready_doing_test")}</Text>
             </AlertDialogBody>
             <AlertDialogFooter className="">
               <Button
@@ -272,7 +276,7 @@ const AddService = () => {
                 onPress={handleCloseAlert}
                 size="sm"
               >
-                <ButtonText>Huỷ</ButtonText>
+                <ButtonText>{i18n.t("word_cancel")}</ButtonText>
               </Button>
               <Button
                 size="sm"
@@ -282,7 +286,7 @@ const AddService = () => {
                   handleVisit();
                 }}
               >
-                <ButtonText>Bắt đầu</ButtonText>
+                <ButtonText>{i18n.t("word_start")}</ButtonText>
               </Button>
             </AlertDialogFooter>
           </AlertDialogContent>

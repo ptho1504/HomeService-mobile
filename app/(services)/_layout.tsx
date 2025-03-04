@@ -1,3 +1,4 @@
+import { i18n } from "@/localization";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import { router, Stack, useNavigation } from "expo-router";
 import { Alert, Button } from "react-native";
@@ -33,14 +34,14 @@ export default function ServiceLayout() {
       <Stack.Screen
         name="add-service"
         options={{
-          title: "Thêm dịch vụ",
+          title: i18n.t("add_workings"),
           headerShown: true,
         }}
       />
       <Stack.Screen
         name="do-test"
         options={{
-          title: "Bài kiểm tra",
+          title: i18n.t("doing_test"),
           headerShown: true,
           // headerLeft: () => <CustomBackButton />
         }}
@@ -49,7 +50,7 @@ export default function ServiceLayout() {
       <Stack.Screen
         name="result-test"
         options={{
-          title: "Kết quả",
+          title: i18n.t("result_test"),
           headerShown: true,
         }}
       />
@@ -57,7 +58,7 @@ export default function ServiceLayout() {
       <Stack.Screen
         name="addition-info"
         options={{
-          title: "Bổ sung thông tin",
+          title: i18n.t("add_addition_info"),
           headerShown: true,
         }}
       />

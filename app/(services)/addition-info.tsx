@@ -47,6 +47,7 @@ import {
 } from "@/components/ui/alert-dialog";
 import { Heading } from "@/components/ui/heading";
 import { usePreventRemove } from "@react-navigation/native";
+import { i18n } from "@/localization";
 
 const AdditionInfo = () => {
 
@@ -57,11 +58,10 @@ const AdditionInfo = () => {
   const navigation = useNavigation();
 
   usePreventRemove(!registerProcess.isRegisterDone, ({ data }) => {
-    
-    Alert.alert("Xác nhận", "Bạn có chắc muốn quay lại?", [
-      { text: "Hủy", style: "cancel" },
+    Alert.alert(i18n.t("word_confirm"), i18n.t("st_confirm_goback"), [
+      { text: i18n.t("word_cancel"), style: "cancel" },
       {
-        text: "Đồng ý",
+        text: i18n.t("word_yes"),
         style: "default",
         onPress: () => navigation.dispatch(data.action),
       },
@@ -131,7 +131,7 @@ const AdditionInfo = () => {
     } catch (error) {
       console.error("Lỗi khi chọn ảnh:", error);
 
-      showToast("Thất bại", "Lỗi khi chọn ảnh", "error");
+      showToast(i18n.t("word_failure"), i18n.t("st_error_at_choice_image"), "error");
     }
   };
 
@@ -141,11 +141,6 @@ const AdditionInfo = () => {
   };
 
   const handleRegisterService = async () => {
-    if (note === "") {
-      console.log("Không có ghi chú để upload");
-      showToast("Lưu ý", "Hãy nhập ghi chú", "warning");
-      return null;
-    }
 
     const dataToRegister = {
       serviceId: testInfo.serviceId ?? "",
@@ -157,15 +152,15 @@ const AdditionInfo = () => {
       },
     };
 
-    // console.log(dataToRegister);
+    console.log("register data", dataToRegister);
 
     try {
       const result = await registerService(dataToRegister).unwrap();
-      console.log("Register ID", result.items.id);
+      console.log("register result", result.items.testResult);
       return result.items.id ?? null;
     } catch (err) {
       console.error("Lỗi khi đăng ký dịch vụ:", err);
-      showToast("Thất bại", "Lỗi khi đăng ký dịch vụ", "error");
+      showToast(i18n.t("word_failure"), i18n.t("st_error_at_register_service"), "error");
       return null;
     }
   };
@@ -180,11 +175,6 @@ const AdditionInfo = () => {
   ] = useUploadImagesForRegisterServiceMutation();
 
   const handleUploadImages = async (id: string) => {
-    if (images.length === 0) {
-      console.log("Không có hình ảnh để upload");
-      showToast("Lưu ý", "Hãy tải hình ảnh ghi chú", "warning");
-      return;
-    }
 
     const formData = new FormData();
 
@@ -208,34 +198,32 @@ const AdditionInfo = () => {
         formData,
       }).unwrap();
 
-      console.log("Upload thành công:", response);
+      console.log("Upload thành công:", response.items.testResult);
     } catch (error) {
       console.error("Lỗi khi upload hình ảnh:", error);
-      showToast("Thất bại", "Lỗi khi đăng tải hình ảnh", "error");
+      showToast(i18n.t("word_failure"), i18n.t("st_error_at_upload_image"), "error");
     }
   };
 
   const handleSubmit = async () => {
-    // Check input
-
     if (note === "") {
       console.log("Không có ghi chú để upload");
-      showToast("Lưu ý", "Hãy nhập ghi chú", "warning");
-      return;
+      showToast(i18n.t("word_warning"), i18n.t("st_please_enter_note"), "warning");
+      return null;
     }
 
     if (images.length === 0) {
       console.log("Không có hình ảnh để upload");
-      showToast("Lưu ý", "Hãy tải hình ảnh ghi chú", "warning");
+      showToast(i18n.t("word_warning"), i18n.t("st_please_upload_image"), "warning");
       return;
     }
-
     try {
       // Gọi API đăng ký dịch vụ
       const registerResponseId = await handleRegisterService();
 
       if (!registerResponseId) {
         console.error("Lỗi: Không lấy được ID sau khi đăng ký");
+        showToast(i18n.t("word_failure"), i18n.t("st_system_error"), "error");
         return;
       }
 
@@ -246,30 +234,23 @@ const AdditionInfo = () => {
         await handleUploadImages(registerResponseId);
       } catch (uploadError) {
         console.error("Lỗi khi upload hình ảnh:", uploadError);
-        showToast("Xin lỗi", "Hệ thống xuất hiện lỗi", "error");
+        showToast(i18n.t("word_failure"), i18n.t("st_system_error"), "error");
       }
     } catch (error) {
       console.error("Lỗi khi submit:", error);
-      showToast("Xin lỗi", "Hệ thống xuất hiện lỗi", "error");
+      showToast(i18n.t("word_failure"), i18n.t("st_system_error"), "error");
+
     }
-
     dispatch(setRegisterProcess({isRegisterDone: true}));
-
-    showToast("Chúc mừng", "Bạn đã hoàn thành đăng ký dịch vụ", "success");
   };
 
   useEffect(() => {
     if (registerProcess.isRegisterDone) {
       router.dismissAll();
+      showToast(i18n.t("word_success"), i18n.t("st_register_successfully"), "success");
     }
   }, [registerProcess]);
 
-
-  // const handleGoOutButton = () => {
-  //   showToast("Chúc mừng", "Bạn đã hoàn thành đăng ký dịch vụ", "success");
-  //   // router.push("/(services)/add-service");
-  //   setIsRegisterSuccessly(false);
-  // };
 
   const [showAlertDialog, setShowAlertDialog] = useState(false);
   const handleCloseAlert = () => setShowAlertDialog(false);
@@ -296,17 +277,17 @@ const AdditionInfo = () => {
         <VStack className="mt-5">
           <Spinner size="large" color={colors.emerald[600]} />
           <Text size="lg" className="text-green-800 text-center">
-            Đang gửi đăng ký dịch vụ
+          {i18n.t("st_wait_for_registering")}
           </Text>
         </VStack>
       ) : (
         <VStack className="px-3 mt-5">
           <VStack space="4xl">
             <VStack space="md">
-              <Text className="font-bold text-lg">Nhập ghi chú của bạn:</Text>
+              <Text className="font-bold text-lg">{i18n.t("st_enter_your_addition_info")}:</Text>
               <Textarea size="md">
                 <TextareaInput
-                  placeholder="Nhập ghi chú tại đây..."
+                  placeholder={i18n.t("st_enter_your_addition_info_here")}
                   onChangeText={setNote}
                   value={note}
                 />
@@ -315,7 +296,7 @@ const AdditionInfo = () => {
             <VStack space="md" className="h-72">
               {/* Tải hình ảnh */}
               <Text className="font-bold text-lg">
-                Tải hình ghi chú của bạn:
+              {i18n.t("st_upload_your_image")}
               </Text>
               <Button
                 size="lg"
@@ -324,7 +305,7 @@ const AdditionInfo = () => {
                 action="secondary"
                 onPress={handlePickImage}
               >
-                <ButtonText>Chọn hình ảnh</ButtonText>
+                <ButtonText> {i18n.t("st_choice_image")}</ButtonText>
                 <ButtonIcon as={EditIcon} />
               </Button>
 
@@ -363,7 +344,7 @@ const AdditionInfo = () => {
               className={"w-64 h-14"}
               onPress={handleOpenAlert}
             >
-              <ButtonText className="font-bold text-xl">Gửi đăng ký</ButtonText>
+              <ButtonText className="font-bold text-xl">{i18n.t("st_send_register")}</ButtonText>
             </Button>
           </Center>
         </VStack>
@@ -379,11 +360,11 @@ const AdditionInfo = () => {
         <AlertDialogContent>
           <AlertDialogHeader>
             <Heading className="text-typography-950 font-semibold" size="md">
-              Gửi đăng ký
+            {i18n.t("word_confirm")}
             </Heading>
           </AlertDialogHeader>
           <AlertDialogBody className="mt-3 mb-4">
-            <Text size="sm">Bạn xác nhận gửi đăng ký!</Text>
+            <Text size="sm">{i18n.t("st_are_ready_send_register")}</Text>
           </AlertDialogBody>
           <AlertDialogFooter className="">
             <Button
@@ -392,7 +373,7 @@ const AdditionInfo = () => {
               onPress={handleCloseAlert}
               size="sm"
             >
-              <ButtonText>Huỷ</ButtonText>
+              <ButtonText>{i18n.t("word_cancel")}</ButtonText>
             </Button>
             <Button
               size="sm"
@@ -402,7 +383,7 @@ const AdditionInfo = () => {
                 handleSubmit();
               }}
             >
-              <ButtonText>Gửi</ButtonText>
+              <ButtonText>{i18n.t("word_register")}</ButtonText>
             </Button>
           </AlertDialogFooter>
         </AlertDialogContent>

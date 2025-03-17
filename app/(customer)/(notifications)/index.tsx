@@ -1,16 +1,17 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { SafeAreaView } from 'react-native';
 
 import { Text } from '@/components/ui/text';
 import { i18n, Language } from '@/localization';
 import { RootStackParamList } from '@/types/postTypes';
-import { RouteProp } from '@react-navigation/native';
+import { RouteProp, useFocusEffect } from '@react-navigation/native';
 import { useGetNotificationQuery } from '@/services';
 import { LinearGradient } from 'expo-linear-gradient';
 import NotificationList from '@/components/list/NotificationList';
 import NotificationSkeleton from '@/components/skeleton/NotificationSkeleton';
 import { useSelector } from 'react-redux';
-import { selectUser } from '@/store/reducers';
+import { selectIsAuthenticated, selectUser } from '@/store/reducers';
+import RequiredAuthenticationModal from '@/components/authentication/RequiredAuthenticationModal';
 
 i18n.locale = 'vn';
 i18n.enableFallback = true;
@@ -36,25 +37,51 @@ type NotificationListProps = {
 const Notifications = ({ route }: Props) => {
   const { status } = route.params;
   const user = useSelector(selectUser);
+  const isAuthenticated = useSelector(selectIsAuthenticated);
+  const [showModal, setShowModal] = React.useState(!isAuthenticated);
 
   const { data, error, isFetching, refetch } = useGetNotificationQuery({
     id: user?.id ?? '',
   });
 
-  return (
-    <SafeAreaView className="relative flex-1">
-      <LinearGradient
-        // Background Linear Gradient
-        colors={['#ebf7eb', 'transparent', '#ffffff']}
-        className="absolute h-[1000px] left-0 right-0 top-0"
-      />
+  useEffect(() => {
+    if (isAuthenticated) {
+      setShowModal(false);
+    }
+  }, [isAuthenticated]);
+  useFocusEffect(
+    React.useCallback(() => {
+      if (isAuthenticated) {
+        setShowModal(false); // Hide the modal if authenticated
+      } else {
+        setShowModal(true); // Show the modal if not authenticated
+      }
+    }, [isAuthenticated]),
+  );
 
-      {isFetching ? (
-        <NotificationSkeleton />
+  return (
+    <>
+      {!isAuthenticated ? (
+        <RequiredAuthenticationModal
+          showModal={showModal}
+          setShowModal={setShowModal}
+        />
       ) : (
-        <NotificationList notifications={data?.items} refetch={refetch} />
+        <SafeAreaView className="relative flex-1">
+          <LinearGradient
+            // Background Linear Gradient
+            colors={['#ebf7eb', 'transparent', '#ffffff']}
+            className="absolute h-[1000px] left-0 right-0 top-0"
+          />
+
+          {isFetching ? (
+            <NotificationSkeleton />
+          ) : (
+            <NotificationList notifications={data?.items} refetch={refetch} />
+          )}
+        </SafeAreaView>
       )}
-    </SafeAreaView>
+    </>
   );
 };
 

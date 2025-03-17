@@ -16,8 +16,9 @@ import { PostModel, RootStackParamList } from '@/types/postTypes';
 import { RouteProp } from '@react-navigation/native';
 import { useGetPostsByCustomerIdQuery } from '@/services/post';
 import { useSelector } from 'react-redux';
-import { selectUser } from '@/store/reducers';
+import { selectIsAuthenticated, selectUser } from '@/store/reducers';
 import { LinearGradient } from 'expo-linear-gradient';
+import RequiredAuthenticationModal from '@/components/authentication/RequiredAuthenticationModal';
 
 interface Props {
   route:
@@ -28,8 +29,7 @@ interface Props {
 
 const Posts = ({ route }: Props) => {
   const currentUser = useSelector(selectUser);
-  // const isAuthenticated = useSelector(selectIsAuthenticated);
-  const isAuthenticated = true;
+  const isAuthenticated = useSelector(selectIsAuthenticated);
   const userId = currentUser?.id ? currentUser.id : '';
   const { status } = route.params;
   const query =
@@ -80,28 +80,37 @@ const Posts = ({ route }: Props) => {
     }, [isAuthenticated]),
   );
   return (
-    <SafeAreaView className="flex h-full bg-[#ebf7eb]">
-      <LinearGradient
-        // Background Linear Gradient
-        colors={['#ebf7eb', 'transparent', '#ffffff']}
-        className="absolute h-[1000px] left-0 right-0 top-0"
-      />
-      {isFetching ? (
-        <PostSkeleton />
+    <>
+      {!isAuthenticated ? (
+        <RequiredAuthenticationModal
+          showModal={showModal}
+          setShowModal={setShowModal}
+        />
       ) : (
-        <PostList posts={posts} refetch={refetch} />
+        <SafeAreaView className="flex h-full bg-[#ebf7eb]">
+          <LinearGradient
+            // Background Linear Gradient
+            colors={['#ebf7eb', 'transparent', '#ffffff']}
+            className="absolute h-[1000px] left-0 right-0 top-0"
+          />
+          {isFetching ? (
+            <PostSkeleton />
+          ) : (
+            <PostList posts={posts} refetch={refetch} />
+          )}
+          <Box className="sticky bottom-0 p-4">
+            <Button
+              onPress={() => router.push('../(home)')}
+              size="xl"
+              className="bg-success-300 flex flex-row items-center justify-center"
+              action="positive"
+            >
+              <ButtonText>Đăng việc mới</ButtonText>
+            </Button>
+          </Box>
+        </SafeAreaView>
       )}
-      <Box className="sticky bottom-0 p-4">
-        <Button
-          onPress={() => router.push('../(home)')}
-          size="xl"
-          className="bg-success-300 flex flex-row items-center justify-center"
-          action="positive"
-        >
-          <ButtonText>Đăng việc mới</ButtonText>
-        </Button>
-      </Box>
-    </SafeAreaView>
+    </>
   );
 };
 

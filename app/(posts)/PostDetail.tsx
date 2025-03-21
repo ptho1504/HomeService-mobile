@@ -1,12 +1,12 @@
-import React, { useEffect, useState } from 'react';
-import { Pressable, SafeAreaView, ScrollView } from 'react-native';
-import { VStack } from '@/components/ui/vstack';
-import { HStack } from '@/components/ui/hstack';
-import { Card } from '@/components/ui/card';
-import { Text } from '@/components/ui/text';
-import { Heading } from '@/components/ui/heading';
-import { Box } from '@/components/ui/box';
-import Ionicons from '@expo/vector-icons/Ionicons';
+import React, { useEffect, useState } from "react";
+import { Pressable, SafeAreaView, ScrollView } from "react-native";
+import { VStack } from "@/components/ui/vstack";
+import { HStack } from "@/components/ui/hstack";
+import { Card } from "@/components/ui/card";
+import { Text } from "@/components/ui/text";
+import { Heading } from "@/components/ui/heading";
+import { Box } from "@/components/ui/box";
+import Ionicons from "@expo/vector-icons/Ionicons";
 
 import {
   PaymentType,
@@ -14,30 +14,30 @@ import {
   TakePostStatus,
   UserRole,
   WorkScheduleStatus,
-} from '@/constants';
+} from "@/constants";
 
-import PostInfo, { isPostModel } from '@/components/post/PostInfo';
-import PostAddress from '@/components/post/PostAddress';
-import PaymentStatusBadge from '@/components/badge/PaymentStatusBadge';
-import { useSelector } from 'react-redux';
-import { selectPost, selectUser } from '@/store/reducers';
-import { Button, ButtonSpinner, ButtonText } from '@/components/ui/button';
-import { router, useLocalSearchParams } from 'expo-router';
-import { LinearGradient } from 'expo-linear-gradient';
-import { useGetPostByIdQuery, useTakePostMutation } from '@/services/post';
-import { Mode } from '@/components/list/PostList';
-import TakePostDialog from '@/components/dialog/TakePostDialog';
-import { CreateTakePostModel, PostModel } from '@/types/postTypes';
+import PostInfo, { isPostModel } from "@/components/post/PostInfo";
+import PostAddress from "@/components/post/PostAddress";
+import PaymentStatusBadge from "@/components/badge/PaymentStatusBadge";
+import { useSelector } from "react-redux";
+import { selectPost, selectUser } from "@/store/reducers";
+import { Button, ButtonSpinner, ButtonText } from "@/components/ui/button";
+import { router, useLocalSearchParams } from "expo-router";
+import { LinearGradient } from "expo-linear-gradient";
+import { useGetPostByIdQuery, useTakePostMutation } from "@/services/post";
+import { Mode } from "@/components/list/PostList";
+import TakePostDialog from "@/components/dialog/TakePostDialog";
+import { CreateTakePostModel, PostModel } from "@/types/postTypes";
 import {
   Toast,
   ToastDescription,
   ToastTitle,
   useToast,
-} from '@/components/ui/toast';
-import FreelancerInfo from '@/components/post/FreelancerInfo';
-import { Divider } from '@/components/ui/divider';
-import PostDetailSkeleton from '@/components/skeleton/PostDetailSkeleton';
-import { useViewNotificationMutation } from '@/services';
+} from "@/components/ui/toast";
+import FreelancerInfo from "@/components/post/FreelancerInfo";
+import { Divider } from "@/components/ui/divider";
+import PostDetailSkeleton from "@/components/skeleton/PostDetailSkeleton";
+import { useViewNotificationMutation } from "@/services";
 
 const PostDetail = () => {
   const { takePostStatus, id, notificationId, status } = useLocalSearchParams();
@@ -64,16 +64,16 @@ const PostDetail = () => {
       } else if (!postError && postData?.returnCode === 1000) {
         if (notificationId) {
           const res = await viewNotification({
-            userId: currentUser?.id ?? '',
-            id: notificationId as string,
+            userId: currentUser?.id ?? "",
+            id: Number(notificationId),
           });
           if (error || res.data?.returnCode != 1000) {
             console.log(res.error.data.message);
             toast.show({
-              placement: 'top',
+              placement: "top",
               duration: 3000,
               render: ({ id }) => {
-                const uniqueToastId = 'toast-' + id;
+                const uniqueToastId = "toast-" + id;
                 return (
                   <Toast
                     nativeID={uniqueToastId}
@@ -119,10 +119,10 @@ const PostDetail = () => {
       console.log(Mode[mode as keyof typeof Mode].value);
       console.log(res.error.data.message);
       toast.show({
-        placement: 'top',
+        placement: "top",
         duration: 3000,
         render: ({ id }) => {
-          const uniqueToastId = 'toast-' + id;
+          const uniqueToastId = "toast-" + id;
           return (
             <Toast nativeID={uniqueToastId} action="error" variant="outline">
               <ToastTitle>
@@ -136,10 +136,10 @@ const PostDetail = () => {
     } else {
       console.log(Mode[mode as keyof typeof Mode].value);
       toast.show({
-        placement: 'top',
+        placement: "top",
         duration: 3000,
         render: ({ id }) => {
-          const uniqueToastId = 'toast-' + id;
+          const uniqueToastId = "toast-" + id;
           return (
             <Toast nativeID={uniqueToastId} action="success" variant="outline">
               <ToastTitle>Thành công</ToastTitle>
@@ -175,7 +175,7 @@ const PostDetail = () => {
     <SafeAreaView className="flex h-full">
       <LinearGradient
         // Background Linear Gradient
-        colors={['#ebf7eb', 'transparent', '#ffffff']}
+        colors={["#ebf7eb", "transparent", "#ffffff"]}
         className="absolute h-[1000px] left-0 right-0 top-0"
       />
       {post === null ? (
@@ -216,8 +216,8 @@ const PostDetail = () => {
                             <Ionicons
                               name={
                                 post.paymentType === PaymentType.CASH.key
-                                  ? 'cash-outline'
-                                  : 'qr-code-outline'
+                                  ? "cash-outline"
+                                  : "qr-code-outline"
                               }
                               size={20}
                             />
@@ -259,7 +259,7 @@ const PostDetail = () => {
           </ScrollView>
           {takePostStatus && (
             <Box className="sticky p-4">
-              {takePostStatus === 'REQUEST' ? (
+              {takePostStatus === "REQUEST" ? (
                 <HStack space="md" className="justify-center">
                   <VStack className="w-1/2">
                     <Button
@@ -345,16 +345,16 @@ const PostDetail = () => {
                       post,
                       post.workSchedules[post.numOfWorkedDay].status ===
                         WorkScheduleStatus.INITIAL.key
-                        ? 'start'
-                        : 'end',
+                        ? "start"
+                        : "end"
                     )
                   }
                 >
                   <ButtonText>
                     {post.workSchedules[post.numOfWorkedDay].status ===
                     WorkScheduleStatus.INITIAL.key
-                      ? 'Bắt đầu làm'
-                      : 'Hoàn thành công việc'}
+                      ? "Bắt đầu làm"
+                      : "Hoàn thành công việc"}
                   </ButtonText>
                 </Button>
               </Box>

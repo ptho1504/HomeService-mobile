@@ -5,7 +5,6 @@ import { router } from "expo-router";
 
 const ListWorking = () => {
   const handleVisit = () => {
-    console.log("Visist");
     router.push("/(services)?id=1");
   };
   return (

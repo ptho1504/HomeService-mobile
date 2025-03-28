@@ -133,4 +133,24 @@ export enum LocalizationKey {
   WORD_MINUTE = 'word_minutes', 
   WORD_SECONDS = 'word_seconds', 
 
+  // manage service screen
+  WORD_SERVICE_DETAIL = 'word_service_detail',
+  WORD_YOUR_SERVICE_DETAIL= 'word_your_service_detail',
+  WORD_YOUR_SERVICE_IMAGE = 'word_your_service_image',
+
+  WORD_LOADING_YOUR_SERVICE = 'word_loading_your_service',
+  ST_NOT_IN_SERVICES = 'st_not_in_services',
+
+  ST_TIME_OF_DOING_TEST = 'st_time_of_doing_test',
+  WORD_NOTIFICAION = 'word_notification',
+  ST_OUT_OF_TIME = "st_out_of_time",
+
+  ST_NOTE_ADDITION_INFO = "st_note_addition_info",
+  ST_NOTE_UPLOAD_ADDITION_IMAGE = "st_note_addition_image",
+  WORD_NOTE = "word_note",
+  WORD_LOADING_YOUR_SERVICE_DETAILS = "word_loading_your_service_details",
+  WORD_RATE = "word_rate",
+  ST_NOTE_HAS_ANY_RATE = "st_not_has_any_rate",
+
+
 }

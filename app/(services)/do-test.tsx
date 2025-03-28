@@ -5,6 +5,9 @@ import {
   ActivityIndicator,
   TextInput,
   Alert,
+  KeyboardAvoidingView,
+  TouchableWithoutFeedback,
+  Keyboard,
 } from "react-native";
 import React, { useState, useEffect } from "react";
 import { SafeAreaView } from "react-native";
@@ -17,7 +20,12 @@ import { useGetQuestionOfTestQuery, useSubmitTestMutation } from "@/services";
 import { QuestionModel, DoingTestModel } from "@/types/workTypes";
 
 import { useSelector, useDispatch } from "react-redux";
-import { selectRegisterProcess, selectTestInfo, setRegisterProcess, setTestResult } from "@/store/reducers";
+import {
+  selectRegisterProcess,
+  selectTestInfo,
+  setRegisterProcess,
+  setTestResult,
+} from "@/store/reducers";
 import { HStack } from "@/components/ui/hstack";
 
 import { VStack } from "@/components/ui/vstack";
@@ -48,13 +56,19 @@ const convertAnswers = (
   questions: QuestionModel[],
   answers: Record<string, string>
 ) => {
-  return questions.map(({ id: questionId, type }) => {
+  const dataFilter = questions.filter((item) => answers[item.id]);
+
+  const dataMap = dataFilter.map(({ id: questionId, type }) => {
     if (type === "MULTICHOICE") {
       return { questionId: questionId, choiceId: answers[questionId] };
     } else {
       return { questionId: questionId, content: answers[questionId] };
     }
   });
+
+  console.log(dataMap);
+
+  return dataMap;
 };
 
 const getLocalISOTime = (): string => {
@@ -82,7 +96,6 @@ const DoTest = () => {
       },
     ]);
   });
-
 
   const [toastId, setToastId] = useState<string>(Date.now().toString());
 
@@ -125,6 +138,7 @@ const DoTest = () => {
   const testInfo = useSelector(selectTestInfo);
 
   const testId = testInfo.testId ?? "";
+  // console.log(testId)
 
   // Fetch danh sách câu hỏi từ API
   const { data, isFetching, error } = useGetQuestionOfTestQuery({ id: testId });
@@ -135,12 +149,45 @@ const DoTest = () => {
     : [];
   // console.log(sortedQuestions);
 
+  const [isStartTest, setIsStartTest] = useState(false);
+
   // get start time to do test
   useEffect(() => {
-    if (!isFetching && !error) {
+    if (data) {
       startTime = getLocalISOTime();
+      setIsStartTest(true);
+    } else {
+      setIsStartTest(false);
     }
-  }, [isFetching]);
+  }, [data]);
+
+  // duration of test
+  const [timeLeft, setTimeLeft] = useState(
+    testInfo.time ? testInfo.time * 60 : 100
+  );
+
+  useEffect(() => {
+    if (timeLeft <= 0) {
+      showToast(
+        i18n.t("word_notification"),
+        i18n.t("st_out_of_time"),
+        "warning"
+      );
+      return;
+    }
+
+    const timer = setInterval(() => {
+      setTimeLeft((prev) => prev - 1);
+    }, 1000);
+
+    return () => clearInterval(timer);
+  }, [timeLeft, isStartTest]);
+
+  const formatTimeInTimer = (seconds: number) => {
+    const minutes = Math.floor(seconds / 60);
+    const secs = seconds % 60;
+    return `${minutes}:${secs < 10 ? "0" : ""}${secs}`;
+  };
 
   // State lưu đáp án của người dùng
   const [answers, setAnswers] = useState<Record<string, string>>({});
@@ -158,11 +205,12 @@ const DoTest = () => {
   // Xử lý khi nộp bài
   const handleSubmit = async () => {
     // Kiểm tra xem đã làm hết bài kiểm tra chưa.
-    const isNotFulfillTest =
-      Object.keys(answers).length < sortedQuestions.length;
-
-    if (isNotFulfillTest) {
-      showToast(i18n.t("word_warning"), i18n.t("st_please_fullfil_test"), "warning");
+    if (Object.keys(answers).length < sortedQuestions.length) {
+      showToast(
+        i18n.t("word_warning"),
+        i18n.t("st_please_fullfil_test"),
+        "warning"
+      );
       return;
     }
 
@@ -176,23 +224,18 @@ const DoTest = () => {
       answerForQuestions: convertAnswers(sortedQuestions, answers),
     };
 
-    try {
-      const result = await submitTest({ testId: testId, answer: answer });
-    } catch (e) {
-      console.log(e);
-      showToast(i18n.t("word_failure"), i18n.t("st_try_again"), "error");
-    }
+    // console.log(answer);
+
+    const result = await submitTest({ testId: testId, answer: answer });
+    console.log(result);
+
+    // showToast("Complete", "Complete", "success")
 
     console.log("complete submit");
   };
 
   useEffect(() => {
-    if (isLoadingSubmitTest) {
-      return;
-    }
-
-    if (resultTestData?.items) {
-
+    if (resultTestData) {
       console.log(resultTestData.items);
       dispatch(
         setTestResult({
@@ -206,12 +249,8 @@ const DoTest = () => {
       );
 
       router.push("/(services)/result-test");
-    } else {
-      if (errorTestData) {
-        showToast(i18n.t("word_failure"), i18n.t("st_try_again"), "error");
-      }
     }
-  }, [isLoadingSubmitTest]);
+  }, [resultTestData]);
 
   const [showAlertDialog, setShowAlertDialog] = useState(false);
   const handleCloseAlert = () => setShowAlertDialog(false);
@@ -233,23 +272,32 @@ const DoTest = () => {
         </HStack>
       )}
 
-      {error && (
+      {isLoadingSubmitTest && (
+        <VStack className="mt-5">
+          <Spinner size="large" color={colors.emerald[600]} />
+          <Text size="lg" className="text-green-800 text-center">
+            {i18n.t("wait_for_submitting")}
+          </Text>
+        </VStack>
+      )}
+
+      {(error || errorTestData) && (
         <Text size="lg" className="text-red-800 text-center mt-5">
           {i18n.t("st_system_error")}
         </Text>
       )}
 
-      {isLoadingSubmitTest && (
-        <VStack className="mt-5">
-          <Spinner size="large" color={colors.emerald[600]} />
-          <Text size="lg" className="text-green-800 text-center">
-          {i18n.t("wait_for_submitting")}
-          </Text>
-        </VStack>
-      )}
-
-      {!isFetching && !error && !isLoadingSubmitTest && (
+      {!isFetching && !error && !isLoadingSubmitTest && !errorTestData && (
         <VStack className="flex-1">
+          {/* Đồng hồ nằm trong danh sách câu hỏi ban đầu */}
+          <View className="bg-green-600 p-5 flex flex-row items-center justify-between">
+            <Text size="2xl" className="text-white">
+              {i18n.t("st_time_of_doing_test")}:
+            </Text>
+            <Text size="2xl" className="text-white font-bold">
+              ⏳{formatTimeInTimer(timeLeft)}
+            </Text>
+          </View>
           <FlatList
             data={sortedQuestions}
             keyExtractor={(item) => item.id}
@@ -272,7 +320,9 @@ const DoTest = () => {
               className="w-64 h-14"
               onPress={handleOpenAlert}
             >
-              <ButtonText className="font-semibold text-lg">{i18n.t("word_submit")}</ButtonText>
+              <ButtonText className="font-semibold text-lg">
+                {i18n.t("word_submit")}
+              </ButtonText>
             </Button>
           </Center>
         </VStack>
@@ -288,7 +338,7 @@ const DoTest = () => {
         <AlertDialogContent>
           <AlertDialogHeader>
             <Heading className="text-typography-950 font-semibold" size="md">
-            {i18n.t("word_submitting_test")}
+              {i18n.t("word_submitting_test")}
             </Heading>
           </AlertDialogHeader>
           <AlertDialogBody className="mt-3 mb-4">
@@ -335,7 +385,7 @@ const QuestionItem = ({
 }) => (
   <View className="mb-5 p-3">
     <Text className="text-xl font-semibold mb-2">
-    {i18n.t("word_question")} {questionNumber}: {item.content}
+      {i18n.t("word_question")} {questionNumber}: {item.content}
     </Text>
 
     {item.type === "MULTICHOICE" && (
@@ -368,7 +418,7 @@ const QuestionItem = ({
     {item.type === "ESSAY" && (
       <TextInput
         className="border border-gray-300 p-3 rounded-lg mt-2 bg-white text-lg"
-        placeholder= {i18n.t("st_enter_your_answer")}
+        placeholder={i18n.t("st_enter_your_answer")}
         multiline
         value={answers[item.id] || ""}
         onChangeText={(text) => onEssayChange(item.id, text)}

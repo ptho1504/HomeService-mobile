@@ -28,7 +28,8 @@ export default function ServiceLayout() {
       <Stack.Screen
         name="index"
         options={{
-          headerShown: false,
+          title: i18n.t("word_service_detail"),
+          headerShown: true,
         }}
       />
       <Stack.Screen

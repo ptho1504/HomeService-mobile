@@ -56,15 +56,6 @@ i18n.enableFallback = true;
 i18n.defaultLocale = Language.VIETNAMESE;
 
 const AddService = () => {
-  // State để lưu lỗi hệ thống
-  const [hasErrorSystem, setHasErrorSystem] = useState(false);
-
-  // Fetch tất cả dịch vụ trong hệ thống
-  const {
-    data: allServices,
-    isFetching: fetchingAll,
-    error: errorFetchingAll,
-  } = useGetAllServicesQuery({ id: undefined });
 
   // lấy thông tin user
   const user = useSelector(selectUser);
@@ -82,49 +73,13 @@ const AddService = () => {
   );
 
   useEffect(() => {
-    setHasErrorSystem(false);
 
-    // Khi bắt đầu fetch, xóa danh sách cũ để tránh hiển thị sai
-    if (fetchingAll || fetchingFreelancer) {
-      setUnregisteredServices([]);
-      return;
+    if (freelancerServices) {
+      const dataFilter = freelancerServices.items.filter(item => item.status === null)
+      setUnregisteredServices(dataFilter)
     }
 
-    if (allServices) {
-      if (freelancerServices) {
-        // Lọc ra các dịch vụ freelancer chưa đăng ký
-        const registeredServiceIds = new Set(
-          freelancerServices.items.map((service) => service.id)
-        );
-
-        const filteredServices = allServices.items.filter(
-          (service) => !registeredServiceIds.has(service.id)
-        );
-
-        setUnregisteredServices(filteredServices);
-      } else {
-        // Nếu fetch useGetAllServicesQuery({ id: userId}) trả về lỗi, kiểm tra xem lỗi gì ???
-        // Lỗi về việc freelancer chưa có đăng ký dịch vụ nào
-        if (
-          errorFreelancerService &&
-          errorFreelancerService.data.returnCode === -1319
-        ) {
-          setUnregisteredServices(allServices.items);
-          return;
-        }
-
-        // Lỗi khác
-        // console.log(errorFreelancerService);
-        setHasErrorSystem(true);
-        return;
-      }
-    } else {
-      if (errorFetchingAll) {
-        setHasErrorSystem(true);
-        return;
-      }
-    }
-  }, [fetchingAll, fetchingFreelancer]);
+  }, [freelancerServices]);
 
   // Use redux to store testInfo
   const dispatch = useDispatch();
@@ -181,8 +136,9 @@ const AddService = () => {
       dispatch(setRegisterProcess({ isRegisterDone: false }));
 
       router.push({
-        pathname: "/(services)/do-test",
+        pathname: "/(services)/do-test"
       });
+
     } else {
       showToast(i18n.t("word_failure"), i18n.t("st_try_again"), "error");
     }
@@ -195,11 +151,11 @@ const AddService = () => {
           DỊCH VỤ CHƯA ĐĂNG KÝ
         </Heading> */}
 
-        {hasErrorSystem ? (
+        {errorFreelancerService ? (
           <Text size="lg" className="text-red-800 text-center mt-5">
             {i18n.t("st_system_error")}
           </Text>
-        ) : fetchingAll || fetchingFreelancer ? (
+        ) : fetchingFreelancer ? (
           <HStack>
             <ServiceSkeleton />
           </HStack>

@@ -147,4 +147,25 @@ export const en = {
   [LocalizationKey.WORD_HOURS]: "hours",
   [LocalizationKey.WORD_MINUTE]: "minutes",
   [LocalizationKey.WORD_SECONDS]: "seconds",
+
+  // manage service screen
+  [LocalizationKey.WORD_SERVICE_DETAIL]: "Service detail",
+  [LocalizationKey.WORD_YOUR_SERVICE_DETAIL]: "Your service detail notes",
+  [LocalizationKey.WORD_YOUR_SERVICE_IMAGE]: "Your service images",
+  
+  [LocalizationKey.WORD_LOADING_YOUR_SERVICE]: "Loading your services...",
+  [LocalizationKey.ST_NOT_IN_SERVICES]: "You are not providing any services!",
+  [LocalizationKey.WORD_LOADING_YOUR_SERVICE_DETAILS]:
+    "Loading your service details...",
+
+  [LocalizationKey.ST_TIME_OF_DOING_TEST]: "Time",
+  [LocalizationKey.WORD_NOTIFICAION]: "Notification",
+  [LocalizationKey.ST_OUT_OF_TIME]: "Out of time!",
+
+  [LocalizationKey.ST_NOTE_ADDITION_INFO]: "You should enter your description related to the service you are applying for.",
+  [LocalizationKey.ST_NOTE_UPLOAD_ADDITION_IMAGE]: "You should upload images that prove you can do the job well: degrees, full working tools,...",
+  [LocalizationKey.WORD_NOTE]: "Note",
+  [LocalizationKey.WORD_RATE]: "Rates",
+  
+  [LocalizationKey.ST_NOTE_HAS_ANY_RATE]: "No reviews yet!",
 };

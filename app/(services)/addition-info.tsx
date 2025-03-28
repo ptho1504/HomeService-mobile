@@ -19,7 +19,13 @@ import { CloseIcon, EditIcon, Icon } from "@/components/ui/icon";
 import { Center } from "@/components/ui/center";
 
 import { useDispatch, useSelector } from "react-redux";
-import { selectTestInfo, selectTestResult, setRegisterProcess, selectUser, selectRegisterProcess } from "@/store/reducers";
+import {
+  selectTestInfo,
+  selectTestResult,
+  setRegisterProcess,
+  selectUser,
+  selectRegisterProcess,
+} from "@/store/reducers";
 
 import {
   useRegisterServiceMutation,
@@ -49,8 +55,15 @@ import { Heading } from "@/components/ui/heading";
 import { usePreventRemove } from "@react-navigation/native";
 import { i18n } from "@/localization";
 
-const AdditionInfo = () => {
+import {
+  Popover,
+  PopoverBackdrop,
+  PopoverArrow,
+  PopoverBody,
+  PopoverContent,
+} from "@/components/ui/popover";
 
+const AdditionInfo = () => {
   const dispatch = useDispatch();
 
   const registerProcess = useSelector(selectRegisterProcess);
@@ -131,7 +144,11 @@ const AdditionInfo = () => {
     } catch (error) {
       console.error("Lỗi khi chọn ảnh:", error);
 
-      showToast(i18n.t("word_failure"), i18n.t("st_error_at_choice_image"), "error");
+      showToast(
+        i18n.t("word_failure"),
+        i18n.t("st_error_at_choice_image"),
+        "error"
+      );
     }
   };
 
@@ -141,7 +158,6 @@ const AdditionInfo = () => {
   };
 
   const handleRegisterService = async () => {
-
     const dataToRegister = {
       serviceId: testInfo.serviceId ?? "",
       freelancerId: user?.id ?? "",
@@ -160,7 +176,11 @@ const AdditionInfo = () => {
       return result.items.id ?? null;
     } catch (err) {
       console.error("Lỗi khi đăng ký dịch vụ:", err);
-      showToast(i18n.t("word_failure"), i18n.t("st_error_at_register_service"), "error");
+      showToast(
+        i18n.t("word_failure"),
+        i18n.t("st_error_at_register_service"),
+        "error"
+      );
       return null;
     }
   };
@@ -175,7 +195,6 @@ const AdditionInfo = () => {
   ] = useUploadImagesForRegisterServiceMutation();
 
   const handleUploadImages = async (id: string) => {
-
     const formData = new FormData();
 
     console.log("handleUploadImages");
@@ -201,20 +220,32 @@ const AdditionInfo = () => {
       console.log("Upload thành công:", response.items.testResult);
     } catch (error) {
       console.error("Lỗi khi upload hình ảnh:", error);
-      showToast(i18n.t("word_failure"), i18n.t("st_error_at_upload_image"), "error");
+      showToast(
+        i18n.t("word_failure"),
+        i18n.t("st_error_at_upload_image"),
+        "error"
+      );
     }
   };
 
   const handleSubmit = async () => {
     if (note === "") {
       console.log("Không có ghi chú để upload");
-      showToast(i18n.t("word_warning"), i18n.t("st_please_enter_note"), "warning");
+      showToast(
+        i18n.t("word_warning"),
+        i18n.t("st_please_enter_note"),
+        "warning"
+      );
       return null;
     }
 
     if (images.length === 0) {
       console.log("Không có hình ảnh để upload");
-      showToast(i18n.t("word_warning"), i18n.t("st_please_upload_image"), "warning");
+      showToast(
+        i18n.t("word_warning"),
+        i18n.t("st_please_upload_image"),
+        "warning"
+      );
       return;
     }
     try {
@@ -239,25 +270,26 @@ const AdditionInfo = () => {
     } catch (error) {
       console.error("Lỗi khi submit:", error);
       showToast(i18n.t("word_failure"), i18n.t("st_system_error"), "error");
-
     }
-    dispatch(setRegisterProcess({isRegisterDone: true}));
+    dispatch(setRegisterProcess({ isRegisterDone: true }));
   };
 
   useEffect(() => {
     if (registerProcess.isRegisterDone) {
       router.dismissAll();
-      showToast(i18n.t("word_success"), i18n.t("st_register_successfully"), "success");
+      showToast(
+        i18n.t("word_success"),
+        i18n.t("st_register_successfully"),
+        "success"
+      );
     }
   }, [registerProcess]);
-
 
   const [showAlertDialog, setShowAlertDialog] = useState(false);
   const handleCloseAlert = () => setShowAlertDialog(false);
   const handleOpenAlert = () => {
     setShowAlertDialog(true);
   };
-
   return (
     <SafeAreaView className="flex-1">
       {/* isRegisterSuccessly ? (
@@ -277,14 +309,16 @@ const AdditionInfo = () => {
         <VStack className="mt-5">
           <Spinner size="large" color={colors.emerald[600]} />
           <Text size="lg" className="text-green-800 text-center">
-          {i18n.t("st_wait_for_registering")}
+            {i18n.t("st_wait_for_registering")}
           </Text>
         </VStack>
       ) : (
-        <VStack className="px-3 mt-5">
+        <View className="h-full px-3 py-5 flex flex-col justify-between">
           <VStack space="4xl">
             <VStack space="md">
-              <Text className="font-bold text-lg">{i18n.t("st_enter_your_addition_info")}:</Text>
+              <Text className="font-bold text-lg">
+                {i18n.t("st_enter_your_addition_info")}:
+              </Text>
               <Textarea size="md">
                 <TextareaInput
                   placeholder={i18n.t("st_enter_your_addition_info_here")}
@@ -293,10 +327,10 @@ const AdditionInfo = () => {
                 />
               </Textarea>
             </VStack>
-            <VStack space="md" className="h-72">
+            <VStack space="md">
               {/* Tải hình ảnh */}
               <Text className="font-bold text-lg">
-              {i18n.t("st_upload_your_image")}
+                {i18n.t("st_upload_your_image")}:
               </Text>
               <Button
                 size="lg"
@@ -344,10 +378,24 @@ const AdditionInfo = () => {
               className={"w-64 h-14"}
               onPress={handleOpenAlert}
             >
-              <ButtonText className="font-bold text-xl">{i18n.t("st_send_register")}</ButtonText>
+              <ButtonText className="font-bold text-xl">
+                {i18n.t("st_send_register")}
+              </ButtonText>
             </Button>
           </Center>
-        </VStack>
+
+          <VStack>
+            <Text size="lg" className="text-orange-500 font-bold">*{i18n.t("word_note")}:</Text>
+            <VStack className="ms-3">
+              <Text className="font-semibold">
+                - {i18n.t("st_note_addition_info")}
+              </Text>
+              <Text className="font-semibold">
+                - {i18n.t("st_note_addition_image")}
+              </Text>
+            </VStack>
+          </VStack>
+        </View>
       )}
 
       {/* Alert dialog */}
@@ -360,7 +408,7 @@ const AdditionInfo = () => {
         <AlertDialogContent>
           <AlertDialogHeader>
             <Heading className="text-typography-950 font-semibold" size="md">
-            {i18n.t("word_confirm")}
+              {i18n.t("word_confirm")}
             </Heading>
           </AlertDialogHeader>
           <AlertDialogBody className="mt-3 mb-4">

@@ -83,7 +83,7 @@ export const vn = {
   [LocalizationKey.WORD_CONGRATULATION]: "Chúc mừng",
   [LocalizationKey.ST_CONGRATULATION]:
     "Bạn đã hoàn thành bài kiểm tra thành công!",
-  [LocalizationKey.WORD_WRONG]: "SAI",
+  [LocalizationKey.WORD_WRONG]: "Rất tiếc",
   [LocalizationKey.ST_WRONG]: "Đừng nản lòng, hãy thử lại vào lần sau!",
 
   // màn hình thêm thông tin bổ sung
@@ -147,4 +147,26 @@ export const vn = {
   [LocalizationKey.WORD_HOURS]: "giờ",
   [LocalizationKey.WORD_MINUTE]: "phút",
   [LocalizationKey.WORD_SECONDS]: "giây",
+
+  // manage service screen
+  [LocalizationKey.WORD_SERVICE_DETAIL]: "Chi tiết dịch vụ",
+  [LocalizationKey.WORD_YOUR_SERVICE_DETAIL]: "Mô tả dịch vụ của bạn",
+  [LocalizationKey.WORD_YOUR_SERVICE_IMAGE]: "Hình ảnh dịch vụ của bạn",
+
+  [LocalizationKey.WORD_LOADING_YOUR_SERVICE]:
+    "Đang tải các dịch vụ của bạn...",
+  [LocalizationKey.ST_NOT_IN_SERVICES]: "Bạn đang không cung cấp dịch vụ nào!",
+
+  [LocalizationKey.WORD_LOADING_YOUR_SERVICE_DETAILS]:
+    "Đang tải thông tin chi tiết của dịch vụ...",
+
+  [LocalizationKey.ST_TIME_OF_DOING_TEST]: "Thời gian làm bài",
+  [LocalizationKey.WORD_NOTIFICAION]: "Thông báo",
+  [LocalizationKey.ST_OUT_OF_TIME]: "Đã hết thời làm bài!",
+
+  [LocalizationKey.ST_NOTE_ADDITION_INFO]: "Nên nhập những mô tả của bạn liên quan đến dịch vụ bạn đang đăng ký.",
+  [LocalizationKey.ST_NOTE_UPLOAD_ADDITION_IMAGE]: "Nên tải lên những hình ảnh chứng minh bạn có thể làm tốt công việc: bằng cấp, công cụ lao động đầy đủ,...",
+  [LocalizationKey.WORD_NOTE]: "Lưu ý",
+  [LocalizationKey.WORD_RATE]: "Đánh giá",
+  [LocalizationKey.ST_NOTE_HAS_ANY_RATE]: "Chưa có đánh giá nào!",
 };

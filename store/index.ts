@@ -15,11 +15,13 @@ import {
 } from 'redux-persist';
 import { API } from '@/services';
 import authApi from '@/services/auth';
+// import serviceReducer from './reducers/service';
 
 const reducers = combineReducers({
   auth: authReducer,
   post: postReducer,
   test: testReducer,
+  // service: serviceReducer,
   [authApi.reducerPath]: authApi.reducer,
 });
 

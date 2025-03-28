@@ -41,10 +41,8 @@ const ResultTest = () => {
   const testInfo = useSelector(selectTestInfo);
   const testResult = useSelector(selectTestResult);
 
-  // const isPassed = testResult?.isPassed ?? false;
-  const isPassed = true;
-
-  const primaryColor = isPassed ? "green" : "red"; // Xanh lá nếu đậu, đỏ nếu trượt
+  const isPassed = testResult?.isPassed ?? false;
+  // const isPassed = true;
 
   const registerProcess = useSelector(selectRegisterProcess);
 
@@ -84,7 +82,7 @@ const ResultTest = () => {
     <SafeAreaView className="flex-1">
       {testResult.isPassed === null ? (
         <Text size="lg" className="text-red-800 text-center mt-5">
-          Đã xảy ra lỗi. Vui lòng thử lại.
+          {i18n.t("st_system_error")}
         </Text>
       ) : (
         <View className="flex-1 bg-white m-4 rounded-2xl p-6">

@@ -6,7 +6,8 @@ import {
   registerServiceModel,
   registerServiceResultModel,
   WorkModel,
-  ImageModel
+  ImageModel,
+  ServiceDetailModel,
 } from "@/types/workTypes";
 
 import { Response } from "@/types/response";
@@ -39,6 +40,20 @@ const worksApi = API.injectEndpoints({
       providesTags: (result, error, { id }) => [{ type: "Service", id }],
     }),
 
+    // Get service detail of a freelancer
+    getServicesDetailOfFreelancer: build.query<
+      Response<ServiceDetailModel>,
+      {
+        workId: string;
+        freelancerId: string;
+      }
+    >({
+      query: ({ workId, freelancerId }) => {
+        // Kết hợp base URL và query string
+        return `${baseUrl}/${workId}/freelancers/${freelancerId}`;
+      },
+    }),
+
     registerService: build.mutation<
       Response<registerServiceResultModel>,
       {
@@ -69,4 +84,9 @@ const worksApi = API.injectEndpoints({
   }),
 });
 
-export const { useGetAllServicesQuery, useRegisterServiceMutation, useUploadImagesForRegisterServiceMutation } = worksApi;
+export const {
+  useGetAllServicesQuery,
+  useRegisterServiceMutation,
+  useUploadImagesForRegisterServiceMutation,
+  useGetServicesDetailOfFreelancerQuery,
+} = worksApi;

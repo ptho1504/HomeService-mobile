@@ -25,6 +25,8 @@ import { useDispatch } from "react-redux";
 import { router, useFocusEffect } from "expo-router";
 import RequiredAuthenticationModal from "@/components/authentication/RequiredAuthenticationModal";
 import ListWorking from "@/components/account/ListWorking";
+import { Divider } from "@/components/ui/divider";
+import StarRating from "@/components/badge/Rating";
 i18n.locale = "vn";
 i18n.enableFallback = true;
 i18n.defaultLocale = Language.VIETNAMESE;
@@ -102,7 +104,7 @@ const Profile = () => {
       )}
       {isAuthenticated && (
         <SafeAreaView className="h-full w-full flex items-center bg-white">
-          <ScrollView
+          <View
             // contentContainerStyle={{ padding: 16 }} // Add padding inside the scrollable area
             // showsVerticalScrollIndicator={false}
             className="h-full flex w-full"
@@ -228,7 +230,7 @@ const Profile = () => {
 
               {/* Addresses */}
 
-              <Box className="border border-gray-100 p-4 flex items-center gap-4">
+              <Box className="border rounded-lg border-gray-300 p-3 flex items-center gap-4">
                 <View className="flex flex-row items-center justify-between w-full">
                   <Text className="text-xl font-bold ">
                     {i18n.t("workings")}
@@ -243,14 +245,14 @@ const Profile = () => {
                     </Text>
                   </Pressable>
                 </View>
-
+                <Divider />
                 {/* List Working */}
-                <View className="flex items-center w-full px-4 gap-3">
+                <View className="flex items-center w-full px-3">
                   <ListWorking />
                 </View>
               </Box>
             </VStack>
-          </ScrollView>
+          </View>
         </SafeAreaView>
       )}
     </>

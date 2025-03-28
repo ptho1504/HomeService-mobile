@@ -17,10 +17,10 @@ export const images = {
 import { getLocales } from 'expo-localization';
 import { i18n, Language } from '@/localization';
 import { CarouselItem, OnboardingItem } from '@/types/types';
-// i18n.locale = getLocales()[0].languageCode ?? "vn";
-i18n.locale = 'vn';
-i18n.enableFallback = true;
-i18n.defaultLocale = Language.VIETNAMESE;
+i18n.locale = getLocales()[0].languageCode ?? "vn";
+// i18n.locale = 'vn';
+// i18n.enableFallback = true;
+// i18n.defaultLocale = Language.VIETNAMESE;
 
 export const onboardings: OnboardingItem[] = [
   {
@@ -108,12 +108,12 @@ export const UserRole = {
 export const WorkType = {
   BABYSITTING: {
     key: 'BABYSITTING',
-    value: 'Trông trẻ',
+    value: i18n.t("job_babysitting"),
     color: 'gray', // Màu xám cho trạng thái khởi tạo
   },
   HOUSECLEANING: {
     key: 'HOUSECLEANING',
-    value: 'Dọn dẹp nhà',
+    value: i18n.t("job_homecleaning"),
     color: 'gray', // Màu xám cho trạng thái khởi tạo
   },
 };
@@ -194,23 +194,23 @@ export const PostStatus = {
 export const FreelancerWorkStatus = {
   INITIAL: {
     key: 'INITIAL',
-    value: 'Gửi yêu cầu',
-    bgColor: 'bg-blue-400', // Màu xám cho trạng thái khởi tạo
+    value: i18n.t("word_initial"),
+    bgColor: 'blue-400', // Màu xám cho trạng thái khởi tạo
   },
   PROHIBITIVE: {
     key: 'PROHIBITIVE',
-    value: 'Bị cấm',
-    bgColor: 'bg-red-400', // Màu đỏ cho trạng thái bị hủy
+    value: i18n.t("word_prohibitive"),
+    bgColor: 'red-400', // Màu đỏ cho trạng thái bị hủy
   },
   WORK: {
     key: 'WORK',
-    value: 'Đã đăng ký',
-    bgColor: 'bg-green-400', // Màu xanh lá cho trạng thái hoàn thành
+    value: i18n.t("word_work"),
+    bgColor: 'green-400', // Màu xanh lá cho trạng thái hoàn thành
   },
   DISABLE: {
     key: 'DISABLE',
-    value: 'Tạm dừng',
-    bgColor: 'bg-gray-400', // Màu cam cho trạng thái thất bại
+    value: i18n.t("word_disable"),
+    bgColor: 'gray-400', // Màu cam cho trạng thái thất bại
   },
 };
 

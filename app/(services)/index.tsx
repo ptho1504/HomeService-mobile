@@ -13,7 +13,7 @@ import { useGetServicesDetailOfFreelancerQuery } from "@/services";
 import { selectUser } from "@/store/reducers";
 import { Spinner } from "@/components/ui/spinner";
 import colors from "tailwindcss/colors";
-import { WorkType } from "@/constants";
+import { FreelancerWorkStatus, WorkType } from "@/constants";
 import { Card } from "@/components/ui/card";
 import { RateModel } from "@/types/workTypes";
 import StarRating from "@/components/badge/Rating";
@@ -55,24 +55,41 @@ const Service = () => {
     </Text>
   ) : (
     <SafeAreaView className="h-full w-full flex items-center bg-white">
-      <VStack space="xl" className="p-3 w-full">
+      <VStack space="lg" className="p-3 w-full">
         <Center>
           <Heading size="xl">
-            {WorkType[data?.items.work.name as keyof typeof WorkType].key ===
-            "BABYSITTING"
-              ? i18n.t("job_babysitting")
-              : i18n.t("job_homecleaning")}
+            {WorkType[data?.items.work.name as keyof typeof WorkType].value}
           </Heading>
         </Center>
-        <VStack space="sm">
-          <Text size="lg" className="font-semibold">
+        <HStack space="sm">
+          <Text size="lg" className="font-bold">
+            {i18n.t("word_status")}:
+          </Text>
+          <Text
+            size="lg"
+            className={`text-${
+              FreelancerWorkStatus[
+                data?.items.status as keyof typeof FreelancerWorkStatus
+              ].bgColor
+            }`}
+          >
+            {
+              FreelancerWorkStatus[
+                data?.items.status as keyof typeof FreelancerWorkStatus
+              ].value
+            }
+          </Text>
+        </HStack>
+
+        <VStack>
+          <Text size="lg" className="font-bold">
             {i18n.t("word_your_service_detail")}:
           </Text>
-          <Text>{data?.items.description}</Text>
+          <Text size="lg">{data?.items.description}</Text>
         </VStack>
 
         <VStack space="sm">
-          <Text size="lg" className="font-semibold">
+          <Text size="lg" className="font-bold">
             {i18n.t("word_your_service_image")}:
           </Text>
           <ScrollView horizontal={true}>
@@ -104,11 +121,11 @@ const Service = () => {
         </VStack>
 
         <VStack space="sm">
-          <Text size="lg" className="font-semibold">
+          <Text size="lg" className="font-bold">
             {i18n.t("word_rate")}:
           </Text>
           {!data?.items.rate && (
-            <Text className="text-orange-500">
+            <Text size="lg" className="text-orange-500">
               {i18n.t("st_not_has_any_rate")}
             </Text>
           )}

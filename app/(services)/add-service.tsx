@@ -49,14 +49,13 @@ import {
   ToastTitle,
   useToast,
 } from "@/components/ui/toast";
-import { WorkType } from "@/constants";
+import { FreelancerWorkStatus, WorkType } from "@/constants";
 
 i18n.locale = "vn";
 i18n.enableFallback = true;
 i18n.defaultLocale = Language.VIETNAMESE;
 
 const AddService = () => {
-
   // lấy thông tin user
   const user = useSelector(selectUser);
 
@@ -72,13 +71,21 @@ const AddService = () => {
     []
   );
 
+  // State để lưu danh sách dịch vụ chưa được xác nhận hoạt động
+  const [unactivedServices, setUnactivedServices] = useState<WorkModel[]>([]);
+
   useEffect(() => {
-
     if (freelancerServices) {
-      const dataFilter = freelancerServices.items.filter(item => item.status === null)
-      setUnregisteredServices(dataFilter)
-    }
+      const dataFilterUnregistered = freelancerServices.items.filter(
+        (item) => item.status === null
+      );
+      const dataFilterUnactivated = freelancerServices.items.filter(
+        (item) => item.status !== "WORK" && item.status !== null
+      );
 
+      setUnregisteredServices(dataFilterUnregistered);
+      setUnactivedServices(dataFilterUnactivated);
+    }
   }, [freelancerServices]);
 
   // Use redux to store testInfo
@@ -136,9 +143,8 @@ const AddService = () => {
       dispatch(setRegisterProcess({ isRegisterDone: false }));
 
       router.push({
-        pathname: "/(services)/do-test"
+        pathname: "/(services)/do-test",
       });
-
     } else {
       showToast(i18n.t("word_failure"), i18n.t("st_try_again"), "error");
     }
@@ -161,50 +167,76 @@ const AddService = () => {
           </HStack>
         ) : (
           <ScrollView className="w-full p-3">
-            {unregisteredServices.length > 0 ? (
-              unregisteredServices.map((service) => (
-                <TouchableOpacity
-                  key={service.id}
-                  onPress={() => handleOpenAlert(service)}
-                >
-                  <Card className="p-5 rounded-lg w-full mb-5 shadow-sm">
-                    <Image
-                      source={{
-                        uri: service.image,
-                      }}
-                      className="mb-6 w-full h-[200px] rounded-md"
-                      alt={service.name}
-                    />
-                    <Heading size="md" className="mb-1">
-                      {WorkType[service.name as keyof typeof WorkType].key ===
-                      "BABYSITTING"
-                        ? i18n.t("job_babysitting")
-                        : i18n.t("job_homecleaning")}
-                    </Heading>
-                    {/* <Text className="text-sm font-normal mb-2 text-typography-700">
-                      May 15, 2023
-                    </Text> */}
-
-                    <HStack className="items-center">
-                      <Text
-                        size="sm"
-                        className="font-semibold text-green-600 no-underline"
-                      >
-                        {i18n.t("word_join_now")}
-                      </Text>
-                      <Icon
-                        as={ArrowRightIcon}
-                        size="sm"
-                        className="text-green-600 mt-0.5 ml-0.5"
-                      />
-                    </HStack>
-                  </Card>
-                </TouchableOpacity>
-              ))
-            ) : (
+            {unregisteredServices.length === 0 &&
+            unactivedServices.length === 0 ? (
               <Text size="lg" className="text-green-800 text-center mt-5">
                 {i18n.t("st_all_job_registered")}
               </Text>
+            ) : (
+              <>
+                {unregisteredServices.map((service) => (
+                  <TouchableOpacity
+                    key={service.id}
+                    onPress={() => handleOpenAlert(service)}
+                  >
+                    <Card className="p-5 rounded-lg w-full mb-5 shadow-sm">
+                      <Image
+                        source={{ uri: service.image }}
+                        className="mb-6 w-full h-[200px] rounded-md"
+                        alt={service.name}
+                      />
+                      <Heading size="md" className="mb-1">
+                        {WorkType[service.name as keyof typeof WorkType].value}
+                      </Heading>
+                      <HStack className="items-center">
+                        <Text
+                          size="sm"
+                          className="font-semibold text-green-600 no-underline"
+                        >
+                          {i18n.t("word_join_now")}
+                        </Text>
+                        <Icon
+                          as={ArrowRightIcon}
+                          size="sm"
+                          className="text-green-600 mt-0.5 ml-0.5"
+                        />
+                      </HStack>
+                    </Card>
+                  </TouchableOpacity>
+                ))}
+
+                {unactivedServices.map((service) => (
+                  <Card key={service.id} className="p-5 rounded-lg w-full mb-5">
+                    <Image
+                      source={{ uri: service.image }}
+                      className="mb-6 w-full h-[120px] rounded-md"
+                      alt={service.name}
+                    />
+                    <Heading size="md" className="mb-1">
+                      {WorkType[service.name as keyof typeof WorkType].value}
+                    </Heading>
+                    <HStack space="sm">
+                      <Text size="md" className="font-semibold">
+                        {i18n.t("word_status")}:
+                      </Text>
+                      <Text
+                        size="md"
+                        className={`font-bold text-${
+                          FreelancerWorkStatus[
+                            service.status as keyof typeof FreelancerWorkStatus
+                          ].bgColor
+                        }`}
+                      >
+                        {
+                          FreelancerWorkStatus[
+                            service.status as keyof typeof FreelancerWorkStatus
+                          ].value
+                        }
+                      </Text>
+                    </HStack>
+                  </Card>
+                ))}
+              </>
             )}
           </ScrollView>
         )}

@@ -67,6 +67,9 @@ const worksApi = API.injectEndpoints({
         method: "PATCH",
         body: data,
       }),
+      invalidatesTags: (result, error, { freelancerId }) => [
+        { type: "Service", id: freelancerId }, // Làm mới danh sách dịch vụ của freelancer
+      ],
     }),
 
     uploadImagesForRegisterService: build.mutation<

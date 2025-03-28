@@ -153,4 +153,12 @@ export enum LocalizationKey {
   ST_NOTE_HAS_ANY_RATE = "st_not_has_any_rate",
 
 
+  // const FreelancerWorkStatus
+  WORD_STATUS = "word_status",
+  WORD_INITIAL = "word_initial",
+  WORD_PROHIBITIVE = "word_prohibitive",
+  WORD_WORK = "word_work",
+  WORD_DISABLE = "word_disable",
+
+
 }

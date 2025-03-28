@@ -169,4 +169,10 @@ export const vn = {
   [LocalizationKey.WORD_NOTE]: "Lưu ý",
   [LocalizationKey.WORD_RATE]: "Đánh giá",
   [LocalizationKey.ST_NOTE_HAS_ANY_RATE]: "Chưa có đánh giá nào!",
+
+  [LocalizationKey.WORD_STATUS]: "Trạng thái",
+  [LocalizationKey.WORD_INITIAL]: "Đang gửi yêu cầu",
+  [LocalizationKey.WORD_PROHIBITIVE]: "Bị cấm",
+  [LocalizationKey.WORD_WORK]: "Đang hoạt động",
+  [LocalizationKey.WORD_DISABLE]: "Tạm dừng",
 };

@@ -8,7 +8,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { Avatar, AvatarFallbackText, AvatarImage } from "../ui/avatar";
 import { Text } from "@/components/ui/text";
 import { i18n } from "@/localization";
-import { WorkType } from "@/constants";
+import { FreelancerWorkStatus, WorkType } from "@/constants";
 import { Box } from "../ui/box";
 import { Card } from "../ui/card";
 import { VStack } from "../ui/vstack";
@@ -16,8 +16,6 @@ import colors from "tailwindcss/colors";
 import { Spinner } from "../ui/spinner";
 
 const ListWorking = () => {
-  const dispatch = useDispatch();
-
   // lấy thông tin user
   const user = useSelector(selectUser);
 
@@ -26,6 +24,7 @@ const ListWorking = () => {
       serviceId: string;
       serviceName: string;
       serviceImage: string;
+      serviceStatus: string | null;
     }[]
   >([]);
 
@@ -34,16 +33,13 @@ const ListWorking = () => {
 
   useEffect(() => {
     if (data) {
-
-      const dataFilter = data.items.filter(item => item.status !== null)
+      const dataFilter = data.items.filter((item) => item.status !== null);
 
       const dataConvert = dataFilter.map((item) => ({
         serviceId: item.id,
-        serviceName:
-          WorkType[item.name as keyof typeof WorkType].key === "BABYSITTING"
-            ? i18n.t("job_babysitting")
-            : i18n.t("job_homecleaning"),
+        serviceName: WorkType[item.name as keyof typeof WorkType].value,
         serviceImage: item.image,
+        serviceStatus: item.status,
       }));
 
       setDataService(dataConvert);
@@ -59,10 +55,12 @@ const ListWorking = () => {
     serviceId,
     serviceName,
     serviceImage,
+    serviceStatus,
   }: {
     serviceId: string;
     serviceName: string;
     serviceImage: string;
+    serviceStatus: string | null;
   }) => {
     return (
       <Pressable onPress={() => handleVisit(serviceId)}>
@@ -81,9 +79,30 @@ const ListWorking = () => {
                   }}
                 />
               </Avatar>
-              <Text className="ms-3 text-2xl font-semibold">{serviceName}</Text>
+              <VStack>
+                <Text size="2xl" className="ms-3 font-semibold">
+                  {serviceName}
+                </Text>
+                <Text
+                  size="sm"
+                  className={`ms-4 text-${
+                    FreelancerWorkStatus[
+                      serviceStatus as keyof typeof FreelancerWorkStatus
+                    ].bgColor
+                  }`}
+                >
+                  {
+                    FreelancerWorkStatus[
+                      serviceStatus as keyof typeof FreelancerWorkStatus
+                    ].value
+                  }
+                </Text>
+              </VStack>
             </View>
-            <Ionicons name="arrow-forward" size={24} color="green" />
+            <Ionicons
+              name="arrow-forward"
+              size={24}
+            />
           </Card>
         )}
       </Pressable>
@@ -113,6 +132,7 @@ const ListWorking = () => {
           serviceId={item.serviceId}
           serviceName={item.serviceName}
           serviceImage={item.serviceImage}
+          serviceStatus={item.serviceStatus}
         />
       )}
       keyExtractor={(item) => item.serviceId}

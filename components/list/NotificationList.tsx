@@ -1,20 +1,20 @@
-import { data, UserRole } from '@/constants';
-import { NotificationModel } from '@/types/userTypes';
-import { normalizeDateTime } from '@/utils/dateUtil';
-import { useRouter } from 'expo-router';
-import moment from 'moment';
-import { Pressable, FlatList, RefreshControl, ScrollView } from 'react-native';
-import { Box } from '../ui/box';
-import { Card } from '../ui/card';
-import { Heading } from '../ui/heading';
-import { VStack } from '../ui/vstack';
-import { Text } from '../ui/text';
-import { useCallback, useState } from 'react';
-import { useViewNotificationMutation } from '@/services';
-import { Toast, ToastDescription, ToastTitle, useToast } from '../ui/toast';
-import { Mode } from './PostList';
-import { useSelector } from 'react-redux';
-import { selectUser } from '@/store/reducers';
+import { data, UserRole } from "@/constants";
+import { NotificationModel } from "@/types/userTypes";
+import { normalizeDateTime } from "@/utils/dateUtil";
+import { useRouter } from "expo-router";
+import moment from "moment";
+import { Pressable, FlatList, RefreshControl, ScrollView } from "react-native";
+import { Box } from "../ui/box";
+import { Card } from "../ui/card";
+import { Heading } from "../ui/heading";
+import { VStack } from "../ui/vstack";
+import { Text } from "../ui/text";
+import { useCallback, useState } from "react";
+import { useViewNotificationMutation } from "@/services";
+import { Toast, ToastDescription, ToastTitle, useToast } from "../ui/toast";
+import { Mode } from "./PostList";
+import { useSelector } from "react-redux";
+import { selectUser } from "@/store/reducers";
 
 interface Props {
   notifications: NotificationModel[] | undefined;
@@ -32,15 +32,13 @@ const NotificationList = ({ notifications, refetch }: Props) => {
   const toast = useToast();
 
   const handleViewNotification = async (
-    userNotification: NotificationModel,
+    userNotification: NotificationModel
   ) => {
     if (userNotification.view) {
-      router.push(
-        `/(posts)/PostDetail?id=${userNotification.notification.post.id}`,
-      );
+      router.push(`/(posts)/PostDetail?id=${userNotification.postId}`);
     } else {
       router.push(
-        `/(posts)/PostDetail?id=${userNotification.notification.post.id}&notificationId=${userNotification.id}`,
+        `/(posts)/PostDetail?id=${userNotification.postId}&notificationId=${userNotification.id}`
       );
     }
   };
@@ -72,18 +70,18 @@ const NotificationList = ({ notifications, refetch }: Props) => {
     <Card
       size="md"
       variant="elevated"
-      className={`m-3 shadow-lg ${item.view ? 'bg-secondary-0' : 'bg-info-0'}`}
+      className={`m-3 shadow-lg ${item.view ? "bg-secondary-0" : "bg-info-0"}`}
     >
       <Pressable className="" onPress={() => handleViewNotification(item)}>
         {({ pressed }) => (
-          <Box className={pressed ? 'opacity-75' : ''}>
-            <Heading className="mb-1">{item.notification.title}</Heading>
+          <Box className={pressed ? "opacity-75" : ""}>
+            <Heading className="mb-1">{item.title}</Heading>
 
             <VStack space="xs">
-              <Text>{item.notification.content}</Text>
+              <Text>{item.content}</Text>
               <Text className="text-info-600">
-                {moment(normalizeDateTime(item.notification.createdAt))?.format(
-                  'DD/MM/YYYY',
+                {moment(normalizeDateTime(item.createdAt))?.format(
+                  "DD/MM/YYYY"
                 )}
               </Text>
             </VStack>
@@ -96,7 +94,7 @@ const NotificationList = ({ notifications, refetch }: Props) => {
   return (
     <FlatList
       data={notifications}
-      keyExtractor={item => item.id}
+      keyExtractor={(item) => String(item.id)}
       renderItem={renderItem}
       refreshControl={
         <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />

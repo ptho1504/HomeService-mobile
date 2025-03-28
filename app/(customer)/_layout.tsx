@@ -56,7 +56,6 @@ export default function Layout() {
         options={{
           title: i18n.t('account'),
           headerShown: true,
-          headerShadowVisible: false,
           tabBarIcon: ({ color }) => (
             <Ionicons size={24} name="person-outline" color={color} />
           ),

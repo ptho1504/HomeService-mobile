@@ -1,37 +1,37 @@
-import React, { useState } from 'react';
-import { SafeAreaView, ScrollView } from 'react-native';
-import { VStack } from '@/components/ui/vstack';
-import { HStack } from '@/components/ui/hstack';
-import { Card } from '@/components/ui/card';
-import { Text } from '@/components/ui/text';
-import { Heading } from '@/components/ui/heading';
-import { CreatePostModel, HouseCleaningOption } from '@/types/postTypes';
-import { Box } from '@/components/ui/box';
-import Ionicons from '@expo/vector-icons/Ionicons';
-import ScrollPickerModal from '@/components/modal/ScrollPickerModal';
-import { Button, ButtonSpinner, ButtonText } from '@/components/ui/button';
+import React, { useState } from "react";
+import { SafeAreaView, ScrollView } from "react-native";
+import { VStack } from "@/components/ui/vstack";
+import { HStack } from "@/components/ui/hstack";
+import { Card } from "@/components/ui/card";
+import { Text } from "@/components/ui/text";
+import { Heading } from "@/components/ui/heading";
+import { CreatePostModel, HouseCleaningOption } from "@/types/postTypes";
+import { Box } from "@/components/ui/box";
+import Ionicons from "@expo/vector-icons/Ionicons";
+import ScrollPickerModal from "@/components/modal/ScrollPickerModal";
+import { Button, ButtonSpinner, ButtonText } from "@/components/ui/button";
 import {
   Radio,
   RadioGroup,
   RadioIcon,
   RadioIndicator,
   RadioLabel,
-} from '@/components/ui/radio';
-import { CircleIcon } from '@/components/ui/icon';
-import { Textarea, TextareaInput } from '@/components/ui/textarea';
-import { useDispatch, useSelector } from 'react-redux';
-import { clearPostForm, selectPostForm } from '@/store/reducers';
-import { router, useLocalSearchParams } from 'expo-router';
-import { useCreatePostMutation } from '@/services/post';
+} from "@/components/ui/radio";
+import { CircleIcon } from "@/components/ui/icon";
+import { Textarea, TextareaInput } from "@/components/ui/textarea";
+import { useDispatch, useSelector } from "react-redux";
+import { clearPostForm, selectPostForm } from "@/store/reducers";
+import { router, useLocalSearchParams } from "expo-router";
+import { useCreatePostMutation } from "@/services/post";
 import {
   useToast,
   Toast,
   ToastTitle,
   ToastDescription,
-} from '@/components/ui/toast';
-import PostInfo from '@/components/post/PostInfo';
-import PostAddress from '@/components/post/PostAddress';
-import { LinearGradient } from 'expo-linear-gradient';
+} from "@/components/ui/toast";
+import PostInfo from "@/components/post/PostInfo";
+import PostAddress from "@/components/post/PostAddress";
+import { LinearGradient } from "expo-linear-gradient";
 
 const options: HouseCleaningOption[] = [
   { area: 60, totalFreelancers: 2, duration: 3 },
@@ -42,7 +42,7 @@ const options: HouseCleaningOption[] = [
   { area: 400, totalFreelancers: 4, duration: 8 },
 ];
 
-const addressId = '08d44b77-8c12-49f4-8ce4-7e94ecafe2fd';
+const addressId = "08d44b77-8c12-49f4-8ce4-7e94ecafe2fd";
 
 const Checkout = () => {
   const dispatch = useDispatch();
@@ -52,8 +52,8 @@ const Checkout = () => {
 
   const [selectedHour, setSelectedHour] = useState<number>(0);
   const [selectedMinute, setSelectedMinute] = useState<number>(0);
-  const [paymentType, setPaymentType] = useState<string>('QR');
-  const [customerNote, setCustomerNote] = useState<string>('');
+  const [paymentType, setPaymentType] = useState<string>("QR");
+  const [customerNote, setCustomerNote] = useState<string>("");
 
   const toast = useToast();
 
@@ -67,13 +67,14 @@ const Checkout = () => {
         customerNote: customerNote,
         paymentType: paymentType,
       };
+      console.info(data);
       const res = await createPost(data);
       if (error || res.data?.returnCode != 1000) {
         toast.show({
-          placement: 'top',
+          placement: "top",
           duration: 3000,
           render: ({ id }) => {
-            const uniqueToastId = 'toast-' + id;
+            const uniqueToastId = "toast-" + id;
             return (
               <Toast nativeID={uniqueToastId} action="error" variant="outline">
                 <ToastTitle>Đăng công việc thất bại</ToastTitle>
@@ -84,10 +85,10 @@ const Checkout = () => {
         });
       } else {
         toast.show({
-          placement: 'top',
+          placement: "top",
           duration: 3000,
           render: ({ id }) => {
-            const uniqueToastId = 'toast-' + id;
+            const uniqueToastId = "toast-" + id;
             return (
               <Toast
                 nativeID={uniqueToastId}
@@ -111,7 +112,7 @@ const Checkout = () => {
     <SafeAreaView className="flex h-full">
       <LinearGradient
         // Background Linear Gradient
-        colors={['#ebf7eb', 'transparent', '#ffffff']}
+        colors={["#ebf7eb", "transparent", "#ffffff"]}
         className="absolute h-[1000px] left-0 right-0 top-0"
       />
       <ScrollView>

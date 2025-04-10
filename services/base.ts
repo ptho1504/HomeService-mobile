@@ -47,5 +47,6 @@ export const API = createApi({
     'TakePostsByFreelancerId',
     'PaymentHistories',
     'Notifications',
+    'Service'
   ],
 });

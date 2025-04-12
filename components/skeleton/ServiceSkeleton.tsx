@@ -11,7 +11,7 @@ const ServiceSkeleton = () => {
         <VStack className="p-5 mb-5 rounded-lg w-full shadow-sm bg-white">
           <Skeleton
             variant="rounded"
-            className="mb-6 w-full h-[200px] rounded-md"
+            className="mb-6 w-full h-[150px] rounded-md"
           />
           <VStack space="sm">
             <SkeletonText _lines={1} className="h-6 w-3/5" />
@@ -22,7 +22,7 @@ const ServiceSkeleton = () => {
         <VStack className="p-5 mb-5 rounded-lg w-full shadow-sm bg-white">
           <Skeleton
             variant="rounded"
-            className="mb-6 w-full h-[200px] rounded-md"
+            className="mb-6 w-full h-[150px] rounded-md"
           />
           <VStack space="sm">
             <SkeletonText _lines={1} className="h-6 w-3/5" />

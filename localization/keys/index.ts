@@ -57,12 +57,17 @@ export enum LocalizationKey {
   ST_YOU_ARE_READY_JOIN = "st_you_are_ready_join",
   ST_READY_DOING_TEST = "st_ready_doing_test",
   ST_ALL_JOB_REGISTERED = "st_all_job_registered",
+  ST_UNREGISTERED_SERVICES = "st_unregistered_services",
+  ST_UNACTIVATED_SERVICES = "st_unactivated_services",
 
   // doing test screen
   DOING_TEST = "doing_test",
   WORD_QUESTION = "word_question",
   ST_ENTER_YOUR_ANSWER = "st_enter_your_answer",
   WORD_SUBMIT = "word_submit",
+
+  WORD_MULTIPLE_CHOICE = "word_multiple_choice",
+  WORD_ESSAY = "word_essay",
 
   ST_SUBMITTING_TEST = "word_submitting_test",
   ST_YOU_ARE_SURE_TO_SUBMIT = "st_you_are_sure_submit",
@@ -111,38 +116,38 @@ export enum LocalizationKey {
 
   // show toast
   WORD_FAILURE = "word_failure",
-  ST_TRY_AGAIN = 'st_try_again',
-  ST_ERROR_AT_CHOICE_IMAGE = 'st_error_at_choice_image',
-  ST_ERROR_AT_REGISTER_SERVICE = 'st_error_at_register_service',
-  ST_ERROR_AT_UPLOAD_IMAGE = 'st_error_at_upload_image',
+  ST_TRY_AGAIN = "st_try_again",
+  ST_ERROR_AT_CHOICE_IMAGE = "st_error_at_choice_image",
+  ST_ERROR_AT_REGISTER_SERVICE = "st_error_at_register_service",
+  ST_ERROR_AT_UPLOAD_IMAGE = "st_error_at_upload_image",
 
-  WORD_WARNING = 'word_warning',
-  ST_PLEASE_FULLFIL_TEST = 'st_please_fullfil_test',
-  ST_PLEASE_ENTER_NOTE = 'st_please_enter_note',
-  ST_PLEASE_UPLOAD_IMAGE = 'st_please_upload_image',
+  WORD_WARNING = "word_warning",
+  ST_PLEASE_FULLFIL_TEST = "st_please_fullfil_test",
+  ST_PLEASE_ENTER_NOTE = "st_please_enter_note",
+  ST_PLEASE_UPLOAD_IMAGE = "st_please_upload_image",
 
-  WORD_SUCCESS = 'word_success',
-  ST_REGISTER_SUCCESSFULLY = 'st_register_successfully',
+  WORD_SUCCESS = "word_success",
+  ST_REGISTER_SUCCESSFULLY = "st_register_successfully",
 
   // system error
-  ST_SYSTEM_ERROR = 'st_system_error',
+  ST_SYSTEM_ERROR = "st_system_error",
 
   // time unit
-  WORD_TIME = 'word_time', 
-  WORD_HOURS = 'word_hours', 
-  WORD_MINUTE = 'word_minutes', 
-  WORD_SECONDS = 'word_seconds', 
+  WORD_TIME = "word_time",
+  WORD_HOURS = "word_hours",
+  WORD_MINUTE = "word_minutes",
+  WORD_SECONDS = "word_seconds",
 
   // manage service screen
-  WORD_SERVICE_DETAIL = 'word_service_detail',
-  WORD_YOUR_SERVICE_DETAIL= 'word_your_service_detail',
-  WORD_YOUR_SERVICE_IMAGE = 'word_your_service_image',
+  WORD_SERVICE_DETAIL = "word_service_detail",
+  WORD_YOUR_SERVICE_DETAIL = "word_your_service_detail",
+  WORD_YOUR_SERVICE_IMAGE = "word_your_service_image",
 
-  WORD_LOADING_YOUR_SERVICE = 'word_loading_your_service',
-  ST_NOT_IN_SERVICES = 'st_not_in_services',
+  WORD_LOADING_YOUR_SERVICE = "word_loading_your_service",
+  ST_NOT_IN_SERVICES = "st_not_in_services",
 
-  ST_TIME_OF_DOING_TEST = 'st_time_of_doing_test',
-  WORD_NOTIFICAION = 'word_notification',
+  ST_TIME_OF_DOING_TEST = "st_time_of_doing_test",
+  WORD_NOTIFICAION = "word_notification",
   ST_OUT_OF_TIME = "st_out_of_time",
 
   ST_NOTE_ADDITION_INFO = "st_note_addition_info",
@@ -152,13 +157,37 @@ export enum LocalizationKey {
   WORD_RATE = "word_rate",
   ST_NOTE_HAS_ANY_RATE = "st_not_has_any_rate",
 
+// constants/index.ts
+  WORD_FREELANCER_WORK_STATUS = "word_freelancer_work_status",
+  WORD_FREELANCER_WORK_INITIAL = "word_freelancer_work_initial",
+  WORD_FREELANCER_WORK_PROHIBITIVE = "word_freelancer_work_prohibitive",
+  WORD_FREELANCER_WORK_WORK = "word_freelancer_work_work",
+  WORD_FREELANCER_WORK_DISABLE = "word_freelancer_work_disable",
 
-  // const FreelancerWorkStatus
-  WORD_STATUS = "word_status",
-  WORD_INITIAL = "word_initial",
-  WORD_PROHIBITIVE = "word_prohibitive",
-  WORD_WORK = "word_work",
-  WORD_DISABLE = "word_disable",
+  WORD_USER_STATUS_ACTIVE = "word_user_status_active",
+  WORD_USER_STATUS_PROHIBITIVE = "word_user_status_prohibitive",
 
+  WORD__1DAY = "word__1day",
+  WORD__1MONTH = "word__1month",
+  WORD__2MONTH = "word__2month",
+  WORD__3MONTH = "word__3month",
+  WORD__4MONTH = "word__4month",
 
+  WORD_PAYMENT_QR = "word_payment_qr",
+  WORD_PAYMENT_CASH = "word_payment_cash",
+
+  WORD_POSTSTATUS_INITIAL = "word_poststatus_initial",
+  WORD_POSTSTATUS_SCHEDULED = "word_poststatus_scheduled",
+  WORD_POSTSTATUS_CANCELED = "word_poststatus_canceled",
+  WORD_POSTSTATUS_DOING = "word_poststatus_doing",
+  WORD_POSTSTATUS_COMPLETED = "word_poststatus_completed",
+  WORD_POSTSTATUS_FAILED = "word_poststatus_failed",
+  WORD_POSTSTATUS_PENDING = "word_poststatus_pending",
+  WORD_POSTSTATUS_ACCEPTED = "word_poststatus_accepted",
+  WORD_POSTSTATUS_REJECTED = "word_poststatus_rejected",
+
+  WORD_SCHEDULE_STATUS_INITIAL = "word_schedule_status_initial",
+  WORD_SCHEDULE_STATUS_DOING = "word_schedule_status_doing",
+  WORD_SCHEDULE_STATUS_COMPLETED = "word_schedule_status_completed",
+  WORD_SCHEDULE_STATUS_CANCELED = "word_schedule_status_canceled",
 }

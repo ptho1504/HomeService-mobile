@@ -30,7 +30,8 @@ const calculateDuration = (startTime: number[], endTime: number[]): string => {
   let result = [];
   if (hours > 0) result.push(`${hours} ${i18n.t("word_hours")}`);
   if (minutes > 0) result.push(`${minutes} ${i18n.t("word_minutes")}`);
-  if (seconds > 0 || result.length === 0) result.push(`${seconds} ${i18n.t("word_seconds")}`);
+  if (seconds > 0 || result.length === 0)
+    result.push(`${seconds} ${i18n.t("word_seconds")}`);
 
   return result.join(" ");
 };
@@ -89,16 +90,18 @@ const ResultTest = () => {
           {/* Score Circle */}
           <View className="items-center mt-10">
             <View
-              className={`w-44 h-44 rounded-full flex items-center justify-center border-4 ${isPassed ? "border-green-300 bg-green-500" : "border-red-300 bg-red-500" }`}
+              className={`w-44 h-44 rounded-full flex items-center justify-center border-4 ${
+                isPassed
+                  ? "border-green-300 bg-green-500"
+                  : "border-red-300 bg-red-500"
+              }`}
             >
               <Center className="">
                 <Text className="text-white text-lg font-semibold">
-                {i18n.t("word_your_score")}
+                  {i18n.t("word_your_score")}
                 </Text>
                 <Text size="4xl" className="text-white font-bold">
-                  {`${testResult.testPoint ?? 0} / ${
-                    testInfo.passedPoint ?? 0
-                  }`}
+                  {testResult.numberOfCorrect ?? 0}
                 </Text>
               </Center>
             </View>
@@ -116,19 +119,19 @@ const ResultTest = () => {
             {isPassed ? (
               <>
                 <Text size="3xl" className="text-green-700 font-bold">
-                {i18n.t("word_congratulation")}
+                  {i18n.t("word_congratulation")}
                 </Text>
                 <Text className="text-green-600 text-md mt-1">
-                {i18n.t("st_congratulation")}
+                  {i18n.t("st_congratulation")}
                 </Text>
               </>
             ) : (
               <>
                 <Text className="text-red-700 text-2xl font-semibold">
-                {i18n.t("word_wrong")}
+                  {i18n.t("word_wrong")}
                 </Text>
                 <Text className="text-red-600 text-md mt-1">
-                {i18n.t("st_wrong")}
+                  {i18n.t("st_wrong")}
                 </Text>
               </>
             )}

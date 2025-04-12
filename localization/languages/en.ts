@@ -65,12 +65,16 @@ export const en = {
   [LocalizationKey.ST_READY_DOING_TEST]: "Ready to take the test now!",
   [LocalizationKey.ST_ALL_JOB_REGISTERED]:
     "You have registered all available services",
+  [LocalizationKey.ST_UNREGISTERED_SERVICES]: "Unregistered services",
+  [LocalizationKey.ST_UNACTIVATED_SERVICES]: "Inactive services",
 
   // doing test screen
   [LocalizationKey.DOING_TEST]: "Do Test",
   [LocalizationKey.WORD_QUESTION]: "Question",
   [LocalizationKey.ST_ENTER_YOUR_ANSWER]: "Enter your answer...",
   [LocalizationKey.WORD_SUBMIT]: "Submit",
+  [LocalizationKey.WORD_MULTIPLE_CHOICE]: "Multiple Choice",
+  [LocalizationKey.WORD_ESSAY]: "Essay",
 
   [LocalizationKey.ST_SUBMITTING_TEST]: "Submitting test",
   [LocalizationKey.ST_YOU_ARE_SURE_TO_SUBMIT]:
@@ -171,9 +175,37 @@ export const en = {
 
   [LocalizationKey.ST_NOTE_HAS_ANY_RATE]: "No reviews yet!",
 
-  [LocalizationKey.WORD_STATUS]: "Status",
-  [LocalizationKey.WORD_INITIAL]: "Sending request",
-  [LocalizationKey.WORD_PROHIBITIVE]: "Prohibited",
-  [LocalizationKey.WORD_WORK]: "Active",
-  [LocalizationKey.WORD_DISABLE]: "Paused",
+  // constants/index.ts
+  [LocalizationKey.WORD_FREELANCER_WORK_STATUS]: "Status",
+  [LocalizationKey.WORD_FREELANCER_WORK_INITIAL]: "Initial",
+  [LocalizationKey.WORD_FREELANCER_WORK_PROHIBITIVE]: "Prohibited",
+  [LocalizationKey.WORD_FREELANCER_WORK_WORK]: "Working",
+  [LocalizationKey.WORD_FREELANCER_WORK_DISABLE]: "Disabled",
+  
+  [LocalizationKey.WORD_USER_STATUS_ACTIVE]: "Active",
+  [LocalizationKey.WORD_USER_STATUS_PROHIBITIVE]: "Prohibited",
+
+  [LocalizationKey.WORD__1DAY]: "1 day",
+  [LocalizationKey.WORD__1MONTH]: "1 month",
+  [LocalizationKey.WORD__2MONTH]: "2 months",
+  [LocalizationKey.WORD__3MONTH]: "3 months",
+  [LocalizationKey.WORD__4MONTH]: "4 months",
+
+  [LocalizationKey.WORD_PAYMENT_QR]: "QR Payment",
+  [LocalizationKey.WORD_PAYMENT_CASH]: "Cash Payment",
+
+  [LocalizationKey.WORD_POSTSTATUS_INITIAL]: "Initialized",
+  [LocalizationKey.WORD_POSTSTATUS_SCHEDULED]: "Scheduled",
+  [LocalizationKey.WORD_POSTSTATUS_CANCELED]: "Canceled",
+  [LocalizationKey.WORD_POSTSTATUS_DOING]: "In Progress",
+  [LocalizationKey.WORD_POSTSTATUS_COMPLETED]: "Completed",
+  [LocalizationKey.WORD_POSTSTATUS_FAILED]: "Failed",
+  [LocalizationKey.WORD_POSTSTATUS_PENDING]: "Pending",
+  [LocalizationKey.WORD_POSTSTATUS_ACCEPTED]: "Accepted",
+  [LocalizationKey.WORD_POSTSTATUS_REJECTED]: "Rejected",
+
+  [LocalizationKey.WORD_SCHEDULE_STATUS_INITIAL]: "Not Started",
+  [LocalizationKey.WORD_SCHEDULE_STATUS_DOING]: "In Progress",
+  [LocalizationKey.WORD_SCHEDULE_STATUS_COMPLETED]: "Completed",
+  [LocalizationKey.WORD_SCHEDULE_STATUS_CANCELED]: "Canceled",
 };

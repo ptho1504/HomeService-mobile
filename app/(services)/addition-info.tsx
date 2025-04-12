@@ -55,13 +55,8 @@ import { Heading } from "@/components/ui/heading";
 import { usePreventRemove } from "@react-navigation/native";
 import { i18n } from "@/localization";
 
-import {
-  Popover,
-  PopoverBackdrop,
-  PopoverArrow,
-  PopoverBody,
-  PopoverContent,
-} from "@/components/ui/popover";
+import AlertConfirmDialog from "@/components/dialog/AlertConfirmDialog";
+import { showToastMessage } from "@/components/Toast/ToastMessage";
 
 const AdditionInfo = () => {
   const dispatch = useDispatch();
@@ -81,32 +76,7 @@ const AdditionInfo = () => {
     ]);
   });
 
-  const [toastId, setToastId] = useState<string>(Date.now().toString());
-
   const toast = useToast();
-
-  const showToast = (
-    title: string,
-    message: string,
-    type: "error" | "muted" | "warning" | "success" | "info" | undefined
-  ) => {
-    if (toast.isActive(toastId)) {
-      return;
-    }
-    const uniqueToastId = Date.now().toString();
-    setToastId(uniqueToastId);
-    toast.show({
-      id: uniqueToastId,
-      placement: "top",
-      duration: 3000,
-      render: ({ id }) => (
-        <Toast nativeID={uniqueToastId} action={type} variant="solid">
-          <ToastTitle>{title}</ToastTitle>
-          <ToastDescription>{message}</ToastDescription>
-        </Toast>
-      ),
-    });
-  };
 
   const [
     registerService,
@@ -144,7 +114,8 @@ const AdditionInfo = () => {
     } catch (error) {
       console.error("Lỗi khi chọn ảnh:", error);
 
-      showToast(
+      showToastMessage(
+        toast,
         i18n.t("word_failure"),
         i18n.t("st_error_at_choice_image"),
         "error"
@@ -176,7 +147,9 @@ const AdditionInfo = () => {
       return result.items.id ?? null;
     } catch (err) {
       console.error("Lỗi khi đăng ký dịch vụ:", err);
-      showToast(
+
+      showToastMessage(
+        toast,
         i18n.t("word_failure"),
         i18n.t("st_error_at_register_service"),
         "error"
@@ -220,7 +193,9 @@ const AdditionInfo = () => {
       console.log("Upload thành công:", response.items.testResult);
     } catch (error) {
       console.error("Lỗi khi upload hình ảnh:", error);
-      showToast(
+
+      showToastMessage(
+        toast,
         i18n.t("word_failure"),
         i18n.t("st_error_at_upload_image"),
         "error"
@@ -231,7 +206,9 @@ const AdditionInfo = () => {
   const handleSubmit = async () => {
     if (note === "") {
       console.log("Không có ghi chú để upload");
-      showToast(
+
+      showToastMessage(
+        toast,
         i18n.t("word_warning"),
         i18n.t("st_please_enter_note"),
         "warning"
@@ -241,7 +218,9 @@ const AdditionInfo = () => {
 
     if (images.length === 0) {
       console.log("Không có hình ảnh để upload");
-      showToast(
+
+      showToastMessage(
+        toast,
         i18n.t("word_warning"),
         i18n.t("st_please_upload_image"),
         "warning"
@@ -254,7 +233,13 @@ const AdditionInfo = () => {
 
       if (!registerResponseId) {
         console.error("Lỗi: Không lấy được ID sau khi đăng ký");
-        showToast(i18n.t("word_failure"), i18n.t("st_system_error"), "error");
+
+        showToastMessage(
+          toast,
+          i18n.t("word_failure"),
+          i18n.t("st_system_error"),
+          "error"
+        );
         return;
       }
 
@@ -265,11 +250,23 @@ const AdditionInfo = () => {
         await handleUploadImages(registerResponseId);
       } catch (uploadError) {
         console.error("Lỗi khi upload hình ảnh:", uploadError);
-        showToast(i18n.t("word_failure"), i18n.t("st_system_error"), "error");
+
+        showToastMessage(
+          toast,
+          i18n.t("word_failure"),
+          i18n.t("st_system_error"),
+          "error"
+        );
       }
     } catch (error) {
       console.error("Lỗi khi submit:", error);
-      showToast(i18n.t("word_failure"), i18n.t("st_system_error"), "error");
+
+      showToastMessage(
+        toast,
+        i18n.t("word_failure"),
+        i18n.t("st_system_error"),
+        "error"
+      );
     }
     dispatch(setRegisterProcess({ isRegisterDone: true }));
   };
@@ -277,7 +274,9 @@ const AdditionInfo = () => {
   useEffect(() => {
     if (registerProcess.isRegisterDone) {
       router.dismissAll();
-      showToast(
+
+      showToastMessage(
+        toast,
         i18n.t("word_success"),
         i18n.t("st_register_successfully"),
         "success"
@@ -385,7 +384,9 @@ const AdditionInfo = () => {
           </Center>
 
           <VStack>
-            <Text size="lg" className="text-orange-500 font-bold">*{i18n.t("word_note")}:</Text>
+            <Text size="lg" className="text-orange-500 font-bold">
+              *{i18n.t("word_note")}:
+            </Text>
             <VStack className="ms-3">
               <Text className="font-semibold">
                 - {i18n.t("st_note_addition_info")}
@@ -399,43 +400,18 @@ const AdditionInfo = () => {
       )}
 
       {/* Alert dialog */}
-      <AlertDialog
+      <AlertConfirmDialog
         isOpen={showAlertDialog}
         onClose={handleCloseAlert}
-        size="md"
-      >
-        <AlertDialogBackdrop />
-        <AlertDialogContent>
-          <AlertDialogHeader>
-            <Heading className="text-typography-950 font-semibold" size="md">
-              {i18n.t("word_confirm")}
-            </Heading>
-          </AlertDialogHeader>
-          <AlertDialogBody className="mt-3 mb-4">
-            <Text size="sm">{i18n.t("st_are_ready_send_register")}</Text>
-          </AlertDialogBody>
-          <AlertDialogFooter className="">
-            <Button
-              variant="outline"
-              action="secondary"
-              onPress={handleCloseAlert}
-              size="sm"
-            >
-              <ButtonText>{i18n.t("word_cancel")}</ButtonText>
-            </Button>
-            <Button
-              size="sm"
-              action="positive"
-              onPress={() => {
-                handleCloseAlert();
-                handleSubmit();
-              }}
-            >
-              <ButtonText>{i18n.t("word_register")}</ButtonText>
-            </Button>
-          </AlertDialogFooter>
-        </AlertDialogContent>
-      </AlertDialog>
+        onConfirm={() => {
+          handleCloseAlert();
+          handleSubmit();
+        }}
+        title={i18n.t("word_confirm")}
+        body={i18n.t("st_are_ready_send_register")}
+        cancelText={i18n.t("word_cancel")}
+        confirmText={i18n.t("word_register")}
+      />
     </SafeAreaView>
   );
 };

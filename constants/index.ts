@@ -77,12 +77,12 @@ export const data = {
 export const UserStatus = {
   ACTIVE: {
     key: 'ACTIVE',
-    value: 'Hoạt động',
+    value: i18n.t('word_user_status_active'),
     bgColor: 'bg-green-400',
   },
   PROHIBITIVE: {
     key: 'PROHIBITIVE',
-    value: 'Bị cấm',
+    value: i18n.t('word_user_status_prohibitive'),
     bgColor: 'bg-red-400',
   },
 };
@@ -90,12 +90,12 @@ export const UserStatus = {
 export const QuestionType = {
   MULTICHOICE: {
     key: 'MULTICHOICE',
-    value: 'Trắc nghiệm',
+    value: i18n.t("word_multiple_choice"),
     bgColor: 'bg-blue-400', // Màu xám cho trạng thái khởi tạo
   },
   ESSAY: {
     key: 'ESSAY',
-    value: 'Tự luận',
+    value: i18n.t("word_essay"),
     bgColor: 'bg-yellow-400', // Màu xám cho trạng thái khởi tạo
   },
 };
@@ -121,71 +121,71 @@ export const WorkType = {
 export const PackageName = {
   _1DAY: {
     key: '_1DAY',
-    value: 'Gói lẻ (làm 1 lần)',
+    value: i18n.t("word__1day"),
   },
   _1MONTH: {
     key: '_1MONTH',
-    value: '1 tháng',
+    value: i18n.t("word__1month"),
   },
   _2MONTH: {
     key: '_2MONTH',
-    value: '2 tháng',
+    value: i18n.t("word__2month"),
   },
   _3MONTH: {
     key: '_3MONTH',
-    value: '3 tháng',
+    value: i18n.t("word__3month"),
   },
   _4MONTH: {
     key: '_4MONTH',
-    value: '4 tháng',
+    value: i18n.t("word__4month"),
   },
 };
 
 export const PaymentType = {
   QR: {
     key: 'QR',
-    value: 'Trừ vào số dư',
+    value: i18n.t("word_payment_qr"),
   },
   CASH: {
     key: 'CASH',
-    value: 'Tiền mặt',
+    value: i18n.t("word_payment_cash"),
   },
 };
 
 export const PostStatus = {
   INITIAL: {
     key: 'INITIAL',
-    value: 'Khởi tạo',
+    value: i18n.t("word_poststatus_initial"),
     bgColor: 'bg-gray-400', // Màu xám cho trạng thái khởi tạo
     action: 'muted',
   },
   SCHEDULED: {
     key: 'SCHEDULED',
-    value: 'Đã lên lịch',
+    value: i18n.t("word_poststatus_scheduled"),
     bgColor: 'bg-blue-400', // Màu xanh dương cho trạng thái đã lên lịch
     action: 'info',
   },
   CANCELED: {
     key: 'CANCELED',
-    value: 'Bị hủy',
+    value: i18n.t("word_poststatus_canceled"),
     bgColor: 'bg-red-400', // Màu đỏ cho trạng thái bị hủy
     action: 'warning',
   },
   DOING: {
     key: 'DOING',
-    value: 'Đang làm',
+    value: i18n.t("word_poststatus_doing"),
     bgColor: 'bg-yellow-400', // Màu vàng cho trạng thái đang làm
     action: 'info',
   },
   COMPLETED: {
     key: 'COMPLETED',
-    value: 'Hoàn thành',
+    value: i18n.t("word_poststatus_completed"),
     bgColor: 'bg-green-400', // Màu xanh lá cho trạng thái hoàn thành
     action: 'success',
   },
   FAILED: {
     key: 'FAILED',
-    value: 'Thất bại',
+    value: i18n.t("word_poststatus_failed"),
     bgColor: 'bg-orange-400', // Màu cam cho trạng thái thất bại
     action: 'error',
   },
@@ -194,22 +194,22 @@ export const PostStatus = {
 export const FreelancerWorkStatus = {
   INITIAL: {
     key: 'INITIAL',
-    value: i18n.t("word_initial"),
+    value: i18n.t("word_freelancer_work_status"),
     bgColor: 'blue-400', // Màu xám cho trạng thái khởi tạo
   },
   PROHIBITIVE: {
     key: 'PROHIBITIVE',
-    value: i18n.t("word_prohibitive"),
+    value: i18n.t("word_freelancer_work_initial"),
     bgColor: 'red-400', // Màu đỏ cho trạng thái bị hủy
   },
   WORK: {
     key: 'WORK',
-    value: i18n.t("word_work"),
+    value: i18n.t("word_freelancer_work_work"),
     bgColor: 'green-400', // Màu xanh lá cho trạng thái hoàn thành
   },
   DISABLE: {
     key: 'DISABLE',
-    value: i18n.t("word_disable"),
+    value: i18n.t("word_freelancer_work_disable"),
     bgColor: 'gray-400', // Màu cam cho trạng thái thất bại
   },
 };
@@ -217,19 +217,19 @@ export const FreelancerWorkStatus = {
 export const TakePostStatus = {
   PENDING: {
     key: 'PENDING',
-    value: 'Chờ xác nhận',
+    value: i18n.t("word_poststatus_pending"),
     bgColor: 'bg-gray-400', // Màu xám cho trạng thái khởi tạo
     priority: 1,
   },
   ACCEPTED: {
     key: 'ACCEPTED',
-    value: 'Đã nhận làm',
+    value: i18n.t("word_poststatus_accepted"),
     bgColor: 'bg-green-400', // Màu xanh dương cho trạng thái đã lên lịch
     priority: 2,
   },
   REJECTED: {
     key: 'REJECTED',
-    value: 'Đã từ chối',
+    value: i18n.t("word_poststatus_rejected"),
     bgColor: 'bg-red-400', // Màu đỏ cho trạng thái bị hủy
     priority: 0,
   },
@@ -238,25 +238,25 @@ export const TakePostStatus = {
 export const WorkScheduleStatus = {
   INITIAL: {
     key: 'INITIAL',
-    value: 'Sắp tới',
+    value: i18n.t("word_schedule_status_initial"),
     bgColor: 'bg-gray-400', // Màu xám cho trạng thái khởi tạo
     action: 'warning',
   },
   DOING: {
     key: 'DOING',
-    value: 'Đang làm',
+    value: i18n.t("word_schedule_status_doing"),
     bgColor: 'bg-yellow-400', // Màu xanh dương cho trạng thái đã lên lịch
     action: 'info',
   },
   COMPLETED: {
     key: 'COMPLETED',
-    value: 'Đã làm',
+    value: i18n.t("word_schedule_status_completed"),
     bgColor: 'bg-green-400', // Màu xanh dương cho trạng thái đã lên lịch
     action: 'success',
   },
   CANCELED: {
     key: 'CANCELED',
-    value: 'Đã hủy',
+    value: i18n.t("word_schedule_status_canceled"),
     bgColor: 'bg-red-400', // Màu đỏ cho trạng thái bị hủy
     action: 'error',
   },

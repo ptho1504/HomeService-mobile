@@ -1,4 +1,3 @@
 export * from './auth';
 export * from './post';
 export * from './test';
-// export * from './service';

@@ -8,8 +8,10 @@ import {
   KeyboardAvoidingView,
   TouchableWithoutFeedback,
   Keyboard,
+  SectionList,
+  Animated,
 } from "react-native";
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { SafeAreaView } from "react-native";
 import { router, useNavigation } from "expo-router";
 import { Button, ButtonText } from "@/components/ui/button";
@@ -42,15 +44,11 @@ import QuestionSkeleton from "@/components/skeleton/QuestionSkeleton";
 import { Spinner } from "@/components/ui/spinner";
 import { usePreventRemove } from "@react-navigation/native";
 
-import {
-  AlertDialog,
-  AlertDialogBackdrop,
-  AlertDialogBody,
-  AlertDialogContent,
-  AlertDialogFooter,
-  AlertDialogHeader,
-} from "@/components/ui/alert-dialog";
 import { i18n } from "@/localization";
+import AlertConfirmDialog from "@/components/dialog/AlertConfirmDialog";
+import { showToastMessage } from "@/components/Toast/ToastMessage";
+import Timer from "@/components/Test/Timer";
+import QuestionItem from "@/components/Test/QuestionItem";
 
 const convertAnswers = (
   questions: QuestionModel[],
@@ -78,14 +76,13 @@ const getLocalISOTime = (): string => {
 
 let startTime: string = getLocalISOTime();
 
-// Main function
+// main function
 const DoTest = () => {
   const dispatch = useDispatch();
 
   const registerProcess = useSelector(selectRegisterProcess);
 
   const navigation = useNavigation();
-  // Hiển thị cảnh báo nếu goback
   usePreventRemove(!registerProcess.isRegisterDone, ({ data }) => {
     Alert.alert(i18n.t("word_confirm"), i18n.t("st_confirm_goback"), [
       { text: i18n.t("word_cancel"), style: "cancel" },
@@ -97,34 +94,8 @@ const DoTest = () => {
     ]);
   });
 
-  const [toastId, setToastId] = useState<string>(Date.now().toString());
-
   const toast = useToast();
 
-  const showToast = (
-    title: string,
-    message: string,
-    type: "error" | "muted" | "warning" | "success" | "info" | undefined
-  ) => {
-    if (toast.isActive(toastId)) {
-      return;
-    }
-    const uniqueToastId = Date.now().toString();
-    setToastId(uniqueToastId);
-    toast.show({
-      id: uniqueToastId,
-      placement: "top",
-      duration: 3000,
-      render: ({ id }) => (
-        <Toast nativeID={uniqueToastId} action={type} variant="solid">
-          <ToastTitle>{title}</ToastTitle>
-          <ToastDescription>{message}</ToastDescription>
-        </Toast>
-      ),
-    });
-  };
-
-  // setup useSubmitTestMutation - use api submit test
   const [
     submitTest,
     {
@@ -134,24 +105,17 @@ const DoTest = () => {
     },
   ] = useSubmitTestMutation();
 
-  // get test info
   const testInfo = useSelector(selectTestInfo);
-
   const testId = testInfo.testId ?? "";
-  // console.log(testId)
 
-  // Fetch danh sách câu hỏi từ API
   const { data, isFetching, error } = useGetQuestionOfTestQuery({ id: testId });
 
-  // Danh sách câu hỏi và sắp xếp trắc nghiệm trước, tự luận sau
   const sortedQuestions: QuestionModel[] = data?.items
     ? [...data.items].sort((a, b) => (a.type === "MULTICHOICE" ? -1 : 1))
     : [];
-  // console.log(sortedQuestions);
 
   const [isStartTest, setIsStartTest] = useState(false);
 
-  // get start time to do test
   useEffect(() => {
     if (data) {
       startTime = getLocalISOTime();
@@ -161,14 +125,14 @@ const DoTest = () => {
     }
   }, [data]);
 
-  // duration of test
   const [timeLeft, setTimeLeft] = useState(
     testInfo.time ? testInfo.time * 60 : 100
   );
 
   useEffect(() => {
     if (timeLeft <= 0) {
-      showToast(
+      showToastMessage(
+        toast,
         i18n.t("word_notification"),
         i18n.t("st_out_of_time"),
         "warning"
@@ -183,38 +147,26 @@ const DoTest = () => {
     return () => clearInterval(timer);
   }, [timeLeft, isStartTest]);
 
-  const formatTimeInTimer = (seconds: number) => {
-    const minutes = Math.floor(seconds / 60);
-    const secs = seconds % 60;
-    return `${minutes}:${secs < 10 ? "0" : ""}${secs}`;
-  };
-
-  // State lưu đáp án của người dùng
   const [answers, setAnswers] = useState<Record<string, string>>({});
 
-  // Xử lý chọn đáp án trắc nghiệm
   const handleOptionPress = (questionId: string, optionId: string) => {
     setAnswers((prev) => ({ ...prev, [questionId]: optionId }));
   };
 
-  // Xử lý nhập câu trả lời tự luận
   const handleEssayChange = (questionId: string, text: string) => {
     setAnswers((prev) => ({ ...prev, [questionId]: text }));
   };
 
-  // Xử lý khi nộp bài
   const handleSubmit = async () => {
-    // Kiểm tra xem đã làm hết bài kiểm tra chưa.
     if (Object.keys(answers).length < sortedQuestions.length) {
-      showToast(
-        i18n.t("word_warning"),
+      showToastMessage(
+        toast,
+        i18n.t("word_notification"),
         i18n.t("st_please_fullfil_test"),
         "warning"
       );
       return;
     }
-
-    console.log("start submit");
 
     const endTime = getLocalISOTime();
 
@@ -224,19 +176,12 @@ const DoTest = () => {
       answerForQuestions: convertAnswers(sortedQuestions, answers),
     };
 
-    // console.log(answer);
-
     const result = await submitTest({ testId: testId, answer: answer });
-    console.log(result);
-
-    // showToast("Complete", "Complete", "success")
-
-    console.log("complete submit");
+    console.log(result.data?.items);
   };
 
   useEffect(() => {
     if (resultTestData) {
-      console.log(resultTestData.items);
       dispatch(
         setTestResult({
           testResultId: resultTestData.items.id,
@@ -247,25 +192,53 @@ const DoTest = () => {
           endTime: resultTestData.items.endTime,
         })
       );
-
       router.push("/(services)/result-test");
     }
   }, [resultTestData]);
 
   const [showAlertDialog, setShowAlertDialog] = useState(false);
   const handleCloseAlert = () => setShowAlertDialog(false);
-  const handleOpenAlert = () => {
-    setShowAlertDialog(true);
-  };
+  const handleOpenAlert = () => setShowAlertDialog(true);
+
+  // Chia các câu hỏi thành 2 nhóm
+  const sections = [
+    {
+      title: i18n.t("word_multiple_choice"),
+      data: sortedQuestions.filter(
+        (question) => question.type === "MULTICHOICE"
+      ),
+    },
+    {
+      title: i18n.t("word_essay"),
+      data: sortedQuestions.filter((question) => question.type === "ESSAY"),
+    },
+  ];
+
+  const [scrollY] = useState(new Animated.Value(0)); // Animated value to track scroll position
+  const [isVisible, setIsVisible] = useState(true);
+
+  const handleScroll = Animated.event(
+    [{ nativeEvent: { contentOffset: { y: scrollY } } }],
+    { useNativeDriver: false }
+  );
+
+  useEffect(() => {
+    const listenerId = scrollY.addListener(({ value }) => {
+      // Nếu vị trí cuộn vượt qua 50px, ẩn Timer
+      if (value > 50 && isVisible) {
+        setIsVisible(false);
+      } else if (value <= 50 && !isVisible) {
+        setIsVisible(true);
+      }
+    });
+
+    return () => {
+      scrollY.removeListener(listenerId);
+    };
+  }, [scrollY, isVisible]);
 
   return (
     <SafeAreaView className="flex-1">
-      {/* <Center>
-        <Heading size="xl" className="my-5">
-          LÀM BÀI KIỂM TRA
-        </Heading>
-      </Center> */}
-
       {isFetching && (
         <HStack className="mt-5">
           <QuestionSkeleton />
@@ -289,17 +262,10 @@ const DoTest = () => {
 
       {!isFetching && !error && !isLoadingSubmitTest && !errorTestData && (
         <VStack className="flex-1">
-          {/* Đồng hồ nằm trong danh sách câu hỏi ban đầu */}
-          <View className="bg-green-600 p-5 flex flex-row items-center justify-between">
-            <Text size="2xl" className="text-white">
-              {i18n.t("st_time_of_doing_test")}:
-            </Text>
-            <Text size="2xl" className="text-white font-bold">
-              ⏳{formatTimeInTimer(timeLeft)}
-            </Text>
-          </View>
-          <FlatList
-            data={sortedQuestions}
+          {isVisible && <Timer timeLeft={timeLeft} />}
+
+          <SectionList
+            sections={sections}
             keyExtractor={(item) => item.id}
             renderItem={({ item, index }) => (
               <QuestionItem
@@ -310,8 +276,18 @@ const DoTest = () => {
                 onEssayChange={handleEssayChange}
               />
             )}
+            renderSectionHeader={({ section: { title, data } }) =>
+              data.length > 0 ? (
+                <View className="bg-gray-200 p-3 rounded-md my-3">
+                  <Text className="text-xl font-bold">{title}</Text>
+                </View>
+              ) : null
+            }
+            onScroll={handleScroll} // Sử dụng onScroll để theo dõi cuộn
+            scrollEventThrottle={16} // Giới hạn tần suất sự kiện cuộn
             className="flex-1 p-2"
           />
+
           <Center className="py-3">
             <Button
               size="lg"
@@ -328,103 +304,20 @@ const DoTest = () => {
         </VStack>
       )}
 
-      {/* Alert dialog */}
-      <AlertDialog
+      <AlertConfirmDialog
         isOpen={showAlertDialog}
         onClose={handleCloseAlert}
-        size="md"
-      >
-        <AlertDialogBackdrop />
-        <AlertDialogContent>
-          <AlertDialogHeader>
-            <Heading className="text-typography-950 font-semibold" size="md">
-              {i18n.t("word_submitting_test")}
-            </Heading>
-          </AlertDialogHeader>
-          <AlertDialogBody className="mt-3 mb-4">
-            <Text size="sm">{i18n.t("st_you_are_sure_submit")}</Text>
-          </AlertDialogBody>
-          <AlertDialogFooter className="">
-            <Button
-              variant="outline"
-              action="secondary"
-              onPress={handleCloseAlert}
-              size="sm"
-            >
-              <ButtonText>{i18n.t("word_goback")}</ButtonText>
-            </Button>
-            <Button
-              size="sm"
-              action="positive"
-              onPress={() => {
-                handleCloseAlert();
-                handleSubmit();
-              }}
-            >
-              <ButtonText>{i18n.t("word_submit")}</ButtonText>
-            </Button>
-          </AlertDialogFooter>
-        </AlertDialogContent>
-      </AlertDialog>
+        onConfirm={() => {
+          handleCloseAlert();
+          handleSubmit();
+        }}
+        title={i18n.t("word_submitting_test")}
+        body={i18n.t("st_you_are_sure_submit")}
+        cancelText={i18n.t("word_goback")}
+        confirmText={i18n.t("word_submit")}
+      />
     </SafeAreaView>
   );
 };
-
-const QuestionItem = ({
-  questionNumber,
-  item,
-  answers,
-  onSelect,
-  onEssayChange,
-}: {
-  questionNumber: number;
-  item: QuestionModel;
-  answers: Record<string, string>;
-  onSelect: (questionId: string, optionId: string) => void;
-  onEssayChange: (questionId: string, text: string) => void;
-}) => (
-  <View className="mb-5 p-3">
-    <Text className="text-xl font-semibold mb-2">
-      {i18n.t("word_question")} {questionNumber}: {item.content}
-    </Text>
-
-    {item.type === "MULTICHOICE" && (
-      <FlatList
-        data={item.choices.filter((choice) => !choice.deleted)} // Chỉ hiển thị lựa chọn không bị xóa
-        keyExtractor={(choice) => choice.id || ""}
-        renderItem={({ item: choice }) => (
-          <TouchableOpacity
-            className={`p-4 my-1 rounded-lg border-2 ${
-              answers[item.id] === choice.id
-                ? "bg-green-600 border-green-500"
-                : "bg-white border-gray-200"
-            }`}
-            onPress={() => onSelect(item.id, choice.id || "")}
-          >
-            <Text
-              className={`text-xl ${
-                answers[item.id] === choice.id
-                  ? "text-white font-semibold"
-                  : "text-black"
-              }`}
-            >
-              {choice.content}
-            </Text>
-          </TouchableOpacity>
-        )}
-      />
-    )}
-
-    {item.type === "ESSAY" && (
-      <TextInput
-        className="border border-gray-300 p-3 rounded-lg mt-2 bg-white text-lg"
-        placeholder={i18n.t("st_enter_your_answer")}
-        multiline
-        value={answers[item.id] || ""}
-        onChangeText={(text) => onEssayChange(item.id, text)}
-      />
-    )}
-  </View>
-);
 
 export default DoTest;

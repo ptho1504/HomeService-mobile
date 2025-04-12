@@ -65,12 +65,16 @@ export const vn = {
   [LocalizationKey.ST_READY_DOING_TEST]: "Sẵn sàng làm bài kiểm tra ngay!",
   [LocalizationKey.ST_ALL_JOB_REGISTERED]:
     "Bạn đã đăng ký tất cả các dịch vụ có sẵn",
+  [LocalizationKey.ST_UNREGISTERED_SERVICES]: "Dịch vụ chưa đăng ký",
+  [LocalizationKey.ST_UNACTIVATED_SERVICES]: "Dịch vụ chưa hoạt động",
 
   // màn hình làm bài kiểm tra
   [LocalizationKey.DOING_TEST]: "Làm bài kiểm tra",
   [LocalizationKey.WORD_QUESTION]: "Câu hỏi",
   [LocalizationKey.ST_ENTER_YOUR_ANSWER]: "Nhập câu trả lời của bạn...",
   [LocalizationKey.WORD_SUBMIT]: "Nộp bài",
+  [LocalizationKey.WORD_MULTIPLE_CHOICE]: "Câu hỏi trắc nghiệm",
+  [LocalizationKey.WORD_ESSAY]: "Câu hỏi tự luận",
 
   [LocalizationKey.ST_SUBMITTING_TEST]: "Đang nộp bài kiểm tra",
   [LocalizationKey.ST_YOU_ARE_SURE_TO_SUBMIT]:
@@ -164,15 +168,47 @@ export const vn = {
   [LocalizationKey.WORD_NOTIFICAION]: "Thông báo",
   [LocalizationKey.ST_OUT_OF_TIME]: "Đã hết thời làm bài!",
 
-  [LocalizationKey.ST_NOTE_ADDITION_INFO]: "Nên nhập những mô tả của bạn liên quan đến dịch vụ bạn đang đăng ký.",
-  [LocalizationKey.ST_NOTE_UPLOAD_ADDITION_IMAGE]: "Nên tải lên những hình ảnh chứng minh bạn có thể làm tốt công việc: bằng cấp, công cụ lao động đầy đủ,...",
+  [LocalizationKey.ST_NOTE_ADDITION_INFO]:
+    "Nên nhập những mô tả của bạn liên quan đến dịch vụ bạn đang đăng ký.",
+  [LocalizationKey.ST_NOTE_UPLOAD_ADDITION_IMAGE]:
+    "Nên tải lên những hình ảnh chứng minh bạn có thể làm tốt công việc: bằng cấp, công cụ lao động đầy đủ,...",
   [LocalizationKey.WORD_NOTE]: "Lưu ý",
   [LocalizationKey.WORD_RATE]: "Đánh giá",
   [LocalizationKey.ST_NOTE_HAS_ANY_RATE]: "Chưa có đánh giá nào!",
 
-  [LocalizationKey.WORD_STATUS]: "Trạng thái",
-  [LocalizationKey.WORD_INITIAL]: "Đang gửi yêu cầu",
-  [LocalizationKey.WORD_PROHIBITIVE]: "Bị cấm",
-  [LocalizationKey.WORD_WORK]: "Đang hoạt động",
-  [LocalizationKey.WORD_DISABLE]: "Tạm dừng",
+
+  // constants/index.ts
+  [LocalizationKey.WORD_FREELANCER_WORK_STATUS]: "Trạng thái",
+  [LocalizationKey.WORD_FREELANCER_WORK_INITIAL]: "Khởi tạo",
+  [LocalizationKey.WORD_FREELANCER_WORK_PROHIBITIVE]: "Bị cấm",
+  [LocalizationKey.WORD_FREELANCER_WORK_WORK]: "Đang hoạt động",
+  [LocalizationKey.WORD_FREELANCER_WORK_DISABLE]: "Tạm dừng",
+  
+
+  [LocalizationKey.WORD_USER_STATUS_ACTIVE]: "Hoạt động",
+  [LocalizationKey.WORD_USER_STATUS_PROHIBITIVE]: "Bị cấm",
+
+  [LocalizationKey.WORD__1DAY]: "Gói lẻ (Làm 1 tuần)",
+  [LocalizationKey.WORD__1MONTH]: "1 tháng",
+  [LocalizationKey.WORD__2MONTH]: "2 tháng",
+  [LocalizationKey.WORD__3MONTH]: "3 tháng",
+  [LocalizationKey.WORD__4MONTH]: "4 tháng",
+
+  [LocalizationKey.WORD_PAYMENT_QR]: "Thanh toán QR",
+  [LocalizationKey.WORD_PAYMENT_CASH]: "Thanh toán tiền mặt",
+
+  [LocalizationKey.WORD_POSTSTATUS_INITIAL]: "Khởi tạo",
+  [LocalizationKey.WORD_POSTSTATUS_SCHEDULED]: "Đã lên lịch",
+  [LocalizationKey.WORD_POSTSTATUS_CANCELED]: "Đã huỷ",
+  [LocalizationKey.WORD_POSTSTATUS_DOING]: "Đang thực hiện",
+  [LocalizationKey.WORD_POSTSTATUS_COMPLETED]: "Đã hoàn tất",
+  [LocalizationKey.WORD_POSTSTATUS_FAILED]: "Thất bại",
+  [LocalizationKey.WORD_POSTSTATUS_PENDING]: "Chờ xử lý",
+  [LocalizationKey.WORD_POSTSTATUS_ACCEPTED]: "Đã chấp nhận",
+  [LocalizationKey.WORD_POSTSTATUS_REJECTED]: "Bị từ chối",
+
+  [LocalizationKey.WORD_SCHEDULE_STATUS_INITIAL]: "Chưa thực hiện",
+  [LocalizationKey.WORD_SCHEDULE_STATUS_DOING]: "Đang thực hiện",
+  [LocalizationKey.WORD_SCHEDULE_STATUS_COMPLETED]: "Đã hoàn tất",
+  [LocalizationKey.WORD_SCHEDULE_STATUS_CANCELED]: "Đã huỷ",
 };

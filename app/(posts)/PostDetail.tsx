@@ -38,6 +38,7 @@ import FreelancerInfo from "@/components/post/FreelancerInfo";
 import { Divider } from "@/components/ui/divider";
 import PostDetailSkeleton from "@/components/skeleton/PostDetailSkeleton";
 import { useViewNotificationMutation } from "@/services";
+import { i18n } from "@/localization";
 
 const PostDetail = () => {
   const { takePostStatus, id, notificationId, status } = useLocalSearchParams();
@@ -80,7 +81,9 @@ const PostDetail = () => {
                     action="error"
                     variant="outline"
                   >
-                    <ToastTitle>Xem thông báo thất bại</ToastTitle>
+                    <ToastTitle>
+                      {i18n.t("st_view_failure_notification")}
+                    </ToastTitle>
                     <ToastDescription>
                       {res.error.data.message}
                     </ToastDescription>
@@ -126,7 +129,8 @@ const PostDetail = () => {
           return (
             <Toast nativeID={uniqueToastId} action="error" variant="outline">
               <ToastTitle>
-                {Mode[mode as keyof typeof Mode].value} công việc thất bại
+                {Mode[mode as keyof typeof Mode].value}{" "}
+                {i18n.t("stp_failed_job")}
               </ToastTitle>
               <ToastDescription>{res.error.data.message}</ToastDescription>
             </Toast>
@@ -142,9 +146,10 @@ const PostDetail = () => {
           const uniqueToastId = "toast-" + id;
           return (
             <Toast nativeID={uniqueToastId} action="success" variant="outline">
-              <ToastTitle>Thành công</ToastTitle>
+              <ToastTitle>{i18n.t("word_success")}</ToastTitle>
               <ToastDescription>
-                {Mode[mode as keyof typeof Mode].value} công việc thành công
+                {Mode[mode as keyof typeof Mode].value}{" "}
+                {i18n.t("stp_successful_job")}
               </ToastDescription>
             </Toast>
           );
@@ -180,7 +185,7 @@ const PostDetail = () => {
       />
       {post === null ? (
         <Box>
-          <Text>Công việc không tồn tại</Text>
+          <Text>{i18n.t("st_job_not_exist")}</Text>
         </Box>
       ) : (
         <>
@@ -196,21 +201,23 @@ const PostDetail = () => {
 
                 <Card size="md" variant="elevated" className="shadow-2xl">
                   <VStack space="md">
-                    <Heading>Thanh toán</Heading>
+                    <Heading>{i18n.t("word_checkout")}</Heading>
                     <VStack
                       space="md"
                       className="border p-4 rounded-lg border-secondary-50"
                     >
                       <HStack space="md" className="items-center">
                         <Text className="font-medium text-lg">
-                          Tổng thanh toán :
+                          {i18n.t("word_total_payment")}:
                         </Text>
                         <Text className="font-medium text-lg text-success-400">
                           {post.price.toLocaleString()} VND
                         </Text>
                       </HStack>
                       <HStack space="md" className="items-center">
-                        <Text className="font-medium text-lg">Hình thức :</Text>
+                        <Text className="font-medium text-lg">
+                          {i18n.t("word_method")}:
+                        </Text>
                         <HStack space="md" className="items-center">
                           <Text className="text-md">
                             <Ionicons
@@ -233,7 +240,7 @@ const PostDetail = () => {
                       </HStack>
                       <HStack space="md" className="items-center">
                         <Text className="font-medium text-lg">
-                          Trạng thái :
+                          {i18n.t("word_payment_status")}:
                         </Text>
                         <PaymentStatusBadge status={post.payment} />
                       </HStack>
@@ -243,7 +250,7 @@ const PostDetail = () => {
                 {post.customerNote && (
                   <Card size="md" variant="elevated" className="shadow-2xl">
                     <VStack space="md">
-                      <Heading>Ghi chú cho Freelancers</Heading>
+                      <Heading>{i18n.t("word_note_for_freelancer")}:</Heading>
                       <Text>{post.customerNote}</Text>
                     </VStack>
                   </Card>
@@ -268,7 +275,7 @@ const PostDetail = () => {
                       className="bg-error-400"
                       onPress={() => actionPost(Mode.REJECT.key)}
                     >
-                      <ButtonText>Từ chối</ButtonText>
+                      <ButtonText>{i18n.t("word_cancel")}</ButtonText>
                     </Button>
                   </VStack>
                   <VStack className="w-1/2">
@@ -278,7 +285,7 @@ const PostDetail = () => {
                       className="bg-success-300"
                       onPress={() => actionPost(Mode.ACCEPT.key)}
                     >
-                      <ButtonText>Chấp nhận</ButtonText>
+                      <ButtonText>{i18n.t("word_confirm")}</ButtonText>
                     </Button>
                   </VStack>
                 </HStack>
@@ -289,7 +296,7 @@ const PostDetail = () => {
                   className="bg-success-300"
                   onPress={() => actionPost(Mode.TAKE.key)}
                 >
-                  <ButtonText>Nhận việc</ButtonText>
+                  <ButtonText>{i18n.t("word_get_job")}</ButtonText>
                 </Button>
               )}
             </Box>
@@ -308,7 +315,7 @@ const PostDetail = () => {
                   className="bg-success-300"
                   onPress={() => actionPost(Mode.TAKE.key)}
                 >
-                  <ButtonText>Đăng lại</ButtonText>
+                  <ButtonText>{i18n.t("word_post_again")}</ButtonText>
                 </Button>
               </Box>
             )}
@@ -324,7 +331,7 @@ const PostDetail = () => {
                   className="bg-success-300"
                   onPress={() => actionPost(Mode.TAKE.key)}
                 >
-                  <ButtonText>Chọn Freelancer</ButtonText>
+                  <ButtonText>{i18n.t("word_choose_freelancer")}</ButtonText>
                 </Button>
               </Box>
             )}
@@ -345,16 +352,16 @@ const PostDetail = () => {
                       post,
                       post.workSchedules[post.numOfWorkedDay].status ===
                         WorkScheduleStatus.INITIAL.key
-                        ? "start"
-                        : "end"
+                        ? i18n.t("word_start_work")
+                        : i18n.t("word_end_work")
                     )
                   }
                 >
                   <ButtonText>
                     {post.workSchedules[post.numOfWorkedDay].status ===
                     WorkScheduleStatus.INITIAL.key
-                      ? "Bắt đầu làm"
-                      : "Hoàn thành công việc"}
+                      ? i18n.t("word_start_work")
+                      : i18n.t("word_end_work")}
                   </ButtonText>
                 </Button>
               </Box>

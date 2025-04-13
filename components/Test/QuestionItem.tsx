@@ -5,6 +5,7 @@ import MultipleChoiceQuestion from "./MultipleChoiceQuestion";
 import EssayQuestion from "./EssayQuestion";
 import { QuestionModel } from "@/types/workTypes";
 import { Text } from "@/components/ui/text";
+import { i18n } from "@/localization";
 
 const QuestionItem = ({
   questionNumber,
@@ -21,7 +22,7 @@ const QuestionItem = ({
 }) => (
   <View className="mb-5 p-3">
     <Text size="xl" className="font-semibold mb-2">
-      Question {questionNumber}: {item.content}
+      {i18n.t("word_question")} {questionNumber}: {item.content}
     </Text>
 
     {item.type === "MULTICHOICE" && (
@@ -33,7 +34,11 @@ const QuestionItem = ({
     )}
 
     {item.type === "ESSAY" && (
-      <EssayQuestion item={item} answers={answers} onEssayChange={onEssayChange} />
+      <EssayQuestion
+        item={item}
+        answers={answers}
+        onEssayChange={onEssayChange}
+      />
     )}
   </View>
 );

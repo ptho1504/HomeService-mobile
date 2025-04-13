@@ -1,13 +1,13 @@
-import React from 'react';
+import React from "react";
 
-import { Heading } from '@/components/ui/heading';
-import { Text } from '../ui/text';
-import { Card } from '../ui/card';
-import { Grid, GridItem } from '../ui/grid';
-import { VStack } from '../ui/vstack';
-import { Package } from '@/types/postTypes';
-import { isLoading } from 'expo-font';
-import { Mode } from '../list/PostList';
+import { Heading } from "@/components/ui/heading";
+import { Text } from "../ui/text";
+import { Card } from "../ui/card";
+import { Grid, GridItem } from "../ui/grid";
+import { VStack } from "../ui/vstack";
+import { Package } from "@/types/postTypes";
+import { isLoading } from "expo-font";
+import { Mode } from "../list/PostList";
 import {
   AlertDialog,
   AlertDialogBackdrop,
@@ -15,8 +15,9 @@ import {
   AlertDialogHeader,
   AlertDialogBody,
   AlertDialogFooter,
-} from '../ui/alert-dialog';
-import { ButtonText, ButtonSpinner, Button } from '../ui/button';
+} from "../ui/alert-dialog";
+import { ButtonText, ButtonSpinner, Button } from "../ui/button";
+import { i18n } from "@/localization";
 
 interface Props {
   showAlertDialog: boolean;
@@ -41,7 +42,8 @@ const TakePostDialog = ({
       <AlertDialogContent>
         <AlertDialogHeader>
           <Heading className="text-typography-950 font-semibold" size="md">
-            Bạn có muốn {Mode[mode as keyof typeof Mode].value} công việc này?
+            {i18n.t("word_confirm_action")}{" "}
+            {Mode[mode as keyof typeof Mode].value} {i18n.t("word_job_this")}
           </Heading>
         </AlertDialogHeader>
         <AlertDialogBody className="mt-3 mb-4">
@@ -49,14 +51,14 @@ const TakePostDialog = ({
         </AlertDialogBody>
         <AlertDialogFooter className="">
           <Button variant="outline" action="secondary" onPress={handleClose}>
-            <ButtonText>Hủy</ButtonText>
+            <ButtonText>{i18n.t("word_cancel")}</ButtonText>
           </Button>
           <Button
             onPress={handleTakePost}
-            action={mode === Mode.REJECT.key ? 'negative' : 'positive'}
+            action={mode === Mode.REJECT.key ? "negative" : "positive"}
           >
             {isLoading && <ButtonSpinner className="text-secondary-50" />}
-            <ButtonText>Đồng ý</ButtonText>
+            <ButtonText>{i18n.t("word_confirm")}</ButtonText>
           </Button>
         </AlertDialogFooter>
       </AlertDialogContent>

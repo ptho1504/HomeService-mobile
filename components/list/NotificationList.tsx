@@ -1,4 +1,3 @@
-import { data, UserRole } from "@/constants";
 import { NotificationModel } from "@/types/userTypes";
 import { normalizeDateTime } from "@/utils/dateUtil";
 import { useRouter } from "expo-router";
@@ -10,11 +9,7 @@ import { Heading } from "../ui/heading";
 import { VStack } from "../ui/vstack";
 import { Text } from "../ui/text";
 import { useCallback, useState } from "react";
-import { useViewNotificationMutation } from "@/services";
-import { Toast, ToastDescription, ToastTitle, useToast } from "../ui/toast";
-import { Mode } from "./PostList";
-import { useSelector } from "react-redux";
-import { selectUser } from "@/store/reducers";
+import { i18n } from "@/localization";
 
 interface Props {
   notifications: NotificationModel[] | undefined;
@@ -26,10 +21,7 @@ interface Props {
 
 const NotificationList = ({ notifications, refetch }: Props) => {
   const router = useRouter();
-  const currentUser = useSelector(selectUser);
   const [refreshing, setRefreshing] = useState(false);
-
-  const toast = useToast();
 
   const handleViewNotification = async (
     userNotification: NotificationModel
@@ -59,7 +51,7 @@ const NotificationList = ({ notifications, refetch }: Props) => {
       >
         <Box className="flex flex-1 justify-center items-center">
           <Text className="text-lg text-center mt-10">
-            Không có thông báo mới
+            {i18n.t("st_not_has_any_new_notification")}
           </Text>
         </Box>
       </ScrollView>

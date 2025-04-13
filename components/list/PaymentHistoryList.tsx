@@ -1,23 +1,23 @@
-import { data, UserRole } from '@/constants';
-import { NotificationModel, PaymentHistoryModel } from '@/types/userTypes';
-import { normalizeDateTime } from '@/utils/dateUtil';
-import { useRouter } from 'expo-router';
-import moment from 'moment';
-import { Pressable, FlatList, RefreshControl, ScrollView } from 'react-native';
-import { Box } from '../ui/box';
-import { Card } from '../ui/card';
-import { Heading } from '../ui/heading';
-import { VStack } from '../ui/vstack';
-import { Text } from '../ui/text';
-import { useCallback, useState } from 'react';
-import { useViewNotificationMutation } from '@/services';
-import { Toast, ToastDescription, ToastTitle, useToast } from '../ui/toast';
-import { Mode } from './PostList';
-import { useSelector } from 'react-redux';
-import { selectUser } from '@/store/reducers';
-import { Divider } from '../ui/divider';
-import { ButtonText, Button } from '../ui/button';
-import { Icon, CloseIcon } from '../ui/icon';
+import { data, UserRole } from "@/constants";
+import { NotificationModel, PaymentHistoryModel } from "@/types/userTypes";
+import { normalizeDateTime } from "@/utils/dateUtil";
+import { useRouter } from "expo-router";
+import moment from "moment";
+import { Pressable, FlatList, RefreshControl, ScrollView } from "react-native";
+import { Box } from "../ui/box";
+import { Card } from "../ui/card";
+import { Heading } from "../ui/heading";
+import { VStack } from "../ui/vstack";
+import { Text } from "../ui/text";
+import { useCallback, useState } from "react";
+import { useViewNotificationMutation } from "@/services";
+import { Toast, ToastDescription, ToastTitle, useToast } from "../ui/toast";
+import { Mode } from "./PostList";
+import { useSelector } from "react-redux";
+import { selectUser } from "@/store/reducers";
+import { Divider } from "../ui/divider";
+import { ButtonText, Button } from "../ui/button";
+import { Icon, CloseIcon } from "../ui/icon";
 import {
   ModalBackdrop,
   ModalContent,
@@ -26,8 +26,9 @@ import {
   ModalBody,
   ModalFooter,
   Modal,
-} from '../ui/modal';
-import { HStack } from '../ui/hstack';
+} from "../ui/modal";
+import { HStack } from "../ui/hstack";
+import { i18n } from "@/localization";
 
 interface Props {
   paymentHitories: PaymentHistoryModel[] | undefined;
@@ -58,7 +59,7 @@ const PaymentHistoryList = ({ paymentHitories, refetch }: Props) => {
       >
         <Box className="flex flex-1 justify-center items-center">
           <Text className="text-lg text-center mt-10">
-            Không có lịch sử giao dịch mới
+            {i18n.t("st_no_new_transaction_history")}
           </Text>
         </Box>
       </ScrollView>
@@ -77,25 +78,27 @@ const PaymentHistoryList = ({ paymentHitories, refetch }: Props) => {
           <Divider></Divider>
           <Box
             className={`${
-              pressed ? 'opacity-50' : ''
+              pressed ? "opacity-50" : ""
             } flex flex-row justify-between items-center`}
           >
             <VStack space="xs">
               <Text className="font-medium text-lg">
-                {item.amount > 0 ? 'Nạp tiền' : 'Rút tiền'}
+                {item.amount > 0
+                  ? i18n.t("word_top_up")
+                  : i18n.t("word_withdraw")}
               </Text>
               <Text className="">
                 {moment(normalizeDateTime(item.createdAt))?.format(
-                  'DD/MM/YYYY HH:mm:ss',
+                  "DD/MM/YYYY HH:mm:ss"
                 )}
               </Text>
             </VStack>
             <Text
               className={`font-medium text-lg ${
-                item.amount > 0 ? 'text-success-400' : 'text-error-400'
+                item.amount > 0 ? "text-success-400" : "text-error-400"
               }`}
             >
-              {item.amount > 0 ? '+' : '-'}{' '}
+              {item.amount > 0 ? "+" : "-"}{" "}
               {Math.abs(item.amount).toLocaleString()} VND
             </Text>
           </Box>
@@ -108,7 +111,7 @@ const PaymentHistoryList = ({ paymentHitories, refetch }: Props) => {
     <>
       <FlatList
         data={paymentHitories}
-        keyExtractor={item => item.id}
+        keyExtractor={(item) => item.id}
         renderItem={renderItem}
         refreshControl={
           <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
@@ -126,7 +129,7 @@ const PaymentHistoryList = ({ paymentHitories, refetch }: Props) => {
           <ModalContent>
             <ModalHeader>
               <Heading size="lg" className="text-typography-950 mb-4">
-                Chi tiết giao dịch
+                {i18n.t("word_transaction_details")}
               </Heading>
               <ModalCloseButton
                 onPress={() => {
@@ -143,29 +146,36 @@ const PaymentHistoryList = ({ paymentHitories, refetch }: Props) => {
             <ModalBody>
               <VStack space="md">
                 <HStack>
-                  <Text className="text-md font-medium">Mã giao dịch : </Text>
+                  <Text className="text-md font-medium">
+                    {i18n.t("word_transaction_code")}:{" "}
+                  </Text>
                   <Text>{paymentHistory.refId}</Text>
                 </HStack>
                 <HStack className="items-center">
                   <Text className="text-md font-medium">
-                    {paymentHistory.amount > 0 ? 'Nạp' : 'Rút'} tiền :{' '}
+                    {paymentHistory.amount > 0
+                      ? i18n.t("word_top_up")
+                      : i18n.t("word_withdraw")}
+                    {": "}
                   </Text>
                   <Text
                     className={`font-medium ${
                       paymentHistory.amount > 0
-                        ? 'text-success-400'
-                        : 'text-error-400'
+                        ? "text-success-400"
+                        : "text-error-400"
                     }`}
                   >
                     {Math.abs(paymentHistory.amount).toLocaleString()} VND
                   </Text>
                 </HStack>
                 <HStack>
-                  <Text className="text-md font-medium">Ngày giao dịch : </Text>
+                  <Text className="text-md font-medium">
+                    {i18n.t("word_transaction_date")}:{" "}
+                  </Text>
                   <Text>
                     {moment(
-                      normalizeDateTime(paymentHistory.createdAt),
-                    )?.format('DD/MM/YYYY HH:mm:ss')}
+                      normalizeDateTime(paymentHistory.createdAt)
+                    )?.format("DD/MM/YYYY HH:mm:ss")}
                   </Text>
                 </HStack>
               </VStack>

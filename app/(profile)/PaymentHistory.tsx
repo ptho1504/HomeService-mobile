@@ -32,6 +32,7 @@ import { VStack } from "@/components/ui/vstack";
 import { Heading } from "@/components/ui/heading";
 import { Divider } from "@/components/ui/divider";
 import { HStack } from "@/components/ui/hstack";
+import { i18n } from "@/localization";
 
 const PaymentHistory = () => {
   const currentUser = useSelector(selectUser);
@@ -68,7 +69,9 @@ const PaymentHistory = () => {
           const uniqueToastId = "toast-" + id;
           return (
             <Toast nativeID={uniqueToastId} action="error" variant="outline">
-              <ToastTitle>Lấy thông tin lịch sử giao dịch thất bại</ToastTitle>
+              <ToastTitle>
+                {i18n.t("st_failed_to_get_transaction_history")}
+              </ToastTitle>
               <ToastDescription>{error.data.message}</ToastDescription>
             </Toast>
           );
@@ -87,7 +90,9 @@ const PaymentHistory = () => {
         className="absolute h-[1000px] left-0 right-0 top-0"
       />
       <VStack space="lg" className="bg-success-300 m-5 p-5 rounded-md">
-        <Text className="text-2xl font-bold text-white">Số dư tài khoản</Text>
+        <Text className="text-2xl font-bold text-white">
+          {i18n.t("word_account_balance")}
+        </Text>
         <Box className="items-center bg-white rounded-md p-2">
           <Text className="text-2xl mt-1 font-bold text-success-300">
             {currentUser?.balance.toLocaleString("en-US")} VND
@@ -96,7 +101,7 @@ const PaymentHistory = () => {
       </VStack>
 
       <VStack space="md" className="mx-5 bg-white rounded-md shadow p-4 h-1/2">
-        <Heading>Lịch sử giao dịch</Heading>
+        <Heading>{i18n.t("word_transaction_history")}</Heading>
         {isFetching ? (
           <PaymentHistorySkeleton />
         ) : (
@@ -116,7 +121,7 @@ const PaymentHistory = () => {
               className="bg-success-300"
               onPress={handleRecharge}
             >
-              <ButtonText>Nạp tiền</ButtonText>
+              <ButtonText>{i18n.t("word_top_up")}</ButtonText>
             </Button>
           </VStack>
           <VStack className="w-1/2">
@@ -126,7 +131,7 @@ const PaymentHistory = () => {
               className="bg-info-300"
               onPress={handleWithdraw}
             >
-              <ButtonText>Rút tiền</ButtonText>
+              <ButtonText>{i18n.t("word_withdraw")}</ButtonText>
             </Button>
           </VStack>
         </HStack>

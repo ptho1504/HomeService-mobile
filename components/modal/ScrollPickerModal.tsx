@@ -1,11 +1,11 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState } from "react";
 
-import { HStack } from '@/components/ui/hstack';
+import { HStack } from "@/components/ui/hstack";
 
-import { Heading } from '@/components/ui/heading';
+import { Heading } from "@/components/ui/heading";
 
-import { ButtonText, Button } from '@/components/ui/button';
-import ScrollPicker from 'react-native-wheel-scrollview-picker';
+import { ButtonText, Button } from "@/components/ui/button";
+import ScrollPicker from "react-native-wheel-scrollview-picker";
 import {
   ModalBackdrop,
   ModalContent,
@@ -13,7 +13,8 @@ import {
   ModalBody,
   ModalFooter,
   Modal,
-} from '@/components/ui/modal';
+} from "@/components/ui/modal";
+import { i18n } from "@/localization";
 
 interface Props {
   showPickerModal: boolean;
@@ -51,14 +52,14 @@ const ScrollPickerModal = ({
       <ModalContent>
         <ModalHeader>
           <Heading size="md" className="text-typography-950">
-            Chọn giờ làm
+            {i18n.t("word_select_work_hour")}
           </Heading>
         </ModalHeader>
         <ModalBody>
           <HStack space="xl">
             <ScrollPicker
               dataSource={hours}
-              selectedIndex={hours.findIndex(value => value === selectedHour)}
+              selectedIndex={hours.findIndex((value) => value === selectedHour)}
               onValueChange={(data, selectedIndex) => {
                 setSelectedHour(hours[selectedIndex]);
               }}
@@ -71,7 +72,7 @@ const ScrollPickerModal = ({
             <ScrollPicker
               dataSource={minutes}
               selectedIndex={minutes.findIndex(
-                value => value === selectedMinute,
+                (value) => value === selectedMinute
               )}
               onValueChange={(data, selectedIndex) => {
                 setSelectedMinute(minutes[selectedIndex]);
@@ -92,14 +93,14 @@ const ScrollPickerModal = ({
               setShowPickerModal(false);
             }}
           >
-            <ButtonText>Hủy</ButtonText>
+            <ButtonText>{i18n.t("word_cancel")}</ButtonText>
           </Button>
           <Button
             className="bg-success-400"
             action="positive"
             onPress={handleApplyTime}
           >
-            <ButtonText>Áp dụng</ButtonText>
+            <ButtonText>{i18n.t("word_apply_action")}</ButtonText>
           </Button>
         </ModalFooter>
       </ModalContent>

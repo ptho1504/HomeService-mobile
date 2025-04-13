@@ -1,14 +1,15 @@
-import React from 'react';
+import React from "react";
 
-import { Heading } from '@/components/ui/heading';
-import { Text } from '../ui/text';
-import { Pressable, Switch } from 'react-native';
-import { Card } from '../ui/card';
-import { Grid, GridItem } from '../ui/grid';
-import { VStack } from '../ui/vstack';
-import { Package } from '@/types/postTypes';
-import Ionicons from '@expo/vector-icons/Ionicons';
-import { HStack } from '../ui/hstack';
+import { Heading } from "@/components/ui/heading";
+import { Text } from "../ui/text";
+import { Pressable, Switch } from "react-native";
+import { Card } from "../ui/card";
+import { Grid, GridItem } from "../ui/grid";
+import { VStack } from "../ui/vstack";
+import { Package } from "@/types/postTypes";
+import Ionicons from "@expo/vector-icons/Ionicons";
+import { HStack } from "../ui/hstack";
+import { i18n } from "@/localization";
 
 interface Props {
   chooseFreelancers: boolean;
@@ -19,7 +20,7 @@ const PostOption = ({ chooseFreelancers, toggleSwitch }: Props) => {
   return (
     <Card size="md" variant="elevated">
       <VStack space="md">
-        <Heading>Tùy chọn</Heading>
+        <Heading>{i18n.t("word_option")}</Heading>
 
         <VStack space="lg">
           <HStack space="sm" className="items-center justify-between">
@@ -27,7 +28,9 @@ const PostOption = ({ chooseFreelancers, toggleSwitch }: Props) => {
               <Text className="text-success-400 text-md">
                 <Ionicons name="people-outline" size={24} />
               </Text>
-              <Text className="text-lg font-medium">Tự chọn freelancers</Text>
+              <Text className="text-lg font-medium">
+                {i18n.t("word_select_freelancer")}
+              </Text>
 
               <Text className="text-success-400 text-md">
                 <Ionicons name="help-circle-outline" size={16} />
@@ -35,8 +38,8 @@ const PostOption = ({ chooseFreelancers, toggleSwitch }: Props) => {
             </HStack>
 
             <Switch
-              trackColor={{ false: '#767577', true: '#D1FAE5' }}
-              thumbColor={chooseFreelancers ? '#22C55E' : '#f4f3f4'}
+              trackColor={{ false: "#767577", true: "#D1FAE5" }}
+              thumbColor={chooseFreelancers ? "#22C55E" : "#f4f3f4"}
               ios_backgroundColor="#3e3e3e"
               onValueChange={toggleSwitch}
               value={chooseFreelancers}

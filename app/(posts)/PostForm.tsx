@@ -1,6 +1,6 @@
-import React, { useEffect, useState } from 'react';
-import { SafeAreaView, ScrollView } from 'react-native';
-import { VStack } from '@/components/ui/vstack';
+import React, { useEffect, useState } from "react";
+import { SafeAreaView, ScrollView } from "react-native";
+import { VStack } from "@/components/ui/vstack";
 import {
   BabysittingModel,
   CreatePostModel,
@@ -8,43 +8,47 @@ import {
   HouseCleaningModel,
   HouseCleaningOption,
   Package,
-} from '@/types/postTypes';
-import { Box } from '@/components/ui/box';
+} from "@/types/postTypes";
+import { Box } from "@/components/ui/box";
 import {
   convertToTime,
   generateNext7Days,
   getWorkSchedulesByDaysOfWeek,
-} from '@/utils/dateUtil';
-import { Button, ButtonText } from '@/components/ui/button';
-import { router, useLocalSearchParams } from 'expo-router';
+} from "@/utils/dateUtil";
+import { Button, ButtonText } from "@/components/ui/button";
+import { router, useLocalSearchParams } from "expo-router";
 import {
   calculateBabysittingPrice,
   calculateHouseCleaningPrice,
-} from '@/utils/priceUtil';
-import { PackageName, WorkType } from '@/constants';
-import PackageSelect, { packages } from '@/components/post/PackageSelect';
-import PostOption from '@/components/post/PostOption';
-import WorkSchedule from '@/components/post/WorkSchedule';
+} from "@/utils/priceUtil";
+import { PackageName, WorkType } from "@/constants";
+import PackageSelect, { packages } from "@/components/post/PackageSelect";
+import PostOption from "@/components/post/PostOption";
+import WorkSchedule from "@/components/post/WorkSchedule";
 import HouseCleaningSelect, {
   houseCleaningOptions,
-} from '@/components/post/HouseCleaningSelect';
+} from "@/components/post/HouseCleaningSelect";
 import BabysittingSelect, {
   ageRange,
   babysittingDurations,
   numsOfBaby,
-} from '@/components/post/BabysittingSelect';
-import { useDispatch } from 'react-redux';
-import { setPostForm } from '@/store/reducers';
+} from "@/components/post/BabysittingSelect";
+import { useDispatch } from "react-redux";
+import { setPostForm } from "@/store/reducers";
 import {
   Toast,
   ToastDescription,
   ToastTitle,
   useToast,
-} from '@/components/ui/toast';
-import { LinearGradient } from 'expo-linear-gradient';
+} from "@/components/ui/toast";
+import { LinearGradient } from "expo-linear-gradient";
+import { i18n } from "@/localization";
 
-const userId = 'USER-1';
-const workId = 'WORK-1';
+import { getLocales } from 'expo-localization';
+i18n.locale = getLocales()[0].languageCode ?? "vn";
+
+const userId = "USER-1";
+const workId = "WORK-1";
 
 const HouseCleaningForm = () => {
   const dispatch = useDispatch();
@@ -59,7 +63,7 @@ const HouseCleaningForm = () => {
 
   const [chooseFreelancers, setChooseFreelancers] = useState<boolean>(false);
   const [workSchedules, setWorkSchedules] = useState<CreateWorkScheduleModel[]>(
-    [],
+    []
   );
 
   const [selectedHour, setSelectedHour] = useState<number>(7);
@@ -76,19 +80,19 @@ const HouseCleaningForm = () => {
 
     // Cập nhật danh sách `ages` dựa trên số lượng trẻ
     if (option > ages.length) {
-      setAges(prevAges => [
+      setAges((prevAges) => [
         ...prevAges,
         ...Array(option - prevAges.length).fill(ageRange[0].key),
       ]);
     } else {
-      setAges(prevAges => prevAges.slice(0, option));
+      setAges((prevAges) => prevAges.slice(0, option));
     }
   };
 
   const handleAddBaby = (childIndex: number, newAge: number) => {
     if (childIndex >= 0 && childIndex < ages.length) {
-      setAges(prevAges =>
-        prevAges.map((age, index) => (index === childIndex ? newAge : age)),
+      setAges((prevAges) =>
+        prevAges.map((age, index) => (index === childIndex ? newAge : age))
       );
     }
   };
@@ -100,14 +104,16 @@ const HouseCleaningForm = () => {
   const checkWorkSchedules = (): boolean => {
     if (workSchedules.length === 0) {
       toast.show({
-        placement: 'top',
+        placement: "top",
         duration: 3000,
         render: ({ id }) => {
-          const uniqueToastId = 'toast-' + id;
+          const uniqueToastId = "toast-" + id;
           return (
             <Toast nativeID={uniqueToastId} action="error" variant="outline">
-              <ToastTitle>Xử lý thất bại</ToastTitle>
-              <ToastDescription>Vui lòng chọn lịch làm việc</ToastDescription>
+              <ToastTitle>{i18n.t("st_process_failed")}</ToastTitle>
+              <ToastDescription>
+                {i18n.t("word_select_schedule")}
+              </ToastDescription>
             </Toast>
           );
         },
@@ -128,7 +134,7 @@ const HouseCleaningForm = () => {
           ? duration
           : selectedHouseCleaningOption.duration,
       price: price,
-      paymentType: '',
+      paymentType: "",
       totalFreelancer:
         workType === WorkType.BABYSITTING.key
           ? 1
@@ -138,14 +144,14 @@ const HouseCleaningForm = () => {
       chooseFreelancer: chooseFreelancers,
       workSchedules: workSchedules,
       customerId: userId,
-      addressId: '',
-      workId: workType === WorkType.BABYSITTING.key ? 'WORK-2' : 'WORK-1',
+      addressId: "",
+      workId: workType === WorkType.BABYSITTING.key ? "WORK-2" : "WORK-1",
       payment: false,
     };
     if (workType === WorkType.BABYSITTING.key) {
       const babysitting: BabysittingModel = {
         numOfBaby: numOfBaby,
-        babies: ages.map(age => ({ age })),
+        babies: ages.map((age) => ({ age })),
       };
       createPost.babysitting = babysitting;
     } else {
@@ -166,7 +172,7 @@ const HouseCleaningForm = () => {
     const days: Date[] = generateNext7Days();
     setDays(days);
     const initWorkSchedule: CreateWorkScheduleModel = { date: days[0] };
-    setWorkSchedules(prevWorkSchedules => [
+    setWorkSchedules((prevWorkSchedules) => [
       ...prevWorkSchedules,
       initWorkSchedule,
     ]);
@@ -178,14 +184,14 @@ const HouseCleaningForm = () => {
       calculatedPrice = calculateBabysittingPrice(
         numOfBaby,
         duration,
-        workSchedules.length,
+        workSchedules.length
       );
     } else {
       calculatedPrice = calculateHouseCleaningPrice(
         selectedHouseCleaningOption.area,
         selectedHouseCleaningOption.totalFreelancers,
         selectedHouseCleaningOption.duration,
-        workSchedules.length,
+        workSchedules.length
       );
     }
     setPrice(calculatedPrice);
@@ -198,7 +204,7 @@ const HouseCleaningForm = () => {
   const handlePackageSelect = (pack: Package) => {
     setSelectedPackage(pack);
     setWorkSchedules(
-      pack.key === PackageName._1DAY.key ? [{ date: days[0] }] : [],
+      pack.key === PackageName._1DAY.key ? [{ date: days[0] }] : []
     );
     setDaysOfWeek([]);
   };
@@ -210,7 +216,7 @@ const HouseCleaningForm = () => {
   const handleAddWorkScheduleByDayOfWeek = (dayOfWeek: string) => {
     let updatedDaysOfWeek: string[];
     if (daysOfWeek.includes(dayOfWeek)) {
-      updatedDaysOfWeek = daysOfWeek.filter(day => day !== dayOfWeek);
+      updatedDaysOfWeek = daysOfWeek.filter((day) => day !== dayOfWeek);
       setDaysOfWeek(updatedDaysOfWeek);
     } else {
       updatedDaysOfWeek = [...daysOfWeek, dayOfWeek];
@@ -219,8 +225,8 @@ const HouseCleaningForm = () => {
     const updatedWorkSchedules: CreateWorkScheduleModel[] =
       getWorkSchedulesByDaysOfWeek(
         updatedDaysOfWeek,
-        selectedPackage.month,
-      ).map(date => ({ date }));
+        selectedPackage.month
+      ).map((date) => ({ date }));
     setWorkSchedules(updatedWorkSchedules);
   };
 
@@ -228,7 +234,7 @@ const HouseCleaningForm = () => {
     <SafeAreaView className="flex h-full">
       <LinearGradient
         // Background Linear Gradient
-        colors={['#ebf7eb', 'transparent', '#ffffff']}
+        colors={["#ebf7eb", "transparent", "#ffffff"]}
         className="absolute h-[1000px] left-0 right-0 top-0"
       />
       <ScrollView>
@@ -284,7 +290,9 @@ const HouseCleaningForm = () => {
           action="positive"
         >
           <ButtonText>{price.toLocaleString()} VND</ButtonText>
-          <ButtonText className="text-md font-normal">Tiếp theo</ButtonText>
+          <ButtonText className="text-md font-normal">
+            {i18n.t("word_next")}
+          </ButtonText>
         </Button>
       </Box>
     </SafeAreaView>

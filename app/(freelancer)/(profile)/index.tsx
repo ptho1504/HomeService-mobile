@@ -60,7 +60,7 @@ const Profile = () => {
     console.log("Finace Mode");
     router.push("/(profile)/PaymentHistory");
   };
-  
+
   const handleAdd = () => {
     console.log("Add a service");
     router.push("/(services)/add-service");
@@ -168,7 +168,7 @@ const Profile = () => {
                       {/* <View className="bg-[#66B584] rounded-md"> */}
                       <View className="bg-success-400 rounded-md">
                         <Text className="text-md text-white px-2 py-1">
-                          Cập nhập
+                          {i18n.t("word_update")}
                         </Text>
                       </View>
                     </Pressable>
@@ -184,7 +184,8 @@ const Profile = () => {
                   {/* Phone */}
                   <HStack>
                     <Text className="text-lg text-white font-medium">
-                      {i18n.t("phone")}: {currentUser?.phoneNumber || "Chưa có"}
+                      {i18n.t("phone")}:{" "}
+                      {currentUser?.phoneNumber || i18n.t("word_not_available")}
                     </Text>
                   </HStack>
 

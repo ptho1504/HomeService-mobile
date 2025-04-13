@@ -32,6 +32,7 @@ import {
 import PostInfo from "@/components/post/PostInfo";
 import PostAddress from "@/components/post/PostAddress";
 import { LinearGradient } from "expo-linear-gradient";
+import { i18n } from "@/localization";
 
 const options: HouseCleaningOption[] = [
   { area: 60, totalFreelancers: 2, duration: 3 },
@@ -77,7 +78,7 @@ const Checkout = () => {
             const uniqueToastId = "toast-" + id;
             return (
               <Toast nativeID={uniqueToastId} action="error" variant="outline">
-                <ToastTitle>Đăng công việc thất bại</ToastTitle>
+                <ToastTitle>{i18n.t("st_post_job_failed")}</ToastTitle>
                 <ToastDescription>{res.error.data.message}</ToastDescription>
               </Toast>
             );
@@ -95,8 +96,10 @@ const Checkout = () => {
                 action="success"
                 variant="outline"
               >
-                <ToastTitle>Thành công</ToastTitle>
-                <ToastDescription>Đăng công việc thành công</ToastDescription>
+                <ToastTitle>{i18n.t("word_success")}</ToastTitle>
+                <ToastDescription>
+                  {i18n.t("st_post_job_success")}
+                </ToastDescription>
               </Toast>
             );
           },
@@ -122,7 +125,7 @@ const Checkout = () => {
             <PostInfo workType={workType} postForm={postForm} />
             <Card size="md" variant="elevated" className="shadow-2xl">
               <VStack space="md">
-                <Heading>Hình thức thanh toán</Heading>
+                <Heading>{i18n.t("word_payment_method")}</Heading>
                 <VStack
                   space="md"
                   className="border p-4 rounded-lg border-secondary-50"
@@ -140,7 +143,9 @@ const Checkout = () => {
                           <Text className="text-md">
                             <Ionicons name="qr-code-outline" size={20} />
                           </Text>
-                          <RadioLabel>Trừ vào số dư</RadioLabel>
+                          <RadioLabel>
+                            {i18n.t("word_deduct_from_balance")}
+                          </RadioLabel>
                         </HStack>
 
                         <RadioIndicator>
@@ -158,7 +163,7 @@ const Checkout = () => {
                           <Text className="text-md text-green-600">
                             <Ionicons name="cash-outline" size={20} />
                           </Text>
-                          <RadioLabel>Thanh toán tiền mặt</RadioLabel>
+                          <RadioLabel>{i18n.t("word_payment_cash")}</RadioLabel>
                         </HStack>
 
                         <RadioIndicator>
@@ -172,9 +177,9 @@ const Checkout = () => {
             </Card>
             <Card size="md" variant="elevated" className="shadow-2xl">
               <VStack space="md">
-                <Heading>Ghi chú cho Freelancers</Heading>
+                <Heading>{i18n.t("word_note_for_freelancer")}</Heading>
                 <Text className="text-gray-500">
-                  Ghi chú giúp Freelancers làm tốt hơn
+                  {i18n.t("st_note_description_for_freelancer")}
                 </Text>
                 <Textarea
                   size="md"
@@ -185,7 +190,7 @@ const Checkout = () => {
                   <TextareaInput
                     value={customerNote}
                     onChangeText={setCustomerNote}
-                    placeholder="Ghi chú dành cho Freelancers ở đây..."
+                    placeholder={i18n.t("word_note_placeholder_for_freelancer")}
                   />
                 </Textarea>
               </VStack>
@@ -204,7 +209,9 @@ const Checkout = () => {
       <Box className="sticky bg-white p-4 rounded-t-lg shadow-lg">
         <VStack space="md">
           <Box className="flex flex-row justify-between items-center">
-            <Text className="text-xl font-semibold">Tổng cộng:</Text>
+            <Text className="text-xl font-semibold">
+              {i18n.t("word_total_payment")}:
+            </Text>
             <Text className="text-xl font-semibold text-success-400">
               {postForm?.price.toLocaleString()} VND
             </Text>
@@ -216,7 +223,7 @@ const Checkout = () => {
             onPress={handlePost}
           >
             {isLoading && <ButtonSpinner className="text-secondary-50" />}
-            <ButtonText>Đăng việc</ButtonText>
+            <ButtonText>{i18n.t("word_post_a_job")}</ButtonText>
           </Button>
         </VStack>
       </Box>

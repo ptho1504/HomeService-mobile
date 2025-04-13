@@ -1,21 +1,22 @@
-import React, { useState } from 'react';
+import React, { useState } from "react";
 
-import { Heading } from '@/components/ui/heading';
-import { Text } from '../ui/text';
-import { Card } from '../ui/card';
-import { VStack } from '../ui/vstack';
-import { HStack } from '../ui/hstack';
-import { CreatePostModel, PostModel } from '@/types/postTypes';
-import { WorkType, PackageName } from '@/constants';
-import PostStatusBadge from '../badge/PostStatusBadge';
-import Ionicons from '@expo/vector-icons/Ionicons';
-import { Button, ButtonText } from '../ui/button';
+import { Heading } from "@/components/ui/heading";
+import { Text } from "../ui/text";
+import { Card } from "../ui/card";
+import { VStack } from "../ui/vstack";
+import { HStack } from "../ui/hstack";
+import { CreatePostModel, PostModel } from "@/types/postTypes";
+import { WorkType, PackageName } from "@/constants";
+import PostStatusBadge from "../badge/PostStatusBadge";
+import Ionicons from "@expo/vector-icons/Ionicons";
+import { Button, ButtonText } from "../ui/button";
+import { i18n } from "@/localization";
 
 export const numsOfBaby: number[] = [1, 2, 3];
 
 export const ageRange = [
-  { key: 6, value: 'Dưới 6 tuổi' },
-  { key: 11, value: '7 - 11 tuổi' },
+  { key: 6, value: i18n.t("word_under_6_years") },
+  { key: 11, value: i18n.t("word_under_6_yword_7_to_11_yearsears") },
 ];
 
 export const babysittingDurations: number[] = [3, 4, 5, 6, 7, 8];
@@ -28,7 +29,7 @@ const PostAddress = ({ canChange }: Props) => {
   return (
     <Card size="md" variant="elevated" className="shadow-2xl">
       <VStack space="md">
-        <Heading>Địa chỉ làm việc</Heading>
+        <Heading>{i18n.t("word_work_address")}</Heading>
         <VStack
           space="md"
           className="border p-4 rounded-lg border-secondary-50"
@@ -57,7 +58,7 @@ const PostAddress = ({ canChange }: Props) => {
                 className="rounded-2xl bg-success-300"
                 size="sm"
               >
-                <ButtonText>Thay đổi</ButtonText>
+                <ButtonText>{i18n.t("word_change")}</ButtonText>
               </Button>
             )}
           </HStack>

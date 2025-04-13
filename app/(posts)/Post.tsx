@@ -1,43 +1,42 @@
-import { Button, ButtonText } from '@/components/ui/button';
-import { router, useLocalSearchParams } from 'expo-router';
-import React, { useEffect } from 'react';
-import { SafeAreaView } from 'react-native';
-import { WorkType } from '@/constants';
-import { Box } from '@/components/ui/box';
-import { useGetPostsByCustomerIdQuery } from '@/services/post';
+import { Button, ButtonText } from "@/components/ui/button";
+import { router, useLocalSearchParams } from "expo-router";
+import React, { useEffect } from "react";
+import { SafeAreaView } from "react-native";
+import { WorkType } from "@/constants";
+import { Box } from "@/components/ui/box";
+import { useGetPostsByCustomerIdQuery } from "@/services/post";
 import {
   Toast,
   ToastDescription,
   ToastTitle,
   useToast,
-} from '@/components/ui/toast';
-import PostSkeleton from '@/components/skeleton/PostSkeleton';
-import PostList from '@/components/list/PostList';
-import { PostModel } from '@/types/postTypes';
-import { LinearGradient } from 'expo-linear-gradient';
+} from "@/components/ui/toast";
+import PostSkeleton from "@/components/skeleton/PostSkeleton";
+import PostList from "@/components/list/PostList";
+import { PostModel } from "@/types/postTypes";
+import { LinearGradient } from "expo-linear-gradient";
+import { i18n } from "@/localization";
 
-const userId = 'USER-1';
+const userId = "USER-1";
 
 const Post = () => {
   const { workType } = useLocalSearchParams();
   const { data, error, isFetching, refetch } = useGetPostsByCustomerIdQuery({
     id: userId,
-    workId: workType === WorkType.BABYSITTING.key ? 'WORK-2' : 'WORK-1',
+    workId: workType === WorkType.BABYSITTING.key ? "WORK-2" : "WORK-1",
   });
   const toast = useToast();
 
   useEffect(() => {
     if (error || (data && data.returnCode !== 1000)) {
       toast.show({
-        placement: 'top',
+        placement: "top",
         duration: 3000,
         render: ({ id }) => {
-          const uniqueToastId = 'toast-' + id;
+          const uniqueToastId = "toast-" + id;
           return (
             <Toast nativeID={uniqueToastId} action="error" variant="outline">
-              <ToastTitle>
-                Lấy thông tin các bài đăng công việc thất bại
-              </ToastTitle>
+              <ToastTitle>{i18n.t("st_get_post_info_failed")}</ToastTitle>
               <ToastDescription>{error.data.message}</ToastDescription>
             </Toast>
           );
@@ -54,7 +53,7 @@ const Post = () => {
           a.createdAt[2],
           a.createdAt[3],
           a.createdAt[4],
-          a.createdAt[5],
+          a.createdAt[5]
         );
         const dateB = new Date(
           b.createdAt[0],
@@ -62,7 +61,7 @@ const Post = () => {
           b.createdAt[2],
           b.createdAt[3],
           b.createdAt[4],
-          b.createdAt[5],
+          b.createdAt[5]
         );
         // Nếu các phần tử so sánh được bằng nhau, ưu tiên mảng có độ dài lớn hơn
         return dateB.getTime() - dateA.getTime();
@@ -73,7 +72,7 @@ const Post = () => {
     <SafeAreaView className="flex h-full relative">
       <LinearGradient
         // Background Linear Gradient
-        colors={['#ebf7eb', 'transparent', '#ffffff']}
+        colors={["#ebf7eb", "transparent", "#ffffff"]}
         className="absolute h-[1000px] left-0 right-0 top-0"
       />
       {isFetching ? (
@@ -89,7 +88,8 @@ const Post = () => {
           action="positive"
         >
           <ButtonText>
-            Đăng việc {WorkType[workType as keyof typeof WorkType].value}
+            {i18n.t("word_post_a_job")}{" "}
+            {WorkType[workType as keyof typeof WorkType].value}
           </ButtonText>
         </Button>
       </Box>

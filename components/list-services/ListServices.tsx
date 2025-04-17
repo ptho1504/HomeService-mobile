@@ -25,13 +25,13 @@ export interface IService {
 const services: IService[] = [
   {
     id: 1,
-    title: "Dọn dẹp",
+    title: WorkType.HOUSECLEANING.value,
     iconName: "cleaning-services",
     href: `/Post?workType=${WorkType.HOUSECLEANING.key}`,
   },
   {
     id: 2,
-    title: "Trông trẻ",
+    title: WorkType.BABYSITTING.value,
     iconName: "baby-changing-station",
     href: `/Post?workType=${WorkType.BABYSITTING.key}`,
   },

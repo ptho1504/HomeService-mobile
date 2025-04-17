@@ -1,19 +1,20 @@
-import React, { useState } from 'react';
+import React, { useState } from "react";
 
-import { Heading } from '@/components/ui/heading';
-import { Text } from '../ui/text';
-import { Pressable, ScrollView } from 'react-native';
-import { Card } from '../ui/card';
-import { VStack } from '../ui/vstack';
-import { HStack } from '../ui/hstack';
-import { HouseCleaningOption } from '@/types/postTypes';
-import { Grid, GridItem } from '../ui/grid';
+import { Heading } from "@/components/ui/heading";
+import { Text } from "../ui/text";
+import { Pressable, ScrollView } from "react-native";
+import { Card } from "../ui/card";
+import { VStack } from "../ui/vstack";
+import { HStack } from "../ui/hstack";
+import { HouseCleaningOption } from "@/types/postTypes";
+import { Grid, GridItem } from "../ui/grid";
+import { i18n } from "@/localization";
 
 export const numsOfBaby: number[] = [1, 2, 3];
 
 export const ageRange = [
-  { key: 6, value: 'Dưới 6 tuổi' },
-  { key: 11, value: '7 - 11 tuổi' },
+  { key: 6, value: i18n.t("word_under_6_years") },
+  { key: 11, value: i18n.t("word_7_to_11_years") },
 ];
 
 export const babysittingDurations: number[] = [3, 4, 5, 6, 7, 8];
@@ -39,19 +40,19 @@ const Babysitting = ({
     <>
       <Card size="md" variant="elevated">
         <VStack space="md">
-          <Heading>Số lượng trẻ</Heading>
+          <Heading>{i18n.t("word_children_quantity")}</Heading>
           <VStack space="md">
             <Grid
               className="gap-4"
               _extra={{
-                className: 'grid-cols-10',
+                className: "grid-cols-10",
               }}
             >
               {numsOfBaby.map((option, index) => (
                 <GridItem
                   key={index}
                   _extra={{
-                    className: 'col-span-3',
+                    className: "col-span-3",
                   }}
                 >
                   <Pressable
@@ -59,17 +60,20 @@ const Babysitting = ({
                     onPress={() => handleSelectNumOfBaby(option)}
                     className={`border rounded-lg py-4 px-6 ${
                       numOfBaby === option
-                        ? 'border-success-400 bg-success-0'
-                        : 'border-gray-400 bg-white'
+                        ? "border-success-400 bg-success-0"
+                        : "border-gray-400 bg-white"
                     }`}
                   >
                     <Text
                       size="lg"
                       className={`font-semibold ${
-                        numOfBaby === option ? 'text-success-400' : ''
+                        numOfBaby === option ? "text-success-400" : ""
                       }`}
                     >
-                      {option} trẻ
+                      {option}{" "}
+                      {option === 1
+                        ? i18n.t("word_baby_unit")
+                        : i18n.t("word_baby_unit_s")}
                     </Text>
                   </Pressable>
                 </GridItem>
@@ -79,35 +83,35 @@ const Babysitting = ({
               {Array.from({ length: numOfBaby }, (_, childIndex) => (
                 <VStack key={childIndex} space="md">
                   <Text className="text-lg font-semibold">
-                    Độ tuổi trẻ {childIndex + 1}:
+                    {i18n.t("word_children_age")} {childIndex + 1}:
                   </Text>
                   <Grid
                     className="gap-4"
                     _extra={{
-                      className: 'grid-cols-10',
+                      className: "grid-cols-10",
                     }}
                   >
                     {ageRange.map((age, index) => (
                       <GridItem
                         key={index}
                         _extra={{
-                          className: 'col-span-4',
+                          className: "col-span-4",
                         }}
                       >
                         <Pressable
                           onPress={() => handleAddBaby(childIndex, age.key)}
                           className={`border rounded-lg py-4 px-6 ${
                             ages[childIndex] === age.key
-                              ? 'border-success-400 bg-success-0'
-                              : 'border-gray-400 bg-white'
+                              ? "border-success-400 bg-success-0"
+                              : "border-gray-400 bg-white"
                           }`}
                         >
                           <Text
                             size="lg"
                             className={`font-semibold ${
                               ages[childIndex] === age.key
-                                ? 'text-success-400'
-                                : ''
+                                ? "text-success-400"
+                                : ""
                             }`}
                           >
                             {age.value}
@@ -124,19 +128,19 @@ const Babysitting = ({
       </Card>
       <Card size="md" variant="elevated">
         <VStack space="md">
-          <Heading>Thời lượng</Heading>
+          <Heading>{i18n.t("word_duration")} </Heading>
           <VStack space="sm">
             <Grid
               className="gap-4"
               _extra={{
-                className: 'grid-cols-10',
+                className: "grid-cols-10",
               }}
             >
               {babysittingDurations.map((option, index) => (
                 <GridItem
                   key={index}
                   _extra={{
-                    className: 'col-span-3',
+                    className: "col-span-3",
                   }}
                 >
                   <Pressable
@@ -144,18 +148,21 @@ const Babysitting = ({
                     onPress={() => handleSelectDuration(option)}
                     className={`border rounded-lg p-4 ${
                       duration === option
-                        ? 'border-success-400 bg-success-0'
-                        : 'border-gray-400 bg-white'
+                        ? "border-success-400 bg-success-0"
+                        : "border-gray-400 bg-white"
                     }`}
                   >
                     <VStack>
                       <Text
                         size="lg"
                         className={`font-semibold ${
-                          duration === option ? 'text-success-400' : ''
+                          duration === option ? "text-success-400" : ""
                         }`}
                       >
-                        {option} giờ
+                        {option}{" "}
+                        {option === 1
+                          ? i18n.t("word_time_unit")
+                          : i18n.t("word_time_unit_s")}
                       </Text>
                     </VStack>
                   </Pressable>

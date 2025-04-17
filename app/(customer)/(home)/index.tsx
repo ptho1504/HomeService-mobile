@@ -59,7 +59,7 @@ const Home = () => {
           <Box className="w-full m-5 px-8 py-2 flex flex-row justify-between h-auto bg-green-300 rounded-full">
             <VStack>
               <Text size="xl" className="px-4 w-full text-white font-semibold">
-                Xin chào 👋,
+                {i18n.t("word_hello")} 👋,
               </Text>
               <Text size="xl" className="px-4 w-full text-white font-semibold">
                 {currentUser?.name}
@@ -82,7 +82,7 @@ const Home = () => {
             {!isAuthenticated && (
               <Pressable
                 onPress={() => {
-                  router.push('/(auth)/log-in')
+                  router.push("/(auth)/log-in");
                 }}
               >
                 {({ pressed }) => (

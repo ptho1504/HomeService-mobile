@@ -1,3 +1,4 @@
+import { i18n } from "@/localization";
 import React from "react";
 import { TouchableOpacity, Text, Animated } from "react-native";
 
@@ -53,7 +54,7 @@ const GettingStartedButton = ({ onPress }: Props) => {
           fontWeight: "600", // Tailwind: font-semibold
         }}
       >
-        Get Started
+        {i18n.t("word_get_started")}
       </Text>
     </AnimatedButton>
   );

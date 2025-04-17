@@ -1,5 +1,6 @@
-import { Stack } from 'expo-router';
-import 'react-native-reanimated';
+import { i18n } from "@/localization";
+import { Stack } from "expo-router";
+import "react-native-reanimated";
 
 export default function ListLayout() {
   return (
@@ -10,11 +11,17 @@ export default function ListLayout() {
     >
       <Stack.Screen
         name="FreelancerList"
-        options={{ headerShown: true, title: 'Chọn freelancers' }}
+        options={{
+          headerShown: true,
+          title: i18n.t("word_freelancer_list_title"),
+        }}
       />
       <Stack.Screen
         name="Freelancer"
-        options={{ headerShown: true, title: 'Thông tin Freelancer' }}
+        options={{
+          headerShown: true,
+          title: i18n.t("word_freelancer_info_title"),
+        }}
       />
     </Stack>
   );

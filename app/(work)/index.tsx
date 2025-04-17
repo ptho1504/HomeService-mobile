@@ -68,6 +68,7 @@ import {
 } from "@/components/ui/form-control";
 import { AlertCircleIcon } from "@/components/ui/icon";
 import DoWorkDialog from "@/components/dialog/DoWorkDialog";
+import { i18n } from "@/localization";
 
 const Work = () => {
   const { workType, status } = useLocalSearchParams();
@@ -127,7 +128,7 @@ const Work = () => {
           const uniqueToastId = "toast-" + id;
           return (
             <Toast nativeID={uniqueToastId} action="error" variant="outline">
-              <ToastTitle>Thất bại</ToastTitle>
+              <ToastTitle>{i18n.t("word_failure")}</ToastTitle>
               <ToastDescription>{res.error.data.message}</ToastDescription>
             </Toast>
           );
@@ -141,10 +142,11 @@ const Work = () => {
           const uniqueToastId = "toast-" + id;
           return (
             <Toast nativeID={uniqueToastId} action="success" variant="outline">
-              <ToastTitle>Thành công</ToastTitle>
+              <ToastTitle>{i18n.t("word_success")}</ToastTitle>
               <ToastDescription>
-                {workType === "start" ? "Bắt đầu" : "Kết thúc"} công việc thành
-                công
+                {workType === "start"
+                  ? i18n.t("st_start_work_success")
+                  : i18n.t("st_end_work_success")}
               </ToastDescription>
             </Toast>
           );
@@ -167,7 +169,7 @@ const Work = () => {
           const uniqueToastId = "toast-" + id;
           return (
             <Toast nativeID={uniqueToastId} action="error" variant="outline">
-              <ToastTitle>Bạn cần cấp quyền sử dụng tính năng này</ToastTitle>
+              <ToastTitle>{i18n.t("st_permission_required")}</ToastTitle>
             </Toast>
           );
         },
@@ -212,7 +214,7 @@ const Work = () => {
       />
       {post === null ? (
         <Box>
-          <Text>Công việc không tồn tại</Text>
+          <Text>{i18n.t("st_job_not_exist")}</Text>
         </Box>
       ) : (
         <>
@@ -227,11 +229,8 @@ const Work = () => {
                 <PostAddress canChange={false} />
                 <Card size="md" variant="elevated" className="shadow-2xl">
                   <VStack space="md">
-                    <Heading>Chụp hình minh chứng</Heading>
-                    <Text>
-                      Chụp 1 hoặc nhiều ảnh để minh chứng bản thân đã có mặt tại
-                      nơi làm việc
-                    </Text>
+                    <Heading>{i18n.t("st_take_picture_evidence")}</Heading>
+                    <Text>{i18n.t("st_take_one_or_more_pictures")}</Text>
                     <FormControl isInvalid={isInvalid} size="md">
                       <HStack space="md" className="flex flex-row flex-wrap">
                         {images.map(
@@ -279,7 +278,7 @@ const Work = () => {
                       <FormControlError className="mt-4">
                         <FormControlErrorIcon as={AlertCircleIcon} />
                         <FormControlErrorText>
-                          Vui lòng chụp hình minh chứng
+                          {i18n.t("st_please_take_evidence_picture")}
                         </FormControlErrorText>
                       </FormControlError>
                     </FormControl>
@@ -298,7 +297,9 @@ const Work = () => {
             >
               {isLoading && <ButtonSpinner className="text-secondary-50" />}
               <ButtonText>
-                {workType === "start" ? "Bắt đầu làm" : "Hoàn thành công việc"}
+                {workType === "start"
+                  ? i18n.t("st_start_work_success")
+                  : i18n.t("st_end_work_success")}
               </ButtonText>
             </Button>
           </Box>

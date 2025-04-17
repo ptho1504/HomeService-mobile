@@ -4,13 +4,14 @@ import Ionicons from '@expo/vector-icons/Ionicons';
 import { i18n, Language } from '@/localization';
 import { useSelector } from 'react-redux';
 import { selectUser } from '@/store/reducers';
+import { getLocales } from 'expo-localization';
 
 // Language
 
-// i18n.locale = getLocales()[0].languageCode ?? "vn";
-i18n.locale = 'vn';
-i18n.enableFallback = true;
-i18n.defaultLocale = Language.VIETNAMESE;
+i18n.locale = getLocales()[0].languageCode ?? "vn";
+// i18n.locale = 'vn';
+// i18n.enableFallback = true;
+// i18n.defaultLocale = Language.VIETNAMESE;
 
 export default function Layout() {
   return (

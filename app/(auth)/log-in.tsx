@@ -28,7 +28,6 @@ import {
   View,
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { getLocales } from 'expo-localization';
 import { i18n, Language } from '@/localization';
 import { Box } from '@/components/ui/box';
 import { Divider } from '@/components/ui/divider';
@@ -45,6 +44,7 @@ import {
 import { useDebounce, validateEmail } from '@/utils/helper';
 import { Text } from '@/components/ui/text';
 
+// import { getLocales } from 'expo-localization';
 // i18n.locale = getLocales()[0].languageCode ?? "vn";
 i18n.locale = 'vn';
 i18n.enableFallback = true;

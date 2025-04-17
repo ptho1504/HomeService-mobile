@@ -12,6 +12,7 @@ import {
   useToast,
 } from "@/components/ui/toast";
 import { useGetPaymentHistoriesQuery } from "@/services/users";
+import { i18n } from "@/localization";
 
 const PaymentQr = () => {
   const successUrl = "http://localhost:3000/success";
@@ -55,8 +56,10 @@ const PaymentQr = () => {
                       action="success"
                       variant="outline"
                     >
-                      <ToastTitle>Thành công</ToastTitle>
-                      <ToastDescription>Nạp tiền thành công</ToastDescription>
+                      <ToastTitle>{i18n.t("word_success")}</ToastTitle>
+                      <ToastDescription>
+                        {i18n.t("st_top_up_successfully")}
+                      </ToastDescription>
                     </Toast>
                   );
                 },

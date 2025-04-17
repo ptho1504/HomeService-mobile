@@ -85,8 +85,10 @@ const VerifySignUp = () => {
           {i18n.t("enter_verify")}
         </Text>
         <Text className="text-xl font-font-normal">
-          We are automatically send OTP to {" " + obfuscateEmail(email)} email.
-          Check your email
+          {i18n.t("st_send_otp_to_email")}
+          {": "}
+          {obfuscateEmail(email)}
+          {i18n.t("st_check_your_email")}
         </Text>
         {/* OTP */}
         <View className="my-5 w-full">

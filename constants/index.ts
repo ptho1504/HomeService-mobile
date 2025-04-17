@@ -194,12 +194,12 @@ export const PostStatus = {
 export const FreelancerWorkStatus = {
   INITIAL: {
     key: 'INITIAL',
-    value: i18n.t("word_freelancer_work_status"),
+    value: i18n.t("word_freelancer_work_initial"),
     bgColor: 'blue-400', // Màu xám cho trạng thái khởi tạo
   },
   PROHIBITIVE: {
     key: 'PROHIBITIVE',
-    value: i18n.t("word_freelancer_work_initial"),
+    value: i18n.t("word_freelancer_work_prohibitive"),
     bgColor: 'red-400', // Màu đỏ cho trạng thái bị hủy
   },
   WORK: {

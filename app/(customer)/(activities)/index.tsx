@@ -1,41 +1,42 @@
-import { Box } from '@/components/ui/box';
+import { Box } from "@/components/ui/box";
 import {
   Toast,
   ToastDescription,
   ToastTitle,
   useToast,
-} from '@/components/ui/toast';
-import { PackageName } from '@/constants';
-import React, { useEffect } from 'react';
-import { SafeAreaView } from 'react-native';
-import { Button, ButtonText } from '@/components/ui/button';
-import { router, useFocusEffect } from 'expo-router';
-import PostList from '@/components/list/PostList';
-import PostSkeleton from '@/components/skeleton/PostSkeleton';
-import { PostModel, RootStackParamList } from '@/types/postTypes';
-import { RouteProp } from '@react-navigation/native';
-import { useGetPostsByCustomerIdQuery } from '@/services/post';
-import { useSelector } from 'react-redux';
-import { selectIsAuthenticated, selectUser } from '@/store/reducers';
-import { LinearGradient } from 'expo-linear-gradient';
-import RequiredAuthenticationModal from '@/components/authentication/RequiredAuthenticationModal';
+} from "@/components/ui/toast";
+import { PackageName } from "@/constants";
+import React, { useEffect } from "react";
+import { SafeAreaView } from "react-native";
+import { Button, ButtonText } from "@/components/ui/button";
+import { router, useFocusEffect } from "expo-router";
+import PostList from "@/components/list/PostList";
+import PostSkeleton from "@/components/skeleton/PostSkeleton";
+import { PostModel, RootStackParamList } from "@/types/postTypes";
+import { RouteProp } from "@react-navigation/native";
+import { useGetPostsByCustomerIdQuery } from "@/services/post";
+import { useSelector } from "react-redux";
+import { selectIsAuthenticated, selectUser } from "@/store/reducers";
+import { LinearGradient } from "expo-linear-gradient";
+import RequiredAuthenticationModal from "@/components/authentication/RequiredAuthenticationModal";
+import { i18n } from "@/localization";
 
 interface Props {
   route:
-    | RouteProp<RootStackParamList, 'UpcomingWork'>
-    | RouteProp<RootStackParamList, 'PackageWork'>
-    | RouteProp<RootStackParamList, 'PastWork'>;
+    | RouteProp<RootStackParamList, "UpcomingWork">
+    | RouteProp<RootStackParamList, "PackageWork">
+    | RouteProp<RootStackParamList, "PastWork">;
 }
 
 const Posts = ({ route }: Props) => {
   const currentUser = useSelector(selectUser);
   const isAuthenticated = useSelector(selectIsAuthenticated);
-  const userId = currentUser?.id ? currentUser.id : '';
+  const userId = currentUser?.id ? currentUser.id : "";
   const { status } = route.params;
   const query =
-    status === 'UPCOMING'
+    status === "UPCOMING"
       ? { id: userId, packageName: PackageName._1DAY.key }
-      : status === 'PACKAGE'
+      : status === "PACKAGE"
       ? { id: userId, packageName: PackageName._1MONTH.key }
       : { id: userId };
 
@@ -47,15 +48,13 @@ const Posts = ({ route }: Props) => {
   useEffect(() => {
     if (error || (data && data.returnCode !== 1000)) {
       toast.show({
-        placement: 'top',
+        placement: "top",
         duration: 3000,
         render: ({ id }) => {
-          const uniqueToastId = 'toast-' + id;
+          const uniqueToastId = "toast-" + id;
           return (
             <Toast nativeID={uniqueToastId} action="error" variant="outline">
-              <ToastTitle>
-                Lấy thông tin các bài đăng công việc thất bại
-              </ToastTitle>
+              <ToastTitle>{i18n.t("st_get_post_info_failed")}</ToastTitle>
               <ToastDescription>{error.data.message}</ToastDescription>
             </Toast>
           );
@@ -77,7 +76,7 @@ const Posts = ({ route }: Props) => {
       } else {
         setShowModal(true); // Show the modal if not authenticated
       }
-    }, [isAuthenticated]),
+    }, [isAuthenticated])
   );
   return (
     <>
@@ -90,7 +89,7 @@ const Posts = ({ route }: Props) => {
         <SafeAreaView className="flex h-full bg-[#ebf7eb]">
           <LinearGradient
             // Background Linear Gradient
-            colors={['#ebf7eb', 'transparent', '#ffffff']}
+            colors={["#ebf7eb", "transparent", "#ffffff"]}
             className="absolute h-[1000px] left-0 right-0 top-0"
           />
           {isFetching ? (
@@ -100,12 +99,12 @@ const Posts = ({ route }: Props) => {
           )}
           <Box className="sticky bottom-0 p-4">
             <Button
-              onPress={() => router.push('../(home)')}
+              onPress={() => router.push("../(home)")}
               size="xl"
               className="bg-success-300 flex flex-row items-center justify-center"
               action="positive"
             >
-              <ButtonText>Đăng việc mới</ButtonText>
+              <ButtonText>{i18n.t("st_post_new_job")}</ButtonText>
             </Button>
           </Box>
         </SafeAreaView>

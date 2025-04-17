@@ -14,6 +14,7 @@ import { CloseIcon, Icon } from "../ui/icon";
 import { Text } from "../ui/text";
 import { Button, ButtonText } from "../ui/button";
 import { router } from "expo-router";
+import { i18n } from "@/localization";
 
 interface Props {
   showModal: boolean;
@@ -35,7 +36,7 @@ const RequiredAuthenticationModal = ({ showModal, setShowModal }: Props) => {
         <ModalContent>
           <ModalHeader>
             <Heading size="md" className="text-error-600">
-              Lỗi
+              {i18n.t("st_system_error")}
             </Heading>
             <ModalCloseButton
               onPress={() => {
@@ -52,7 +53,7 @@ const RequiredAuthenticationModal = ({ showModal, setShowModal }: Props) => {
           </ModalHeader>
           <ModalBody>
             <Text size="sm" className="text-typography-500">
-              Bạn cần phải đăng nhập để sử dụng dịch vụ
+              {i18n.t("word_require_login")}
             </Text>
           </ModalBody>
           <ModalFooter>
@@ -64,7 +65,7 @@ const RequiredAuthenticationModal = ({ showModal, setShowModal }: Props) => {
                 setShowModal(false);
               }}
             >
-              <ButtonText>Hủy bỏ</ButtonText>
+              <ButtonText>{i18n.t("word_cancel")}</ButtonText>
             </Button>
             <Button
               onPress={() => {
@@ -72,7 +73,7 @@ const RequiredAuthenticationModal = ({ showModal, setShowModal }: Props) => {
                 setShowModal(false);
               }}
             >
-              <ButtonText>Đăng nhập</ButtonText>
+              <ButtonText>{i18n.t("login")}</ButtonText>
             </Button>
           </ModalFooter>
         </ModalContent>

@@ -1,6 +1,7 @@
 import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs';
 import { RootStackParamList } from '@/types/postTypes';
 import Posts from '.';
+import { i18n } from '@/localization';
 
 const Tab = createMaterialTopTabNavigator<RootStackParamList>();
 
@@ -15,13 +16,13 @@ export default function ActivityLayout() {
     >
       <Tab.Screen
         name="NewPost"
-        options={{ title: 'Việc mới' }}
+        options={{ title: i18n.t("word_newpost") }}
         component={Posts} // Truyền component mà không cần hàm inline
         initialParams={{ status: 'NEW' }} // Truyền tham số
       />
       <Tab.Screen
         name="RequestPost"
-        options={{ title: 'Việc yêu cầu' }}
+        options={{ title: i18n.t("word_requestpost") }}
         component={Posts}
         initialParams={{ status: 'REQUEST' }}
       />

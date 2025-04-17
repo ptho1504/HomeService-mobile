@@ -63,7 +63,7 @@ const Service = () => {
         </Center>
         <HStack space="sm">
           <Text size="lg" className="font-bold">
-            {i18n.t("word_status")}:
+            {i18n.t("word_freelancer_work_status")}:
           </Text>
           <Text
             size="lg"

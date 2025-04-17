@@ -5,14 +5,13 @@ import OnboardItem from "./OnboardItem";
 import AntDesign from "@expo/vector-icons/AntDesign";
 import Paginator from "./Paginator";
 import { router } from "expo-router";
+import { i18n } from "@/localization";
 
 interface Props {
   onboardings: OnboardingItem[];
 }
 
 const Onboarding = ({ onboardings }: Props) => {
-  
-
   const scrollX = useRef(new Animated.Value(0)).current;
   const [currentIndex, setCurrentIndex] = useState(0);
   const viewableItemsChanged = useRef(
@@ -58,12 +57,12 @@ const Onboarding = ({ onboardings }: Props) => {
               className=""
               onPress={() => {
                 // router.replace('/(auth)/log-in');
-                router.replace('/(customer)/(home)');
+                router.replace("/(customer)/(home)");
                 // router.push(`/(auth)/verify?email=${email}&role=${role}`);
               }}
             >
               <Text className="text-black text-md p-5 font-normal text-xl">
-                Bỏ qua
+                {i18n.t("word_skip")}
               </Text>
             </TouchableOpacity>
             <TouchableOpacity
@@ -78,11 +77,11 @@ const Onboarding = ({ onboardings }: Props) => {
             <TouchableOpacity
               className=""
               onPress={() => {
-                router.replace('/(customer)/(home)');
+                router.replace("/(customer)/(home)");
               }}
             >
               <Text className="text-white text-lg font-semibold my-4 py-3 px-12 bg-green-600 rounded-full shadow-lg shadow-green-500">
-                Bắt đầu
+                {i18n.t("word_get_started")}
               </Text>
             </TouchableOpacity>
           </>

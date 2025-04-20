@@ -30,6 +30,7 @@ import { Divider } from "@/components/ui/divider";
 import StarRating from "@/components/badge/Rating";
 import LanguageToggleButton from "@/components/customeButton/LanguageToggleButton";
 import LanguageDropdown from "@/components/customeButton/LanguageDropdown";
+import { Config } from "@/config";
 // import { Config } from "@/config";
 i18n.locale = "vn";
 // i18n.enableFallback = true;

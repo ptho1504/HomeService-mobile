@@ -217,7 +217,8 @@ const Home = () => {
                 <Box className="flex flex-row gap-2 items-center">
                   <Ionicons name="globe-outline" size={32} color="white" />
                   <Text className="text-xl font-bold text-white">
-                    {i18n.t("st_switch_language_to")}{" :"}
+                    {i18n.t("st_switch_language_to")}
+                    {" :"}
                   </Text>
                 </Box>
                 <LanguageDropdown />

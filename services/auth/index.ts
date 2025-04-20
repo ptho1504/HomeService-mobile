@@ -1,13 +1,13 @@
-import { createApi } from '@reduxjs/toolkit/query';
-import { API } from '../base';
-import { Response } from '@/types/response';
-import { Address, BankAccount } from '@/types/types';
-import { FreelancerWorkModel } from '@/types/workTypes';
-import { UserModel } from '@/types/userTypes';
+import { createApi } from "@reduxjs/toolkit/query";
+import { API } from "../base";
+import { Response } from "@/types/response";
+import { Address, BankAccount } from "@/types/types";
+import { FreelancerWorkModel } from "@/types/workTypes";
+import { UserModel } from "@/types/userTypes";
 
 export interface LoginRequest {
   email: string;
-  role: 'FREELANCER' | 'CUSTOMER';
+  role: "FREELANCER" | "CUSTOMER";
   otp: string;
   firebaseToken: string;
 }
@@ -71,35 +71,38 @@ export interface VerifyJwtForUserRequest {
   jwt: string;
 }
 
-const baseUrl = '/auth';
+const baseUrl = "/auth";
 
 const authApi = API.injectEndpoints({
-  endpoints: build => ({
+  endpoints: (build) => ({
     login: build.mutation<Response<UserModel>, LoginRequest>({
-      query: credentials => ({
+      query: (credentials) => ({
         url: `${baseUrl}/logIn`,
-        method: 'POST',
+        method: "POST",
         body: credentials,
       }),
+      invalidatesTags: (result, error, login) => [
+        { type: "User" }, // Đánh dấu các cache liên quan cần làm mới
+      ],
     }),
     signup: build.mutation<Response<UserModel>, SignUpRequest>({
-      query: credentials => ({
+      query: (credentials) => ({
         url: `${baseUrl}/signUp`,
-        method: 'POST',
+        method: "POST",
         body: credentials,
       }),
     }),
     sendOtp: build.mutation<Response<{}>, SendOtpRequest>({
-      query: credentials => ({
+      query: (credentials) => ({
         url: `${baseUrl}/sendOtp`,
-        method: 'POST',
+        method: "POST",
         body: credentials,
       }),
     }),
     verifyOtp: build.mutation<Response<{}>, VerifyRequest>({
-      query: credentials => ({
+      query: (credentials) => ({
         url: `${baseUrl}/verifyOtp`,
-        method: 'POST',
+        method: "POST",
         body: credentials,
       }),
     }),
@@ -107,9 +110,9 @@ const authApi = API.injectEndpoints({
       Response<UserModel>,
       VerifyJwtForUserRequest
     >({
-      query: credentials => ({
+      query: (credentials) => ({
         url: `${baseUrl}/verifyJwtForUser`,
-        method: 'POST',
+        method: "POST",
         body: credentials,
       }),
     }),

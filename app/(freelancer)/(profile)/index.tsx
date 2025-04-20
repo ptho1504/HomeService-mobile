@@ -30,7 +30,9 @@ import { Divider } from "@/components/ui/divider";
 import StarRating from "@/components/badge/Rating";
 import LanguageToggleButton from "@/components/customeButton/LanguageToggleButton";
 import LanguageDropdown from "@/components/customeButton/LanguageDropdown";
-// i18n.locale = "vn";
+import { Config } from "@/config";
+// import { Config } from "@/config";
+i18n.locale = "vn";
 // i18n.enableFallback = true;
 // i18n.defaultLocale = Language.VIETNAMESE;
 
@@ -135,7 +137,10 @@ const Profile = () => {
                       <Image
                         size="md"
                         source={{
-                          uri: `${currentUser?.avatar}`,
+                          uri:
+                            Config.URL_PATH +
+                            currentUser.avatar +
+                            `?time=${Date.now()}`,
                         }}
                         alt={`${currentUser?.name}`}
                         className="rounded-full shadow-lg"

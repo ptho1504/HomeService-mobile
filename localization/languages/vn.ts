@@ -498,4 +498,5 @@ export const vn = {
   [LocalizationKey.ST_CHOOSE_WORK_DATE_AND_TIME]:
     "Chọn ngày làm việc và thời gian phù hợp",
   [LocalizationKey.WORD_CHOOSE_WORK_SCHEDULE]: "Chọn lịch làm việc",
+  [LocalizationKey.PLACEHOLDER_SEARCH_MAP]: 'Nhập địa chỉ của bạn',
 };

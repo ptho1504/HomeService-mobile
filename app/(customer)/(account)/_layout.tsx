@@ -26,6 +26,12 @@ export default function AccountLayout() {
           headerShown: false,
         }}
       />
+      <Stack.Screen
+        name="map-address"
+        options={{
+          headerShown: false,
+        }}
+      />
     </Stack>
   );
 }

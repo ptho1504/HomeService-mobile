@@ -17,7 +17,6 @@ const App = () => {
   const dispatch = useDispatch();
   const [loading, setLoading] = useState(true); // Ensure the app waits for initialization
   const [initialized, setInitialized] = useState(false);
-
   const [notification, setNotification] = useState<
     Notifications.Notification | undefined
   >(undefined);
@@ -42,7 +41,6 @@ const App = () => {
         return;
       } else if (response.data) {
         const user: UserModel = response.data.items;
-        dispatch(setUser(user));
         dispatch(authenticateUser(true));
         if (user.role === UserRole.CUSTOMER) {
           router.replace("/(customer)/(home)");
@@ -111,7 +109,6 @@ const App = () => {
   if (initialized) {
     return <Redirect href={"/(customer)/(home)"} />;
   }
-
   return null; // Prevent rendering until initialization is complete
 };
 

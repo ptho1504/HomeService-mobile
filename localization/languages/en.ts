@@ -493,4 +493,5 @@ export const en = {
   [LocalizationKey.ST_CHOOSE_WORK_DATE_AND_TIME]:
     "Choose a suitable work date and time",
   [LocalizationKey.WORD_CHOOSE_WORK_SCHEDULE]: "Choose work schedule",
+  [LocalizationKey.PLACEHOLDER_SEARCH_MAP]: "Enter your location",
 };

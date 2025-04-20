@@ -9,7 +9,7 @@ import { useEffect } from "react";
 // Language
 
 // i18n.locale = getLocales()[0].languageCode ?? "vn";
-// i18n.locale = 'vn';
+// i18n.locale = "vn";
 // i18n.enableFallback = true;
 // i18n.defaultLocale = Language.VIETNAMESE;
 
@@ -67,7 +67,8 @@ export default function Layout() {
         name="(account)"
         options={{
           title: i18n.t("account"),
-          headerShown: true,
+          headerShown: false,
+          headerShadowVisible: false,
           tabBarIcon: ({ color }) => (
             <Ionicons size={24} name="person-outline" color={color} />
           ),

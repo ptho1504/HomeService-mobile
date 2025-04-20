@@ -457,4 +457,5 @@ export enum LocalizationKey {
   WORD_WORK_SCHEDULE = "word_work_schedule",
   ST_CHOOSE_WORK_DATE_AND_TIME = "st_choose_work_date_and_time",
   WORD_CHOOSE_WORK_SCHEDULE = "word_choose_work_schedule",
+  PLACEHOLDER_SEARCH_MAP = "placer_holder_search_map",
 }

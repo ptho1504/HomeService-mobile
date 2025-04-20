@@ -24,6 +24,7 @@ import ListAddress from "@/components/account/ListAddress";
 import { useDispatch } from "react-redux";
 import { router, useFocusEffect } from "expo-router";
 import RequiredAuthenticationModal from "@/components/authentication/RequiredAuthenticationModal";
+import { useGetUserByIdQuery } from "@/services";
 i18n.locale = "vn";
 i18n.enableFallback = true;
 i18n.defaultLocale = Language.VIETNAMESE;
@@ -31,10 +32,11 @@ i18n.defaultLocale = Language.VIETNAMESE;
 const Home = () => {
   const currentUser = useSelector(selectUser);
   const isAuthenticated = useSelector(selectIsAuthenticated);
+
   // const isAuthenticated = true;
   const dispatch = useDispatch();
-
   // console.log("currentUser", currentUser);
+  
 
   const [refreshing, setRefreshing] = React.useState(false);
   const [showModal, setShowModal] = React.useState(!isAuthenticated);
@@ -114,9 +116,11 @@ const Home = () => {
               </Box>
 
               {/* Avatar */}
-              <Box className="
+              <Box
+                className="
               rounded-lg bg-success-200
-              border border-gray-100 w-full p-4 flex flex-row items-center gap-4">
+              border border-gray-100 w-full p-4 flex flex-row items-center gap-4"
+              >
                 {/* Avatar */}
                 <Pressable className="" onPress={() => setShowModalEdit(true)}>
                   {currentUser?.avatar && (
@@ -244,9 +248,15 @@ const Home = () => {
                 <View className="flex items-center w-full px-4 gap-3">
                   {currentUser?.addresses ? (
                     <>
-                      {[1, 2, 3].map((item, index) => (
-                        <ListAddress key={index} address={item as any} />
-                      ))}
+                      {/* {console.log(userWithAddress)} */}
+                      {/* {console.log(currentUser?.addresses)} */}
+                      {currentUser?.addresses.map(
+                        (item, index) =>
+                          item.id &&
+                          !item.deleted && (
+                            <ListAddress key={index} address={item as any} />
+                          )
+                      )}
                     </>
                   ) : (
                     <View>

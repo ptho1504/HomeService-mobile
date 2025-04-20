@@ -1,4 +1,4 @@
-import { FreelancerWorkModel } from './workTypes';
+import { FreelancerWorkModel } from "./workTypes";
 
 export interface AdminModel {
   jwt: string;
@@ -14,9 +14,9 @@ export interface UserModel {
   dob: Date;
   phoneNumber?: string;
   reputationPoint?: string;
-  status: 'ACTIVE' | 'PROHIBITIVE';
-  role: 'CUSTOMER' | 'FREELANCER';
-  gender: 'MALE' | 'FEMALE';
+  status: "ACTIVE" | "PROHIBITIVE";
+  role: "CUSTOMER" | "FREELANCER";
+  gender: "MALE" | "FEMALE";
   createdAt: number[];
   bankAccount?: BankAccountModel;
   addresses: AddressModel[];
@@ -56,11 +56,13 @@ export interface BankModel {
 }
 
 export interface AddressModel {
-  id: string;
+  id?: string;
   customerName: string;
   phoneNumber: string;
   detail: string;
   latitude: string;
-  longtitude: string;
+  longitude: string;
   default: boolean;
+  deleted?: boolean;
+  userId?: string;
 }

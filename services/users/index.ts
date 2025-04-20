@@ -1,22 +1,28 @@
-import { createApi } from '@reduxjs/toolkit/query';
-import { API } from '../base';
-import { Address, BankAccount } from '@/types/types';
-import { FreelancerWorkModel } from '@/types/workTypes';
+import { createApi } from "@reduxjs/toolkit/query";
+import { API } from "../base";
+import { Address, BankAccount, User } from "@/types/types";
+import { FreelancerWorkModel } from "@/types/workTypes";
 import {
+  AddressModel,
   NotificationModel,
   PaymentHistoryModel,
   UserModel,
-} from '@/types/userTypes';
-import { Response } from '@/types/response';
+} from "@/types/userTypes";
+import { Response } from "@/types/response";
+import { AddressPlaces, AddressType } from "@/types/addressType";
 
-const baseUrl = '/users';
+const baseUrl = "/users";
 
 const usersApi = API.injectEndpoints({
-  endpoints: build => ({
-    // getUser: build.query<User, string>({
-    //   query: (id) => `users/${id}`,
-    // }),
-
+  endpoints: (build) => ({
+    getUserById: build.query<UserModel, string>({
+      query: (id) => {
+        // console.log("id in api", id);
+        return `${baseUrl}/users/${id}`;
+      },
+      providesTags: (result) =>
+        result ? [{ type: "User", id: result.id }] : [],
+    }),
     getUsers: build.query<
       Response<UserModel[]>,
       {
@@ -31,16 +37,16 @@ const usersApi = API.injectEndpoints({
         const params = new URLSearchParams();
 
         if (page !== undefined) {
-          params.append('index', page.toString());
+          params.append("index", page.toString());
         }
         if (size !== undefined) {
-          params.append('size', size.toString());
+          params.append("size", size.toString());
         }
         if (role) {
-          params.append('freelancerId', role);
+          params.append("freelancerId", role);
         }
         if (postId) {
-          params.append('freelancerId', postId);
+          params.append("freelancerId", postId);
         }
         // Kết hợp base URL và query string
         return `${baseUrl}?${params.toString()}`;
@@ -78,7 +84,7 @@ const usersApi = API.injectEndpoints({
       query: ({ id, userId }) => {
         return {
           url: `${baseUrl}/notifications/${id}`,
-          method: 'PUT',
+          method: "PUT",
         };
       },
       async onQueryStarted(arg, { queryFulfilled, dispatch }) {
@@ -86,15 +92,54 @@ const usersApi = API.injectEndpoints({
         const { data } = await queryFulfilled;
         dispatch(
           usersApi.util.updateQueryData(
-            'getNotification',
+            "getNotification",
             { id: arg.userId },
-            draft => {
+            (draft) => {
               console.log(draft.items);
               draft.items = [];
-            },
-          ),
+            }
+          )
         );
       },
+    }),
+
+    createAddress: build.mutation<
+      Response<AddressModel>,
+      Partial<AddressModel>
+    >({
+      query: ({ userId, ...rest }) => ({
+        url: `${baseUrl}/${userId}/addresses`,
+        method: "POST",
+        body: rest,
+      }),
+      invalidatesTags: (result, error, createAddress) => [
+        { type: "Address", id: createAddress.userId }, // Đánh dấu các cache liên quan cần làm mới
+      ],
+    }),
+
+    getPlaceByInput: build.query<
+      Response<AddressPlaces[]>,
+      {
+        input: string;
+      }
+    >({
+      query: ({ input }) => {
+        // Kết hợp base URL và query string
+        return `addresses/googleMap/place?input=${input}`;
+      },
+    }),
+
+    deleteAddressById: build.mutation<Response<null>, string>({
+      query: (id) => {
+        console.log("deleteAddressById called with id:", id);
+        return {
+          url: `${baseUrl}/addresses/${id}`,
+          method: "DELETE",
+        };
+      },
+      invalidatesTags: (result, error, deleteAddressById) => [
+        { type: "User" }, // Đánh dấu các cache liên quan cần làm mới
+      ],
     }),
   }),
 });
@@ -104,4 +149,8 @@ export const {
   useGetNotificationQuery,
   useViewNotificationMutation,
   useGetPaymentHistoriesQuery,
+  useCreateAddressMutation,
+  useGetPlaceByInputQuery,
+  useDeleteAddressByIdMutation,
+  useGetUserByIdQuery,
 } = usersApi;

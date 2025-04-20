@@ -51,4 +51,5 @@ export enum LocalizationKey {
   WORKS = "workings",
   LIST_WORKS = "list_workings",
   ADD_WORKING = "add_workings",
+  PLACEHOLDER_SEARCH_MAP = "placer_holder_search_map",
 }

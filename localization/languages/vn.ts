@@ -57,4 +57,5 @@ export const vn = {
   [LocalizationKey.WORKS]: 'Danh sách dịch vụ của tôi',
   [LocalizationKey.ADD_WORKING]: 'Thêm dịch vụ',
   [LocalizationKey.LIST_WORKS]: 'Danh sách dịch vụ',
+  [LocalizationKey.PLACEHOLDER_SEARCH_MAP]: 'Nhập địa chỉ của bạn',
 };

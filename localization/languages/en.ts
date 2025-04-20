@@ -58,4 +58,5 @@ export const en = {
   [LocalizationKey.WORKS]: "My list services",
   [LocalizationKey.ADD_WORKING]: "Add a service",
   [LocalizationKey.LIST_WORKS]: "List services",
+  [LocalizationKey.PLACEHOLDER_SEARCH_MAP]: "Enter your location",
 };

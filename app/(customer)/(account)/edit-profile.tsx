@@ -138,9 +138,11 @@ const EditProfile = () => {
             ...currentUser!,
             name: response.data?.items.name ?? "Error",
             phoneNumber: response.data?.items.phoneNumber ?? "Error",
-            bankAccount: response.data?.items.bankAccount ?? {
-              bin: "Error",
-              accountNumber: "Error",
+            bankAccount: {
+              bank: {
+                bin: dataUpdated?.bankAccount?.bank.bin,
+              },
+              accountNumber: dataUpdated?.bankAccount?.accountNumber,
             },
           })
         );
@@ -478,11 +480,11 @@ const EditProfile = () => {
                             fontSize: 18,
                           }}
                         />
-                        {/* {formik.errors.bankAccount && (
+                        {formik.errors.bankAccount && (
                           <Text className="text-md font-medium text-error-500">
-                            {formik.errors.bankAccount}
+                            {formik.errors.bankAccount as string}
                           </Text>
-                        )} */}
+                        )}
                       </View>
                     )}
 

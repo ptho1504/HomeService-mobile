@@ -25,6 +25,7 @@ import { useDispatch } from "react-redux";
 import { router, useFocusEffect } from "expo-router";
 import RequiredAuthenticationModal from "@/components/authentication/RequiredAuthenticationModal";
 import ListWorking from "@/components/account/ListWorking";
+import { Config } from "@/config";
 i18n.locale = "vn";
 i18n.enableFallback = true;
 i18n.defaultLocale = Language.VIETNAMESE;
@@ -58,7 +59,7 @@ const Profile = () => {
     console.log("Finace Mode");
     router.push("/(profile)/PaymentHistory");
   };
-  
+
   const handleAdd = () => {
     console.log("Add a servuce");
     router.push("/(services)/add-service");
@@ -127,7 +128,10 @@ const Profile = () => {
                       <Image
                         size="md"
                         source={{
-                          uri: `${currentUser?.avatar}`,
+                          uri:
+                            Config.URL_PATH +
+                            currentUser.avatar +
+                            `?time=${Date.now()}`,
                         }}
                         alt={`${currentUser?.name}`}
                         className="rounded-full shadow-lg"

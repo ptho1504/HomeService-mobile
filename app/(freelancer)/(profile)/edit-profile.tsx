@@ -19,7 +19,7 @@ import Ionicons from "@expo/vector-icons/Ionicons";
 import { Button, ButtonSpinner, ButtonText } from "@/components/ui/button";
 import { useDispatch } from "react-redux";
 import { useSelector } from "react-redux";
-import { selectUser } from "@/store/reducers";
+import { selectUser, setAVTUser, setUser } from "@/store/reducers";
 import { useFormik } from "formik";
 import * as Yup from "yup";
 import { i18n, Language } from "@/localization";
@@ -29,11 +29,17 @@ import { Image } from "@/components/ui/image";
 import { Pressable } from "react-native";
 import * as ImagePicker from "expo-image-picker";
 import { BankModel } from "@/types/userTypes";
-import { useGetBanksQuery, usePostBanksMutation } from "@/services";
+import {
+  useGetBanksQuery,
+  usePostBanksMutation,
+  useUploadAVTMutation,
+  useUploadUserByIdMutation,
+} from "@/services";
 import { Picker } from "@react-native-picker/picker";
 import { BankAccount } from "@/types/types";
 import { useDebounce } from "@/utils/helper";
 import { LinearGradient } from "expo-linear-gradient";
+import { Config } from "@/config";
 
 i18n.locale = "vn";
 i18n.enableFallback = true;
@@ -56,7 +62,8 @@ const InforSchema = Yup.object().shape({
 const EditProfile = () => {
   const dispatch = useDispatch();
   const currentUser = useSelector(selectUser);
-
+  // console.log("BANK", currentUser?.bankAccount.bank);
+  // console.log("accountNumber", currentUser?.bankAccount.accountNumber);
   // State
   const [avt, setAvt] = useState<string | undefined>(currentUser?.avatar);
   const [isLoadingButton, setIsLoadingButton] = useState<boolean>(false);
@@ -69,7 +76,8 @@ const EditProfile = () => {
   const debounceAccountNumber = useDebounce(selectedAccountNumber, 500);
   // Call api
   const { data: banks, isLoading, error } = useGetBanksQuery();
-
+  const [uploadAVT, { data: urlPath, isLoading: AVTLoading, error: AVTError }] =
+    useUploadAVTMutation();
   const [userForEdit] = useState({
     name: currentUser?.name,
     // gender: currentUser?.gender,
@@ -80,7 +88,10 @@ const EditProfile = () => {
   });
 
   // console.log("SelectedBank", selectedBank);
-
+  const [
+    upLoadUserById,
+    { data: updatedUser, isLoading: upLoading, error: uploadError },
+  ] = useUploadUserByIdMutation();
   const formik = useFormik({
     initialValues: userForEdit,
     validationSchema: InforSchema,
@@ -98,9 +109,50 @@ const EditProfile = () => {
           },
         };
       }
-      console.log("Form submitted with values:", dataUpdated);
+      // console.log("Form submitted with values:", dataUpdated);
       try {
         setIsLoadingButton(true);
+        // console.log("name: ", dataUpdated.name);
+        // console.log("phoneNumber: ", dataUpdated.phoneNumber);
+        // console.log(
+        //   "accountNumber in updated: ",
+        //   dataUpdated.bankAccount?.accountNumber
+        // );
+        // console.log("bank in updated: ", dataUpdated.bankAccount?.bank);
+        const response = await upLoadUserById({
+          userId: currentUser?.id!,
+          body: {
+            name: values.name,
+            phoneNumber: values.phoneNumber,
+            bankAccount: {
+              bin:
+                dataUpdated?.bankAccount?.bank.bin ??
+                currentUser?.bankAccount.bank.bin,
+              accountNumber:
+                dataUpdated?.bankAccount?.accountNumber ??
+                currentUser?.bankAccount?.accountNumber,
+            },
+          },
+        });
+        // console.log("resposne", response);
+        if (!response.data?.items) {
+          Alert.alert("Error", "Failed to update user info.");
+          return;
+        }
+
+        dispatch(
+          setUser({
+            ...currentUser!,
+            name: response.data?.items.name ?? "Error",
+            phoneNumber: response.data?.items.phoneNumber ?? "Error",
+            bankAccount: {
+              bank: {
+                bin: dataUpdated?.bankAccount?.bank.bin,
+              },
+              accountNumber: dataUpdated?.bankAccount?.accountNumber,
+            },
+          })
+        );
         // const response = await update({
         //   ...values,
         // });
@@ -165,6 +217,22 @@ const EditProfile = () => {
       };
 
       // !TODO: Need api to update avt
+      const formData = new FormData();
+      formData.append("avatar", image as any);
+
+      try {
+        const res = await uploadAVT({
+          userId: currentUser?.id!,
+          formData,
+        });
+
+        dispatch(setAVTUser(res.data?.items!));
+
+        // Alert.alert("Thành công", "Cập nhật ảnh đại diện thành công!");
+      } catch (error) {
+        console.error("Error uploading avatar:", error);
+        Alert.alert("Lỗi", "Không thể cập nhật ảnh đại diện.");
+      }
     }
   };
   const handleChangeAccountNumber = async (text: string) => {
@@ -266,7 +334,10 @@ const EditProfile = () => {
                           <Image
                             size="xl"
                             source={{
-                              uri: `${avt}`,
+                              uri:
+                                Config.URL_PATH +
+                                currentUser?.avatar +
+                                `?time=${Date.now()}`,
                             }}
                             alt={`${currentUser?.name}`}
                             className="rounded-full shadow-lg"
@@ -421,7 +492,7 @@ const EditProfile = () => {
                         />
                         {formik.errors.bankAccount && (
                           <Text className="text-md font-medium text-error-500">
-                            {formik.errors.bankAccount}
+                            {formik.errors.bankAccount as string}
                           </Text>
                         )}
                       </View>

@@ -18,7 +18,7 @@ export interface UserModel {
   role: "CUSTOMER" | "FREELANCER";
   gender: "MALE" | "FEMALE";
   createdAt: number[];
-  bankAccount?: BankAccountModel;
+  bankAccount?: BankAccountModel | any;
   addresses: AddressModel[];
   freelancerWorkServices: FreelancerWorkModel[];
 }

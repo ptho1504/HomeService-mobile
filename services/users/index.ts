@@ -141,6 +141,37 @@ const usersApi = API.injectEndpoints({
         { type: "User" }, // Đánh dấu các cache liên quan cần làm mới
       ],
     }),
+    uploadAVT: build.mutation<
+      Response<string>,
+      { userId: string; formData: FormData }
+    >({
+      query: ({ userId, formData }) => ({
+        url: `${baseUrl}/${userId}/uploadAvatar`,
+        method: "PUT",
+        body: formData,
+      }),
+      invalidatesTags: (result, error, arg) => [
+        { type: "User", id: arg.userId }, // Đánh dấu các cache liên quan cần làm mới
+      ],
+    }),
+    uploadUserById: build.mutation<
+      Response<Partial<UserModel>>,
+      {
+        userId: string;
+        body: Partial<UserModel> & {
+          bankAccount: { bin: string; accountNumber: string };
+        };
+      }
+    >({
+      query: ({ userId, body }) => ({
+        url: `${baseUrl}/${userId}`,
+        method: "PATCH",
+        body: body,
+      }),
+      invalidatesTags: (result, error, arg) => [
+        { type: "User", id: arg.userId }, // Đánh dấu các cache liên quan cần làm mới
+      ],
+    }),
   }),
 });
 
@@ -153,4 +184,6 @@ export const {
   useGetPlaceByInputQuery,
   useDeleteAddressByIdMutation,
   useGetUserByIdQuery,
+  useUploadAVTMutation,
+  useUploadUserByIdMutation,
 } = usersApi;

@@ -25,6 +25,7 @@ import { useDispatch } from "react-redux";
 import { router, useFocusEffect } from "expo-router";
 import RequiredAuthenticationModal from "@/components/authentication/RequiredAuthenticationModal";
 import { useGetUserByIdQuery } from "@/services";
+import { Config } from "@/config";
 i18n.locale = "vn";
 i18n.enableFallback = true;
 i18n.defaultLocale = Language.VIETNAMESE;
@@ -35,8 +36,6 @@ const Home = () => {
 
   // const isAuthenticated = true;
   const dispatch = useDispatch();
-  // console.log("currentUser", currentUser);
-  
 
   const [refreshing, setRefreshing] = React.useState(false);
   const [showModal, setShowModal] = React.useState(!isAuthenticated);
@@ -128,7 +127,10 @@ const Home = () => {
                       <Image
                         size="md"
                         source={{
-                          uri: `${currentUser?.avatar}`,
+                          uri:
+                            Config.URL_PATH +
+                            currentUser.avatar +
+                            `?time=${Date.now()}`,
                         }}
                         alt={`${currentUser?.name}`}
                         className="rounded-full shadow-lg"

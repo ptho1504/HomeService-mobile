@@ -10,6 +10,7 @@ import * as Notifications from "expo-notifications";
 import { registerForPushNotificationsAsync } from "@/utils/firebaseUtil";
 import { UserModel } from "@/types/userTypes";
 import "react-native-get-random-values";
+import { Config } from "@/config";
 const App = () => {
   const dispatch = useDispatch();
   const [loading, setLoading] = useState(true); // Ensure the app waits for initialization
@@ -38,7 +39,6 @@ const App = () => {
         return;
       } else if (response.data) {
         const user: UserModel = response.data.items;
-        dispatch(setUser(user));
         dispatch(authenticateUser(true));
         if (user.role === UserRole.CUSTOMER) {
           router.replace("/(customer)/(home)");

@@ -34,7 +34,6 @@ const slice = createSlice({
       action: PayloadAction<{ user: UserModel; address: AddressModel }>
     ) => {
       if (state.user) {
-        console.log("User in state user", action.payload.address);
         state.user = {
           ...action.payload.user,
           addresses: [action.payload.address, ...state.user.addresses],
@@ -53,6 +52,14 @@ const slice = createSlice({
         );
       }
     },
+    setAVTUser: (state, action: PayloadAction<string>) => {
+      if (state.user) {
+        state.user = {
+          ...state.user,
+          avatar: action.payload,
+        };
+      }
+    },
   },
 });
 
@@ -63,6 +70,7 @@ export const {
   setIsAuthenticated,
   updateCurrentUserWithAddress,
   deleteAddressById,
+  setAVTUser,
 } = slice.actions;
 
 export const selectIsAuthenticated = (state: { auth: AuthState }) =>

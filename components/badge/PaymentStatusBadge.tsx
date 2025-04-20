@@ -1,6 +1,7 @@
-import React from 'react';
-import { Badge, BadgeText } from '../ui/badge';
-import { PostStatus } from '@/constants';
+import React from "react";
+import { Badge, BadgeText } from "../ui/badge";
+import { PostStatus } from "@/constants";
+import { i18n } from "@/localization";
 
 interface Props {
   status: boolean;
@@ -9,11 +10,13 @@ interface Props {
 const PaymentStatusBadge = ({ status }: Props) => {
   return (
     <Badge
-      action={status ? 'success' : 'error'}
+      action={status ? "success" : "error"}
       size="lg"
       className="rounded-xl"
     >
-      <BadgeText>{status ? 'Đã thanh toán' : 'Chưa thanh toán'}</BadgeText>
+      <BadgeText>
+        {status ? i18n.t("word_paid") : i18n.t("word_unpaid")}
+      </BadgeText>
     </Badge>
   );
 };

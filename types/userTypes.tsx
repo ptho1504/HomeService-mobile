@@ -24,17 +24,19 @@ export interface UserModel {
 }
 
 export interface NotificationModel {
-  id: string;
+  id: number;
+  title: string;
+  content: string;
+  createdAt: number[];
+  postId: string;
   view: boolean;
-  notification: {
-    id: string;
-    createdAt: number[];
-    title: string;
-    content: string;
-    post: {
-      id: string;
-    };
-  };
+}
+
+export interface TransactionModel {
+  userId: string;
+  amount: number;
+  successUrl?: string;
+  cancelUrl?: string;
 }
 
 export interface PaymentHistoryModel {

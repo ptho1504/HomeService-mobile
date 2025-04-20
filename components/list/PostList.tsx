@@ -1,28 +1,28 @@
-import React, { useCallback, useState } from 'react';
+import React, { useCallback, useState } from "react";
 import {
   FlatList,
   ListRenderItemInfo,
   RefreshControl,
   ScrollView,
-} from 'react-native';
-import { VStack } from '@/components/ui/vstack';
-import { HStack } from '@/components/ui/hstack';
-import { Card } from '@/components/ui/card';
-import { Text } from '@/components/ui/text';
-import { Pressable } from '@/components/ui/pressable';
+} from "react-native";
+import { VStack } from "@/components/ui/vstack";
+import { HStack } from "@/components/ui/hstack";
+import { Card } from "@/components/ui/card";
+import { Text } from "@/components/ui/text";
+import { Pressable } from "@/components/ui/pressable";
 import {
   CreateTakePostModel,
   PostModel,
   TakePostModel,
-} from '@/types/postTypes';
-import { Box } from '@/components/ui/box';
-import Ionicons from '@expo/vector-icons/Ionicons';
+} from "@/types/postTypes";
+import { Box } from "@/components/ui/box";
+import Ionicons from "@expo/vector-icons/Ionicons";
 import {
   convertMinuteToHour,
   formatTimeRange,
   normalizeDate,
   normalizeDateTime,
-} from '@/utils/dateUtil';
+} from "@/utils/dateUtil";
 import {
   PackageName,
   PostStatus,
@@ -30,15 +30,15 @@ import {
   UserRole,
   WorkScheduleStatus,
   WorkType,
-} from '@/constants';
-import moment from 'moment';
-import PostStatusBadge from '../badge/PostStatusBadge';
-import { Divider } from '../ui/divider';
-import { useRouter } from 'expo-router';
-import { useDispatch } from 'react-redux';
-import { selectUser, setPost } from '@/store/reducers';
-import { useSelector } from 'react-redux';
-import { Button, ButtonSpinner, ButtonText } from '../ui/button';
+} from "@/constants";
+import moment from "moment";
+import PostStatusBadge from "../badge/PostStatusBadge";
+import { Divider } from "../ui/divider";
+import { useRouter } from "expo-router";
+import { useDispatch } from "react-redux";
+import { selectUser, setPost } from "@/store/reducers";
+import { useSelector } from "react-redux";
+import { Button, ButtonSpinner, ButtonText } from "../ui/button";
 import {
   AlertDialog,
   AlertDialogBackdrop,
@@ -46,12 +46,17 @@ import {
   AlertDialogContent,
   AlertDialogFooter,
   AlertDialogHeader,
-} from '../ui/alert-dialog';
-import { Heading } from '../ui/heading';
-import { useTakePostMutation } from '@/services/post';
-import { Toast, ToastDescription, ToastTitle, useToast } from '../ui/toast';
-import { isPostModel } from '../post/PostInfo';
-import TakePostDialog from '../dialog/TakePostDialog';
+} from "../ui/alert-dialog";
+import { Heading } from "../ui/heading";
+import { useTakePostMutation } from "@/services/post";
+import { Toast, ToastDescription, ToastTitle, useToast } from "../ui/toast";
+import { isPostModel } from "../post/PostInfo";
+import TakePostDialog from "../dialog/TakePostDialog";
+import { useViewNotificationMutation } from "@/services";
+import { i18n } from "@/localization";
+import { getLocales } from "expo-localization";
+
+// i18n.locale = getLocales()[0].languageCode ?? "vn";
 
 interface Props {
   posts?: PostModel[] | TakePostModel[];
@@ -65,22 +70,19 @@ interface Props {
 
 export const Mode = {
   TAKE: {
-    key: 'TAKE',
-    value: 'nhận',
-    description:
-      'Sau khi nhận công việc, bạn phải đến làm theo lịch trình công việc',
+    key: "TAKE",
+    value: i18n.t("word_mode_take_value"),
+    description: i18n.t("word_mode_take_description"),
   },
   ACCEPT: {
-    key: 'ACCEPT',
-    value: 'chấp nhận',
-    description:
-      'Sau khi nhận công việc, bạn phải đến làm theo lịch trình công việc',
+    key: "ACCEPT",
+    value: i18n.t("word_mode_accept_value"),
+    description: i18n.t("word_mode_accept_description"),
   },
   REJECT: {
-    key: 'REJECT',
-    value: 'từ chối',
-    description:
-      'Sau khi từ chối công việc, bạn sẽ không thể hoàn lại theo tác',
+    key: "REJECT",
+    value: i18n.t("word_mode_reject_value"),
+    description: i18n.t("word_mode_reject_description"),
   },
 };
 
@@ -98,9 +100,11 @@ const PostList = ({ posts, takePostStatus, status, refetch }: Props) => {
   const navigateToPostDetail = (post: PostModel) => {
     dispatch(setPost(post));
     if (takePostStatus) {
-      router.push(`/(posts)/PostDetail?takePostStatus=${takePostStatus}`);
+      router.push(
+        `/(posts)/PostDetail?takePostStatus=${takePostStatus}&&status=${status}`
+      );
     } else {
-      router.push('/(posts)/PostDetail');
+      router.push(`/(posts)/PostDetail?status=${status}`);
     }
   };
 
@@ -138,13 +142,13 @@ const PostList = ({ posts, takePostStatus, status, refetch }: Props) => {
     const res = await takePost(data);
     if (error || res.data?.returnCode != 1000) {
       toast.show({
-        placement: 'top',
+        placement: "top",
         duration: 3000,
         render: ({ id }) => {
-          const uniqueToastId = 'toast-' + id;
+          const uniqueToastId = "toast-" + id;
           return (
             <Toast nativeID={uniqueToastId} action="error" variant="outline">
-              <ToastTitle>Thất bại</ToastTitle>
+              <ToastTitle>{i18n.t("word_failure")}</ToastTitle>
               <ToastDescription>{res.error.data.message}</ToastDescription>
             </Toast>
           );
@@ -152,15 +156,16 @@ const PostList = ({ posts, takePostStatus, status, refetch }: Props) => {
       });
     } else {
       toast.show({
-        placement: 'top',
+        placement: "top",
         duration: 3000,
         render: ({ id }) => {
-          const uniqueToastId = 'toast-' + id;
+          const uniqueToastId = "toast-" + id;
           return (
             <Toast nativeID={uniqueToastId} action="success" variant="outline">
-              <ToastTitle>Thành công</ToastTitle>
+              <ToastTitle>{i18n.t("word_success")}</ToastTitle>
               <ToastDescription>
-                {Mode[mode as keyof typeof Mode].value} công việc thành công
+                {Mode[mode as keyof typeof Mode].value}{" "}
+                {i18n.t("st_post_a_work_successfully")}
               </ToastDescription>
             </Toast>
           );
@@ -180,7 +185,7 @@ const PostList = ({ posts, takePostStatus, status, refetch }: Props) => {
         className="py-2"
       >
         {({ pressed }) => (
-          <Card className={`rounded-xl shadow-lg ${pressed && 'opacity-75'}`}>
+          <Card className={`rounded-xl shadow-lg ${pressed && "opacity-75"}`}>
             <Box className="flex flex-row items-center justify-between">
               <VStack space="sm">
                 <Text className="font-semibold text-xl text-success-400">
@@ -191,10 +196,10 @@ const PostList = ({ posts, takePostStatus, status, refetch }: Props) => {
                   }
                 </Text>
                 <Text className="text-secondary-400">
-                  Đăng ngày:{' '}
+                  {i18n.t("word_date_posted")}:{" "}
                   {moment(
-                    normalizeDateTime(convertToPost(post).createdAt),
-                  )?.format('DD/MM/YYYY')}
+                    normalizeDateTime(convertToPost(post).createdAt)
+                  )?.format("DD/MM/YYYY")}
                 </Text>
               </VStack>
               <PostStatusBadge status={convertToPost(post).status} />
@@ -211,7 +216,8 @@ const PostList = ({ posts, takePostStatus, status, refetch }: Props) => {
                     {convertToPost(post).packageName !==
                       PackageName._1DAY.key && (
                       <Text className="font-medium">
-                        Ngày làm thứ {convertToPost(post).numOfWorkedDay + 1}/
+                        {i18n.t("st_working_day_number")}{" "}
+                        {convertToPost(post).numOfWorkedDay + 1}/
                         {convertToPost(post).totalWorkDay}:
                       </Text>
                     )}
@@ -220,8 +226,8 @@ const PostList = ({ posts, takePostStatus, status, refetch }: Props) => {
                         convertToPost(post).workSchedules[
                           convertToPost(post).numOfWorkedDay
                         ].date,
-                        '/',
-                        false,
+                        "/",
+                        false
                       )}
                     </Text>
                   </HStack>
@@ -234,7 +240,7 @@ const PostList = ({ posts, takePostStatus, status, refetch }: Props) => {
                 </Text>
                 <Text>{`${convertToPost(post).duration} giờ, ${formatTimeRange(
                   convertToPost(post).startTime,
-                  convertToPost(post).duration,
+                  convertToPost(post).duration
                 )}`}</Text>
               </HStack>
               {convertToPost(post).work.name === WorkType.HOUSECLEANING.key && (
@@ -250,7 +256,12 @@ const PostList = ({ posts, takePostStatus, status, refetch }: Props) => {
                   <Text className="text-tertiary-600">
                     <Ionicons size={20} name="happy-outline" />
                   </Text>
-                  <Text>{convertToPost(post).babysitting?.numOfBaby} trẻ</Text>
+                  <Text>
+                    {convertToPost(post).babysitting?.numOfBaby}{" "}
+                    {convertToPost(post).babysitting?.numOfBaby === 1
+                      ? i18n.t("word_baby_unit")
+                      : i18n.t("word_baby_unit_s")}
+                  </Text>
                 </HStack>
               )}
               <HStack space="md" className="items-center">
@@ -295,7 +306,9 @@ const PostList = ({ posts, takePostStatus, status, refetch }: Props) => {
                       //   actionPost(convertToPost(post), Mode.TAKE.key)
                       // }
                     >
-                      <Text className="text-white text-lg">Đăng lại</Text>
+                      <Text className="text-white text-lg">
+                        {i18n.t("word_post_again")}
+                      </Text>
                     </Button>
                   </HStack>
                 </Box>
@@ -314,14 +327,14 @@ const PostList = ({ posts, takePostStatus, status, refetch }: Props) => {
                       onPress={() => chooseFreelancer(post?.id)}
                     >
                       <Text className="text-white text-lg">
-                        Chọn freelancer
+                        {i18n.t("word_choose_freelancer")}
                       </Text>
                     </Button>
                   </HStack>
                 </Box>
               )}
 
-            {takePostStatus === 'NEW' &&
+            {takePostStatus === "NEW" &&
               currentUser?.role === UserRole.FREELANCER && (
                 <Box>
                   <Divider className="my-4" />
@@ -333,7 +346,9 @@ const PostList = ({ posts, takePostStatus, status, refetch }: Props) => {
                         actionPost(convertToPost(post), Mode.TAKE.key)
                       }
                     >
-                      <Text className="text-white text-lg">Nhận việc</Text>
+                      <Text className="text-white text-lg">
+                        {i18n.t("word_get_job")}
+                      </Text>
                     </Button>
                   </HStack>
                 </Box>
@@ -351,20 +366,24 @@ const PostList = ({ posts, takePostStatus, status, refetch }: Props) => {
                           className="rounded-lg bg-error-400"
                           onPress={() => actionPost(post.post, Mode.REJECT.key)}
                         >
-                          <Text className="text-white text-lg">Từ chối</Text>
+                          <Text className="text-white text-lg">
+                            {i18n.t("word_reject_job")}
+                          </Text>
                         </Button>
                         <Button
                           action="positive"
                           className="rounded-lg bg-success-300"
                           onPress={() => actionPost(post.post, Mode.ACCEPT.key)}
                         >
-                          <Text className="text-white text-lg">Chấp nhận</Text>
+                          <Text className="text-white text-lg">
+                            {i18n.t("word_accept_job")}
+                          </Text>
                         </Button>
                       </>
                     )}
                     {post.status === TakePostStatus.REJECTED.key && (
                       <Text className="text-error-400">
-                        Bạn đã từ chối yêu cầu công việc
+                        {i18n.t("st_you_have_rejected_this_job")}
                       </Text>
                     )}
                   </HStack>
@@ -381,7 +400,7 @@ const PostList = ({ posts, takePostStatus, status, refetch }: Props) => {
               ].includes(
                 convertToPost(post).workSchedules[
                   convertToPost(post).numOfWorkedDay
-                ].status,
+                ].status
               ) && (
                 <Box>
                   <Divider className="my-4" />
@@ -395,8 +414,8 @@ const PostList = ({ posts, takePostStatus, status, refetch }: Props) => {
                           convertToPost(post).workSchedules[
                             convertToPost(post).numOfWorkedDay
                           ].status === WorkScheduleStatus.INITIAL.key
-                            ? 'start'
-                            : 'end',
+                            ? i18n.t("word_start_work")
+                            : i18n.t("word_end_work")
                         )
                       }
                     >
@@ -404,8 +423,8 @@ const PostList = ({ posts, takePostStatus, status, refetch }: Props) => {
                         {convertToPost(post).workSchedules[
                           convertToPost(post).numOfWorkedDay
                         ].status === WorkScheduleStatus.INITIAL.key
-                          ? 'Bắt đầu làm'
-                          : 'Hoàn thành công việc'}
+                          ? i18n.t("word_start_work")
+                          : i18n.t("word_end_work")}
                       </Text>
                     </Button>
                   </HStack>
@@ -433,11 +452,14 @@ const PostList = ({ posts, takePostStatus, status, refetch }: Props) => {
       >
         <Box className="flex flex-1 justify-center items-center">
           <Text className="text-lg text-center mt-10">
-            Bạn chưa có thông tin công việc
+            {i18n.t("word_no_job_info")}
           </Text>
           <Text className="text-lg text-center">
-            Hãy {currentUser?.role === UserRole.FREELANCER ? 'nhận' : 'đăng'}{' '}
-            công việc mới
+            {i18n.t("word_let")}{" "}
+            {currentUser?.role === UserRole.FREELANCER
+              ? i18n.t("word_take_job")
+              : i18n.t("word_post_job")}{" "}
+            {i18n.t("word_new_job")}
           </Text>
         </Box>
       </ScrollView>
@@ -450,7 +472,7 @@ const PostList = ({ posts, takePostStatus, status, refetch }: Props) => {
         <FlatList
           data={posts}
           renderItem={renderItem}
-          keyExtractor={item => item.id.toString()}
+          keyExtractor={(item) => item.id.toString()}
           refreshControl={
             <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
           }

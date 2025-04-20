@@ -1,5 +1,6 @@
-import { Stack } from 'expo-router';
-import 'react-native-reanimated';
+import { i18n } from "@/localization";
+import { Stack } from "expo-router";
+import "react-native-reanimated";
 
 export default function WorkLayout() {
   return (
@@ -11,7 +12,7 @@ export default function WorkLayout() {
     >
       <Stack.Screen
         name="index"
-        options={{ headerShown: true, title: 'Làm công việc' }}
+        options={{ headerShown: true, title: i18n.t("word_do_work") }}
       />
     </Stack>
   );

@@ -1,6 +1,8 @@
 import { combineReducers, configureStore } from '@reduxjs/toolkit';
 import authReducer from './reducers/auth';
 import postReducer from './reducers/post';
+import testReducer from './reducers/test';
+import languageReducer from './reducers/language';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {
   persistReducer,
@@ -18,13 +20,15 @@ import authApi from '@/services/auth';
 const reducers = combineReducers({
   auth: authReducer,
   post: postReducer,
+  test: testReducer,
+  language: languageReducer,
   [authApi.reducerPath]: authApi.reducer,
 });
 
 const persistConfig = {
   key: 'root',
   storage: AsyncStorage,
-  whitelist: [],
+  whitelist: ['language'],
 };
 
 const persistedReducer = persistReducer(persistConfig, reducers);

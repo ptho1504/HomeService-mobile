@@ -6,6 +6,7 @@ import {
   AddressModel,
   NotificationModel,
   PaymentHistoryModel,
+  TransactionModel,
   UserModel,
 } from "@/types/userTypes";
 import { Response } from "@/types/response";
@@ -65,6 +66,43 @@ const usersApi = API.injectEndpoints({
       },
     }),
 
+    viewNotification: build.mutation<
+      Response<NotificationModel>,
+      Partial<{ userId: string; id: number }>
+    >({
+      query: ({ id, userId }) => {
+        console.log({ id, userId });
+        return {
+          url: `${baseUrl}/${userId}/notifications/${id}`,
+          method: "PUT",
+        };
+      },
+      async onQueryStarted({ id, userId }, { dispatch, queryFulfilled }) {
+        try {
+          // Chờ kết quả cập nhật
+          const { data } = await queryFulfilled;
+
+          // Cập nhật cache của `getNotification`
+          dispatch(
+            usersApi.util.updateQueryData(
+              "getNotification",
+              { id: userId as string }, // Tham số của getNotification
+              (draft) => {
+                if (draft?.items) {
+                  const notification = draft.items.find((n) => n.id === id);
+                  if (notification) {
+                    notification.view = true; // Cập nhật trạng thái đã xem
+                  }
+                }
+              }
+            )
+          );
+        } catch (error) {
+          console.error("Failed to update cache:", error);
+        }
+      },
+    }),
+
     getPaymentHistories: build.query<
       Response<PaymentHistoryModel[]>,
       {
@@ -75,32 +113,34 @@ const usersApi = API.injectEndpoints({
         // Kết hợp base URL và query string
         return `${baseUrl}/${id}/paymentHistories`;
       },
+      providesTags: (result, error, { id }) => [
+        { type: "PaymentHistories", id },
+      ],
     }),
 
-    viewNotification: build.mutation<
-      Response<NotificationModel>,
-      { userId: string; id: string }
-    >({
-      query: ({ id, userId }) => {
+    recharge: build.mutation<Response<string>, Partial<TransactionModel>>({
+      query: (rechargeModel: TransactionModel) => {
+        const { userId, ...data } = rechargeModel;
         return {
-          url: `${baseUrl}/notifications/${id}`,
+          url: `${baseUrl}/${userId}/recharge`,
           method: "PUT",
+          body: data,
         };
       },
-      async onQueryStarted(arg, { queryFulfilled, dispatch }) {
-        console.log(arg);
-        const { data } = await queryFulfilled;
-        dispatch(
-          usersApi.util.updateQueryData(
-            "getNotification",
-            { id: arg.userId },
-            (draft) => {
-              console.log(draft.items);
-              draft.items = [];
-            }
-          )
-        );
+    }),
+
+    withdraw: build.mutation<Response<UserModel>, Partial<TransactionModel>>({
+      query: (withdrawModel: TransactionModel) => {
+        const { userId, ...data } = withdrawModel;
+        return {
+          url: `${baseUrl}/${userId}/withdraw`,
+          method: "PUT",
+          body: data,
+        };
       },
+      invalidatesTags: (result, error, transactionModel) => [
+        { type: "PaymentHistories", id: transactionModel.userId }, // Đánh dấu các cache liên quan cần làm mới
+      ],
     }),
 
     createAddress: build.mutation<
@@ -186,4 +226,6 @@ export const {
   useGetUserByIdQuery,
   useUploadAVTMutation,
   useUploadUserByIdMutation,
+  useRechargeMutation,
+  useWithdrawMutation,
 } = usersApi;

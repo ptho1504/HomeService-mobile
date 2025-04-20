@@ -26,9 +26,12 @@ import { router, useFocusEffect } from "expo-router";
 import RequiredAuthenticationModal from "@/components/authentication/RequiredAuthenticationModal";
 import { useGetUserByIdQuery } from "@/services";
 import { Config } from "@/config";
-i18n.locale = "vn";
-i18n.enableFallback = true;
-i18n.defaultLocale = Language.VIETNAMESE;
+import LanguageToggleButton from "@/components/customeButton/LanguageToggleButton";
+import LanguageDropdown from "@/components/customeButton/LanguageDropdown";
+
+// i18n.locale = "vn";
+// i18n.enableFallback = true;
+// i18n.defaultLocale = Language.VIETNAMESE;
 
 const Home = () => {
   const currentUser = useSelector(selectUser);
@@ -106,14 +109,7 @@ const Home = () => {
             // showsVerticalScrollIndicator={false}
             className="h-full flex w-full"
           >
-            <VStack space="xl" className="h-full flex w-full px-2">
-              {/* Title */}
-              <Box className="flex w-full">
-                <Text className="text-2xl font-bold text-center">
-                  {i18n.t("account")}
-                </Text>
-              </Box>
-
+            <VStack space="md" className="h-full flex w-full px-2 mt-2">
               {/* Avatar */}
               <Box
                 className="
@@ -133,7 +129,7 @@ const Home = () => {
                             `?time=${Date.now()}`,
                         }}
                         alt={`${currentUser?.name}`}
-                        className="rounded-full shadow-lg"
+                        className="rounded-full"
                       />
                       <AntDesign
                         className="absolute bottom-0 right-0 p-1 bg-black rounded-full"
@@ -168,7 +164,7 @@ const Home = () => {
                       {/* <View className="bg-[#66B584] rounded-md"> */}
                       <View className="bg-success-400 rounded-md">
                         <Text className="text-md text-white px-2 py-1">
-                          Cập nhập
+                          {i18n.t("word_update")}
                         </Text>
                       </View>
                     </Pressable>
@@ -184,7 +180,8 @@ const Home = () => {
                   {/* Phone */}
                   <HStack>
                     <Text className="text-lg text-white font-medium">
-                      {i18n.t("phone")}: {currentUser?.phoneNumber || "Chưa có"}
+                      {i18n.t("phone")}:{" "}
+                      {currentUser?.phoneNumber || i18n.t("word_not_available")}
                     </Text>
                   </HStack>
 
@@ -214,6 +211,17 @@ const Home = () => {
                   color="#fff"
                 />
               </Pressable>
+
+              {/* Switch language */}
+              <View className=" rounded-lg border border-gray-100 bg-success-200 p-4 flex flex-row items-center gap-4 justify-between">
+                <Box className="flex flex-row gap-2 items-center">
+                  <Ionicons name="globe-outline" size={32} color="white" />
+                  <Text className="text-xl font-bold text-white">
+                    {i18n.t("st_switch_language_to")}{" :"}
+                  </Text>
+                </Box>
+                <LanguageDropdown />
+              </View>
 
               {/* Logout */}
               <Pressable

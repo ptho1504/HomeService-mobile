@@ -4,13 +4,15 @@ import { authenticateUser, setUser } from "@/store/reducers";
 import * as SecureStore from "expo-secure-store";
 import { LOCAL_STORAGE_JWT_KEY, UserRole } from "@/constants";
 import { useVerifyJwtForUserMutation } from "@/services";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import Loading from "@/components/loading/Loading";
 import * as Notifications from "expo-notifications";
 import { registerForPushNotificationsAsync } from "@/utils/firebaseUtil";
 import { UserModel } from "@/types/userTypes";
-import "react-native-get-random-values";
-import { Config } from "@/config";
+import { getLang, setLanguage } from "@/store/reducers/language"; // Import initLanguage
+import { i18n, Language } from "@/localization";
+import { getLocales } from "expo-localization";
+
 const App = () => {
   const dispatch = useDispatch();
   const [loading, setLoading] = useState(true); // Ensure the app waits for initialization

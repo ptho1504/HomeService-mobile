@@ -18,12 +18,13 @@ import Ionicons from "@expo/vector-icons/Ionicons";
 import { i18n, Language } from "@/localization";
 import { Input, InputField, InputIcon, InputSlot } from "@/components/ui/input";
 import { EditIcon, Icon, SearchIcon } from "@/components/ui/icon";
-import AddressSearch from "@/components/address/AddressSearch";
+
+// import AddressSearch from "@/components/address/AddressSearch";
 import * as Location from "expo-location";
 import { useGetPlaceByInputQuery } from "@/services";
 i18n.locale = "vn";
-i18n.enableFallback = true;
-i18n.defaultLocale = Language.VIETNAMESE;
+// i18n.enableFallback = true;
+// i18n.defaultLocale = Language.VIETNAMESE;
 const AddAdress = () => {
   const [location, setLocation] = useState<string>("");
   const [suggestions, setSuggestions] = useState<

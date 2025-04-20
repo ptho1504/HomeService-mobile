@@ -2,6 +2,7 @@ import { Button, ButtonText } from "@/components/ui/button";
 import { LOCAL_STORAGE_JWT_KEY } from "@/constants";
 import {
   clearAuthState,
+  getLang,
   selectIsAuthenticated,
   selectUser,
   setIsAuthenticated,
@@ -25,12 +26,18 @@ import { useDispatch } from "react-redux";
 import { router, useFocusEffect } from "expo-router";
 import RequiredAuthenticationModal from "@/components/authentication/RequiredAuthenticationModal";
 import ListWorking from "@/components/account/ListWorking";
-import { Config } from "@/config";
+import { Divider } from "@/components/ui/divider";
+import StarRating from "@/components/badge/Rating";
+import LanguageToggleButton from "@/components/customeButton/LanguageToggleButton";
+import LanguageDropdown from "@/components/customeButton/LanguageDropdown";
+// import { Config } from "@/config";
 i18n.locale = "vn";
-i18n.enableFallback = true;
-i18n.defaultLocale = Language.VIETNAMESE;
+// i18n.enableFallback = true;
+// i18n.defaultLocale = Language.VIETNAMESE;
 
 const Profile = () => {
+  // const lang = useSelector(getLang);
+
   const currentUser = useSelector(selectUser);
   const isAuthenticated = useSelector(selectIsAuthenticated);
   // const isAuthenticated = true;
@@ -61,8 +68,9 @@ const Profile = () => {
   };
 
   const handleAdd = () => {
-    console.log("Add a servuce");
+    console.log("Add a service");
     router.push("/(services)/add-service");
+    // router.push("/(services)/do-test");
   };
 
   const handleLogout = async () => {
@@ -102,18 +110,18 @@ const Profile = () => {
       )}
       {isAuthenticated && (
         <SafeAreaView className="h-full w-full flex items-center bg-white">
-          <ScrollView
+          <View
             // contentContainerStyle={{ padding: 16 }} // Add padding inside the scrollable area
             // showsVerticalScrollIndicator={false}
             className="h-full flex w-full"
           >
             <VStack space="xl" className="h-full flex w-full px-2">
               {/* Title */}
-              <Box className="flex w-full">
+              {/* <Box className="flex w-full">
                 <Text className="text-2xl font-bold text-center">
                   {i18n.t("account")}
                 </Text>
-              </Box>
+              </Box> */}
 
               {/* Avatar */}
               <Box
@@ -169,7 +177,7 @@ const Profile = () => {
                       {/* <View className="bg-[#66B584] rounded-md"> */}
                       <View className="bg-success-400 rounded-md">
                         <Text className="text-md text-white px-2 py-1">
-                          Cập nhập
+                          {i18n.t("word_update")}
                         </Text>
                       </View>
                     </Pressable>
@@ -185,7 +193,8 @@ const Profile = () => {
                   {/* Phone */}
                   <HStack>
                     <Text className="text-lg text-white font-medium">
-                      {i18n.t("phone")}: {currentUser?.phoneNumber || "Chưa có"}
+                      {i18n.t("phone")}:{" "}
+                      {currentUser?.phoneNumber || i18n.t("word_not_available")}
                     </Text>
                   </HStack>
 
@@ -216,6 +225,17 @@ const Profile = () => {
                 />
               </Pressable>
 
+              {/* Switch language */}
+              <View className=" rounded-lg border border-gray-100 bg-success-200 p-4 flex flex-row items-center gap-4 justify-between">
+                <Box className="flex flex-row gap-2 items-center">
+                  <Ionicons name="globe-outline" size={32} color="white" />
+                  <Text className="text-xl font-bold text-white">
+                    {i18n.t("st_switch_language_to")}{" :"}
+                  </Text>
+                </Box>
+                <LanguageDropdown />
+              </View>
+
               {/* Logout */}
               <Pressable
                 className="rounded-lg border border-gray-100 bg-success-200 p-4 flex flex-row items-center gap-4 justify-between hover:opacity-50"
@@ -231,7 +251,7 @@ const Profile = () => {
 
               {/* Addresses */}
 
-              <Box className="border border-gray-100 p-4 flex items-center gap-4">
+              <Box className="border rounded-lg border-gray-300 p-3 flex items-center gap-4">
                 <View className="flex flex-row items-center justify-between w-full">
                   <Text className="text-xl font-bold ">
                     {i18n.t("workings")}
@@ -246,14 +266,14 @@ const Profile = () => {
                     </Text>
                   </Pressable>
                 </View>
-
+                <Divider />
                 {/* List Working */}
-                <View className="flex items-center w-full px-4 gap-3">
+                <View className="flex items-center w-full px-3">
                   <ListWorking />
                 </View>
               </Box>
             </VStack>
-          </ScrollView>
+          </View>
         </SafeAreaView>
       )}
     </>

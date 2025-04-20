@@ -1,30 +1,31 @@
-import { Tabs } from 'expo-router';
-import FontAwesome from '@expo/vector-icons/FontAwesome';
-import Ionicons from '@expo/vector-icons/Ionicons';
-import { i18n, Language } from '@/localization';
-import { useSelector } from 'react-redux';
-import { selectUser } from '@/store/reducers';
-
-// Language
+import { Tabs } from "expo-router";
+import FontAwesome from "@expo/vector-icons/FontAwesome";
+import Ionicons from "@expo/vector-icons/Ionicons";
+import { i18n, Language } from "@/localization";
+import { useSelector } from "react-redux";
+import { getLang, selectUser } from "@/store/reducers";
+import { getLocales } from "expo-localization";
+import { useEffect } from "react";
 
 // i18n.locale = getLocales()[0].languageCode ?? "vn";
-i18n.locale = 'vn';
-i18n.enableFallback = true;
-i18n.defaultLocale = Language.VIETNAMESE;
+// i18n.locale = 'vn';
+// i18n.enableFallback = true;
+// i18n.defaultLocale = Language.VIETNAMESE;
 
 export default function Layout() {
+
   return (
     <Tabs
       initialRouteName="(home)"
       screenOptions={{
-        tabBarActiveTintColor: '#059669',
+        tabBarActiveTintColor: "#059669",
         tabBarStyle: { paddingVertical: 10 },
       }}
     >
       <Tabs.Screen
         name="(home)"
         options={{
-          title: i18n.t('home'),
+          title: i18n.t("home"),
           headerShown: true,
           headerShadowVisible: false,
           tabBarIcon: ({ color }) => (
@@ -35,7 +36,7 @@ export default function Layout() {
       <Tabs.Screen
         name="(activities)"
         options={{
-          title: i18n.t('activities'),
+          title: i18n.t("activities"),
           headerShown: true,
           headerShadowVisible: false,
           tabBarIcon: ({ color }) => (
@@ -46,7 +47,7 @@ export default function Layout() {
       <Tabs.Screen
         name="(notifications)"
         options={{
-          title: i18n.t('chat'),
+          title: i18n.t("chat"),
           headerShown: true,
           headerShadowVisible: false,
           tabBarIcon: ({ color }) => (
@@ -57,7 +58,7 @@ export default function Layout() {
       <Tabs.Screen
         name="(profile)"
         options={{
-          title: i18n.t('profile'),
+          title: i18n.t("profile"),
           headerShown: true,
           headerShadowVisible: false,
           tabBarIcon: ({ color }) => (

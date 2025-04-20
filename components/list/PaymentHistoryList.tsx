@@ -1,21 +1,34 @@
-import { data, UserRole } from '@/constants';
-import { NotificationModel, PaymentHistoryModel } from '@/types/userTypes';
-import { normalizeDateTime } from '@/utils/dateUtil';
-import { useRouter } from 'expo-router';
-import moment from 'moment';
-import { Pressable, FlatList, RefreshControl, ScrollView } from 'react-native';
-import { Box } from '../ui/box';
-import { Card } from '../ui/card';
-import { Heading } from '../ui/heading';
-import { VStack } from '../ui/vstack';
-import { Text } from '../ui/text';
-import { useCallback, useState } from 'react';
-import { useViewNotificationMutation } from '@/services';
-import { Toast, ToastDescription, ToastTitle, useToast } from '../ui/toast';
-import { Mode } from './PostList';
-import { useSelector } from 'react-redux';
-import { selectUser } from '@/store/reducers';
-import { Divider } from '../ui/divider';
+import { data, UserRole } from "@/constants";
+import { NotificationModel, PaymentHistoryModel } from "@/types/userTypes";
+import { normalizeDateTime } from "@/utils/dateUtil";
+import { useRouter } from "expo-router";
+import moment from "moment";
+import { Pressable, FlatList, RefreshControl, ScrollView } from "react-native";
+import { Box } from "../ui/box";
+import { Card } from "../ui/card";
+import { Heading } from "../ui/heading";
+import { VStack } from "../ui/vstack";
+import { Text } from "../ui/text";
+import { useCallback, useState } from "react";
+import { useViewNotificationMutation } from "@/services";
+import { Toast, ToastDescription, ToastTitle, useToast } from "../ui/toast";
+import { Mode } from "./PostList";
+import { useSelector } from "react-redux";
+import { selectUser } from "@/store/reducers";
+import { Divider } from "../ui/divider";
+import { ButtonText, Button } from "../ui/button";
+import { Icon, CloseIcon } from "../ui/icon";
+import {
+  ModalBackdrop,
+  ModalContent,
+  ModalHeader,
+  ModalCloseButton,
+  ModalBody,
+  ModalFooter,
+  Modal,
+} from "../ui/modal";
+import { HStack } from "../ui/hstack";
+import { i18n } from "@/localization";
 
 interface Props {
   paymentHitories: PaymentHistoryModel[] | undefined;
@@ -26,41 +39,9 @@ interface Props {
 }
 
 const PaymentHistoryList = ({ paymentHitories, refetch }: Props) => {
-  const router = useRouter();
-  const currentUser = useSelector(selectUser);
   const [refreshing, setRefreshing] = useState(false);
-  const [viewNotification, { isLoading, error, data }] =
-    useViewNotificationMutation();
-  const toast = useToast();
-
-  const handleViewNotification = async (
-    userNotification: NotificationModel,
-  ) => {
-    const res = await viewNotification({
-      userId: currentUser?.id ?? '',
-      id: userNotification.id,
-    });
-    if (error || res.data?.returnCode != 1000) {
-      console.log(res.error.data.message);
-      toast.show({
-        placement: 'top',
-        duration: 3000,
-        render: ({ id }) => {
-          const uniqueToastId = 'toast-' + id;
-          return (
-            <Toast nativeID={uniqueToastId} action="error" variant="outline">
-              <ToastTitle>Xem thông báo thất bại</ToastTitle>
-              <ToastDescription>{res.error.data.message}</ToastDescription>
-            </Toast>
-          );
-        },
-      });
-    } else {
-      router.push(
-        `/(posts)/PostDetail?id=${userNotification.notification.post.id}`,
-      );
-    }
-  };
+  const [showModal, setShowModal] = useState(false);
+  const [paymentHistory, setPaymentHistory] = useState<PaymentHistoryModel>();
 
   const onRefresh = useCallback(() => {
     setRefreshing(true);
@@ -78,56 +59,131 @@ const PaymentHistoryList = ({ paymentHitories, refetch }: Props) => {
       >
         <Box className="flex flex-1 justify-center items-center">
           <Text className="text-lg text-center mt-10">
-            Không có lịch sử giao dịch mới
+            {i18n.t("st_no_new_transaction_history")}
           </Text>
         </Box>
       </ScrollView>
     );
   }
 
+  const viewDetail = (item: PaymentHistoryModel) => {
+    setPaymentHistory(item);
+    setShowModal(true);
+  };
+
   const renderItem = ({ item }: { item: PaymentHistoryModel }) => (
-    <Pressable className="mt-2">
+    <Pressable className="mb-3" onPress={() => viewDetail(item)}>
       {({ pressed }) => (
         <VStack space="md">
+          <Divider></Divider>
           <Box
             className={`${
-              pressed ? 'opacity-75' : ''
+              pressed ? "opacity-50" : ""
             } flex flex-row justify-between items-center`}
           >
             <VStack space="xs">
               <Text className="font-medium text-lg">
-                {item.amount > 0 ? 'Nạp tiền' : 'Rút tiền'}
+                {item.amount > 0
+                  ? i18n.t("word_top_up")
+                  : i18n.t("word_withdraw")}
               </Text>
               <Text className="">
                 {moment(normalizeDateTime(item.createdAt))?.format(
-                  'DD/MM/YYYY HH:mm:ss',
+                  "DD/MM/YYYY HH:mm:ss"
                 )}
               </Text>
             </VStack>
             <Text
               className={`font-medium text-lg ${
-                item.amount > 0 ? 'text-success-400' : 'text-error-400'
+                item.amount > 0 ? "text-success-400" : "text-error-400"
               }`}
             >
-              {item.amount > 0 ? '+' : '-'}{' '}
+              {item.amount > 0 ? "+" : "-"}{" "}
               {Math.abs(item.amount).toLocaleString()} VND
             </Text>
           </Box>
-          <Divider></Divider>
         </VStack>
       )}
     </Pressable>
   );
 
   return (
-    <FlatList
-      data={paymentHitories}
-      keyExtractor={item => item.id}
-      renderItem={renderItem}
-      refreshControl={
-        <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
-      }
-    />
+    <>
+      <FlatList
+        data={paymentHitories}
+        keyExtractor={(item) => item.id}
+        renderItem={renderItem}
+        refreshControl={
+          <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+        }
+      />
+      {paymentHistory && (
+        <Modal
+          isOpen={showModal}
+          onClose={() => {
+            setShowModal(false);
+          }}
+          size="md"
+        >
+          <ModalBackdrop />
+          <ModalContent>
+            <ModalHeader>
+              <Heading size="lg" className="text-typography-950 mb-4">
+                {i18n.t("word_transaction_details")}
+              </Heading>
+              <ModalCloseButton
+                onPress={() => {
+                  setShowModal(false);
+                }}
+              >
+                <Icon
+                  as={CloseIcon}
+                  size="md"
+                  className="stroke-background-400 group-[:hover]/modal-close-button:stroke-background-700 group-[:active]/modal-close-button:stroke-background-900 group-[:focus-visible]/modal-close-button:stroke-background-900"
+                />
+              </ModalCloseButton>
+            </ModalHeader>
+            <ModalBody>
+              <VStack space="md">
+                <HStack>
+                  <Text className="text-md font-medium">
+                    {i18n.t("word_transaction_code")}:{" "}
+                  </Text>
+                  <Text>{paymentHistory.refId}</Text>
+                </HStack>
+                <HStack className="items-center">
+                  <Text className="text-md font-medium">
+                    {paymentHistory.amount > 0
+                      ? i18n.t("word_top_up")
+                      : i18n.t("word_withdraw")}
+                    {": "}
+                  </Text>
+                  <Text
+                    className={`font-medium ${
+                      paymentHistory.amount > 0
+                        ? "text-success-400"
+                        : "text-error-400"
+                    }`}
+                  >
+                    {Math.abs(paymentHistory.amount).toLocaleString()} VND
+                  </Text>
+                </HStack>
+                <HStack>
+                  <Text className="text-md font-medium">
+                    {i18n.t("word_transaction_date")}:{" "}
+                  </Text>
+                  <Text>
+                    {moment(
+                      normalizeDateTime(paymentHistory.createdAt)
+                    )?.format("DD/MM/YYYY HH:mm:ss")}
+                  </Text>
+                </HStack>
+              </VStack>
+            </ModalBody>
+          </ModalContent>
+        </Modal>
+      )}
+    </>
   );
 };
 

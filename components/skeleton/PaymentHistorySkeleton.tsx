@@ -13,7 +13,8 @@ import { Divider } from '../ui/divider';
 const PaymentHistorySkeleton = () => {
   return (
     <VStack space="lg">
-      <VStack space="md">
+      <VStack space="lg">
+        <Divider></Divider>
         <Box className="flex flex-row justify-between items-center">
           <Box className="w-1/2">
             <SkeletonText _lines={2} gap={4} className="h-4" />
@@ -22,10 +23,9 @@ const PaymentHistorySkeleton = () => {
             <SkeletonText _lines={1} className="h-4" />
           </Box>
         </Box>
-
-        <Divider></Divider>
       </VStack>
       <VStack space="md">
+        <Divider></Divider>
         <Box className="flex flex-row justify-between items-center">
           <Box className="w-1/2">
             <SkeletonText _lines={2} gap={4} className="h-4" />
@@ -34,8 +34,6 @@ const PaymentHistorySkeleton = () => {
             <SkeletonText _lines={1} className="h-4" />
           </Box>
         </Box>
-
-        <Divider></Divider>
       </VStack>
     </VStack>
   );

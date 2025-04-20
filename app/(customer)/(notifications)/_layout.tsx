@@ -1,6 +1,7 @@
-import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs';
-import { RootStackParamList } from '@/types/postTypes';
-import Notifications from '.';
+import { createMaterialTopTabNavigator } from "@react-navigation/material-top-tabs";
+import { RootStackParamList } from "@/types/postTypes";
+import Notifications from ".";
+import { i18n } from "@/localization";
 
 const Tab = createMaterialTopTabNavigator<RootStackParamList>();
 
@@ -9,21 +10,21 @@ export default function NotificationLayout() {
     <Tab.Navigator
       screenOptions={{
         tabBarIndicatorStyle: {
-          backgroundColor: '#059669',
+          backgroundColor: "#059669",
         },
       }}
     >
       <Tab.Screen
         name="Chat"
-        options={{ title: 'Tin nhắn' }}
+        options={{ title: i18n.t("word_title_chat") }}
         component={Notifications}
-        initialParams={{ status: 'CHAT' }}
+        initialParams={{ status: "CHAT" }}
       />
       <Tab.Screen
         name="Notifications"
-        options={{ title: 'Thông báo' }}
+        options={{ title: i18n.t("word_title_notification") }}
         component={Notifications} // Truyền component mà không cần hàm inline
-        initialParams={{ status: 'NOTIFICATION' }}
+        initialParams={{ status: "NOTIFICATION" }}
       />
     </Tab.Navigator>
   );

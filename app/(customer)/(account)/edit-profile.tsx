@@ -40,22 +40,25 @@ import { BankAccount } from "@/types/types";
 import { useDebounce } from "@/utils/helper";
 import { LinearGradient } from "expo-linear-gradient";
 import { Config } from "@/config";
-i18n.locale = "vn";
-i18n.enableFallback = true;
-i18n.defaultLocale = Language.VIETNAMESE;
+// i18n.locale = "vn";
+// i18n.enableFallback = true;
+// i18n.defaultLocale = Language.VIETNAMESE;
 
 const InforSchema = Yup.object().shape({
   name: Yup.string()
-    .min(2, "Tên phải có ít nhất 2 ký tự")
-    .required("Vui lòng nhập tên"),
+    .min(2, i18n.t("word_name_min_2_chars"))
+    .required(i18n.t("word_name_required")),
+
   phoneNumber: Yup.string()
-    .matches(/^[0-9]+$/, "Số điện thoại không hợp lệ")
-    .min(10, "Số điện thoại phải có ít nhất 10 chữ số")
-    .required("Vui lòng nhập số điện thoại"),
+    .matches(/^[0-9]+$/, i18n.t("word_phone_invalid"))
+    .min(10, i18n.t("word_phone_min_10_digits"))
+    .required(i18n.t("word_phone_required")),
+
   email: Yup.string()
-    .required("Vui lòng nhập email")
-    .email("Email không hợp lệ"),
-  // bank: Yup.object<BankModel>().required("Vui lòng chọn Bank"),
+    .required(i18n.t("word_email_required"))
+    .email(i18n.t("word_email_invalid")),
+
+  // bank: Yup.object<BankModel>().required(i18n.t("word_bank_required")),
 });
 
 const EditProfile = () => {

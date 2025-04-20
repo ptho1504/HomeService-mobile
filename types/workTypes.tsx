@@ -1,14 +1,15 @@
-import { UserModel } from './userTypes';
+import { UserModel } from "./userTypes";
 
 export interface WorkModel {
   id: string;
   name: string;
   image: string;
   description: string;
-  numOfFreelancers: number;
-  numOfRequests: number;
-  postPerMonth: number;
+  // numOfFreelancers: number;
+  // numOfRequests: number;
+  // postPerMonth: number;
   test: TestModel;
+  status: string | null;
 }
 
 export interface FreelancerWorkModel {
@@ -28,9 +29,19 @@ export interface TestResultModel {
   endTime: number[]; // [Year, Month, Day, Hour, Minute, Second, Nanosecond]
   point: number; // Total points scored
   numOfCorrectAnswers: number; // Number of correct answers
-  freelancer: UserModel; // The freelancer who took the test
+  // freelancer: UserModel; // The freelancer who took the test
   answerForQuestions: AnswerForQuestionModel[]; // Answers provided for each question
   passed: boolean; // Indicates if the test was passed
+}
+
+export interface DoingTestModel {
+  startTime: string;
+  endTime: string;
+  answerForQuestions: {
+    questionId: string;
+    choiceId?: string;
+    content?: string;
+  }[];
 }
 
 export interface AnswerForQuestionModel {
@@ -59,4 +70,49 @@ export interface ChoiceModel {
   content: string;
   answer: boolean;
   deleted: boolean;
+}
+export interface registerServiceModel {
+  status: string;
+  description: string;
+  testResultId: string;
+}
+
+export interface registerServiceResultModel {
+  id: string;
+  status: string;
+  description: string;
+  createdAt: number[]; // [Year, Month, Day, Hour, Minute, Second, Millisecond]
+  updatedAt: number[];
+  freelancer: UserModel;
+  work: WorkModel;
+  testResult: TestResultModel;
+  rate: {
+    freelancer: UserModel;
+    comment: string;
+    star: number;
+  }[];
+}
+
+export interface ServiceDetailModel {
+  id: string;
+  status: string;
+  description: string;
+  createdAt: number[]; // [Year, Month, Day, Hour, Minute, Second, Millisecond]
+  updatedAt: number[];
+  freelancer: UserModel;
+  work: WorkModel;
+  testResult: TestResultModel;
+  rate: RateModel[];
+}
+
+export interface RateModel {
+  freelancer: UserModel;
+  comment: string;
+  star: number;
+}
+
+export interface ImageModel {
+  uri?: string;
+  type?: string;
+  name?: string;
 }

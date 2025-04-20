@@ -2,15 +2,27 @@ import { Tabs } from "expo-router";
 import FontAwesome from "@expo/vector-icons/FontAwesome";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import { i18n, Language } from "@/localization";
+import { useSelector } from "react-redux";
+import { getLang } from "@/store/reducers";
+import { useEffect } from "react";
 
 // Language
 
 // i18n.locale = getLocales()[0].languageCode ?? "vn";
-i18n.locale = "vn";
-i18n.enableFallback = true;
-i18n.defaultLocale = Language.VIETNAMESE;
+// i18n.locale = "vn";
+// i18n.enableFallback = true;
+// i18n.defaultLocale = Language.VIETNAMESE;
 
 export default function Layout() {
+  // const lang = useSelector(getLang);
+
+  // useEffect(() => {
+  //   i18n.locale = lang;
+  //   i18n.enableFallback = true;
+  //   i18n.defaultLocale = Language.VIETNAMESE;
+  // }, [lang]);
+
+  // console.log("language: ", lang);
   return (
     <Tabs
       initialRouteName="(home)"

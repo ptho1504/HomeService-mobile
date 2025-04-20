@@ -1,46 +1,55 @@
-import React, { useEffect, useState } from 'react';
-import { Pressable, SafeAreaView, ScrollView } from 'react-native';
-import { VStack } from '@/components/ui/vstack';
-import { HStack } from '@/components/ui/hstack';
-import { Card } from '@/components/ui/card';
-import { Text } from '@/components/ui/text';
-import { Heading } from '@/components/ui/heading';
-import { Box } from '@/components/ui/box';
-import Ionicons from '@expo/vector-icons/Ionicons';
+import React, { useEffect, useState } from "react";
+import { Pressable, SafeAreaView, ScrollView } from "react-native";
+import { VStack } from "@/components/ui/vstack";
+import { HStack } from "@/components/ui/hstack";
+import { Card } from "@/components/ui/card";
+import { Text } from "@/components/ui/text";
+import { Heading } from "@/components/ui/heading";
+import { Box } from "@/components/ui/box";
+import Ionicons from "@expo/vector-icons/Ionicons";
 
-import { PaymentType, PostStatus, TakePostStatus, UserRole } from '@/constants';
+import {
+  PaymentType,
+  PostStatus,
+  TakePostStatus,
+  UserRole,
+  WorkScheduleStatus,
+} from "@/constants";
 
-import PostInfo, { isPostModel } from '@/components/post/PostInfo';
-import PostAddress from '@/components/post/PostAddress';
-import PaymentStatusBadge from '@/components/badge/PaymentStatusBadge';
-import { useSelector } from 'react-redux';
-import { selectPost, selectUser } from '@/store/reducers';
-import { Button, ButtonSpinner, ButtonText } from '@/components/ui/button';
-import { router, useLocalSearchParams } from 'expo-router';
-import { LinearGradient } from 'expo-linear-gradient';
-import { useGetPostByIdQuery, useTakePostMutation } from '@/services/post';
-import { Mode } from '@/components/list/PostList';
-import TakePostDialog from '@/components/dialog/TakePostDialog';
-import { CreateTakePostModel, PostModel } from '@/types/postTypes';
+import PostInfo, { isPostModel } from "@/components/post/PostInfo";
+import PostAddress from "@/components/post/PostAddress";
+import PaymentStatusBadge from "@/components/badge/PaymentStatusBadge";
+import { useSelector } from "react-redux";
+import { selectPost, selectUser } from "@/store/reducers";
+import { Button, ButtonSpinner, ButtonText } from "@/components/ui/button";
+import { router, useLocalSearchParams } from "expo-router";
+import { LinearGradient } from "expo-linear-gradient";
+import { useGetPostByIdQuery, useTakePostMutation } from "@/services/post";
+import { Mode } from "@/components/list/PostList";
+import TakePostDialog from "@/components/dialog/TakePostDialog";
+import { CreateTakePostModel, PostModel } from "@/types/postTypes";
 import {
   Toast,
   ToastDescription,
   ToastTitle,
   useToast,
-} from '@/components/ui/toast';
-import FreelancerInfo from '@/components/post/FreelancerInfo';
-import { Divider } from '@/components/ui/divider';
-import PostDetailSkeleton from '@/components/skeleton/PostDetailSkeleton';
+} from "@/components/ui/toast";
+import FreelancerInfo from "@/components/post/FreelancerInfo";
+import { Divider } from "@/components/ui/divider";
+import PostDetailSkeleton from "@/components/skeleton/PostDetailSkeleton";
+import { useViewNotificationMutation } from "@/services";
+import { i18n } from "@/localization";
 
 const PostDetail = () => {
-  const { takePostStatus, id } = useLocalSearchParams();
+  const { takePostStatus, id, notificationId, status } = useLocalSearchParams();
   const [mode, setMode] = React.useState(Mode.TAKE.key);
   const [post, setPost] = useState<PostModel>();
 
   const [showAlertDialog, setShowAlertDialog] = React.useState(false);
   const [takePost, { isLoading, error, data }] = useTakePostMutation();
+  const [viewNotification, { isLoading: notiLoading, error: notiError }] =
+    useViewNotificationMutation();
   const {
-    refetch,
     isFetching,
     error: postError,
     data: postData,
@@ -50,10 +59,41 @@ const PostDetail = () => {
   const currentPost = useSelector(selectPost);
 
   useEffect(() => {
-    const fetchPost = () => {
-      if (currentPost) {
+    const fetchPost = async () => {
+      if (currentPost && !id) {
         setPost(currentPost);
       } else if (!postError && postData?.returnCode === 1000) {
+        if (notificationId) {
+          const res = await viewNotification({
+            userId: currentUser?.id ?? "",
+            id: Number(notificationId),
+          });
+          if (error || res.data?.returnCode != 1000) {
+            console.log(res.error.data.message);
+            toast.show({
+              placement: "top",
+              duration: 3000,
+              render: ({ id }) => {
+                const uniqueToastId = "toast-" + id;
+                return (
+                  <Toast
+                    nativeID={uniqueToastId}
+                    action="error"
+                    variant="outline"
+                  >
+                    <ToastTitle>
+                      {i18n.t("st_view_failure_notification")}
+                    </ToastTitle>
+                    <ToastDescription>
+                      {res.error.data.message}
+                    </ToastDescription>
+                  </Toast>
+                );
+              },
+            });
+          }
+        }
+
         setPost(postData.items);
       }
     };
@@ -82,14 +122,15 @@ const PostDetail = () => {
       console.log(Mode[mode as keyof typeof Mode].value);
       console.log(res.error.data.message);
       toast.show({
-        placement: 'top',
+        placement: "top",
         duration: 3000,
         render: ({ id }) => {
-          const uniqueToastId = 'toast-' + id;
+          const uniqueToastId = "toast-" + id;
           return (
             <Toast nativeID={uniqueToastId} action="error" variant="outline">
               <ToastTitle>
-                {Mode[mode as keyof typeof Mode].value} công việc thất bại
+                {Mode[mode as keyof typeof Mode].value}{" "}
+                {i18n.t("stp_failed_job")}
               </ToastTitle>
               <ToastDescription>{res.error.data.message}</ToastDescription>
             </Toast>
@@ -99,15 +140,16 @@ const PostDetail = () => {
     } else {
       console.log(Mode[mode as keyof typeof Mode].value);
       toast.show({
-        placement: 'top',
+        placement: "top",
         duration: 3000,
         render: ({ id }) => {
-          const uniqueToastId = 'toast-' + id;
+          const uniqueToastId = "toast-" + id;
           return (
             <Toast nativeID={uniqueToastId} action="success" variant="outline">
-              <ToastTitle>Thành công</ToastTitle>
+              <ToastTitle>{i18n.t("word_success")}</ToastTitle>
               <ToastDescription>
-                {Mode[mode as keyof typeof Mode].value} công việc thành công
+                {Mode[mode as keyof typeof Mode].value}{" "}
+                {i18n.t("stp_successful_job")}
               </ToastDescription>
             </Toast>
           );
@@ -116,6 +158,10 @@ const PostDetail = () => {
       router.back();
     }
     setShowAlertDialog(false);
+  };
+
+  const doWork = (post: PostModel, workType: string) => {
+    router.push(`/(work)?workType=${workType}&status=${status}`);
   };
 
   if (isFetching || !post) {
@@ -134,12 +180,12 @@ const PostDetail = () => {
     <SafeAreaView className="flex h-full">
       <LinearGradient
         // Background Linear Gradient
-        colors={['#ebf7eb', 'transparent', '#ffffff']}
+        colors={["#ebf7eb", "transparent", "#ffffff"]}
         className="absolute h-[1000px] left-0 right-0 top-0"
       />
       {post === null ? (
         <Box>
-          <Text>Công việc không tồn tại</Text>
+          <Text>{i18n.t("st_job_not_exist")}</Text>
         </Box>
       ) : (
         <>
@@ -155,28 +201,30 @@ const PostDetail = () => {
 
                 <Card size="md" variant="elevated" className="shadow-2xl">
                   <VStack space="md">
-                    <Heading>Thanh toán</Heading>
+                    <Heading>{i18n.t("word_checkout")}</Heading>
                     <VStack
                       space="md"
                       className="border p-4 rounded-lg border-secondary-50"
                     >
                       <HStack space="md" className="items-center">
                         <Text className="font-medium text-lg">
-                          Tổng thanh toán :
+                          {i18n.t("word_total_payment")}:
                         </Text>
                         <Text className="font-medium text-lg text-success-400">
                           {post.price.toLocaleString()} VND
                         </Text>
                       </HStack>
                       <HStack space="md" className="items-center">
-                        <Text className="font-medium text-lg">Hình thức :</Text>
+                        <Text className="font-medium text-lg">
+                          {i18n.t("word_method")}:
+                        </Text>
                         <HStack space="md" className="items-center">
                           <Text className="text-md">
                             <Ionicons
                               name={
                                 post.paymentType === PaymentType.CASH.key
-                                  ? 'cash-outline'
-                                  : 'qr-code-outline'
+                                  ? "cash-outline"
+                                  : "qr-code-outline"
                               }
                               size={20}
                             />
@@ -192,7 +240,7 @@ const PostDetail = () => {
                       </HStack>
                       <HStack space="md" className="items-center">
                         <Text className="font-medium text-lg">
-                          Trạng thái :
+                          {i18n.t("word_payment_status")}:
                         </Text>
                         <PaymentStatusBadge status={post.payment} />
                       </HStack>
@@ -202,7 +250,7 @@ const PostDetail = () => {
                 {post.customerNote && (
                   <Card size="md" variant="elevated" className="shadow-2xl">
                     <VStack space="md">
-                      <Heading>Ghi chú cho Freelancers</Heading>
+                      <Heading>{i18n.t("word_note_for_freelancer")}:</Heading>
                       <Text>{post.customerNote}</Text>
                     </VStack>
                   </Card>
@@ -217,8 +265,8 @@ const PostDetail = () => {
             </Box>
           </ScrollView>
           {takePostStatus && (
-            <Box className="sticky bg-white p-4 rounded-t-lg shadow-lg">
-              {takePostStatus === 'REQUEST' ? (
+            <Box className="sticky p-4">
+              {takePostStatus === "REQUEST" ? (
                 <HStack space="md" className="justify-center">
                   <VStack className="w-1/2">
                     <Button
@@ -227,7 +275,7 @@ const PostDetail = () => {
                       className="bg-error-400"
                       onPress={() => actionPost(Mode.REJECT.key)}
                     >
-                      <ButtonText>Từ chối</ButtonText>
+                      <ButtonText>{i18n.t("word_cancel")}</ButtonText>
                     </Button>
                   </VStack>
                   <VStack className="w-1/2">
@@ -237,7 +285,7 @@ const PostDetail = () => {
                       className="bg-success-300"
                       onPress={() => actionPost(Mode.ACCEPT.key)}
                     >
-                      <ButtonText>Chấp nhận</ButtonText>
+                      <ButtonText>{i18n.t("word_confirm")}</ButtonText>
                     </Button>
                   </VStack>
                 </HStack>
@@ -248,7 +296,7 @@ const PostDetail = () => {
                   className="bg-success-300"
                   onPress={() => actionPost(Mode.TAKE.key)}
                 >
-                  <ButtonText>Nhận việc</ButtonText>
+                  <ButtonText>{i18n.t("word_get_job")}</ButtonText>
                 </Button>
               )}
             </Box>
@@ -260,14 +308,14 @@ const PostDetail = () => {
             PostStatus.FAILED.key,
           ].includes(post.status) &&
             currentUser?.role === UserRole.CUSTOMER && (
-              <Box className="sticky bg-white p-4 rounded-t-lg shadow-lg">
+              <Box className="sticky p-4">
                 <Button
                   size="xl"
                   action="positive"
                   className="bg-success-300"
                   onPress={() => actionPost(Mode.TAKE.key)}
                 >
-                  <ButtonText>Đăng lại</ButtonText>
+                  <ButtonText>{i18n.t("word_post_again")}</ButtonText>
                 </Button>
               </Box>
             )}
@@ -276,14 +324,45 @@ const PostDetail = () => {
             [PostStatus.INITIAL.key].includes(post.status) &&
             currentUser?.role === UserRole.CUSTOMER &&
             post.chooseFreelancer && (
-              <Box className="sticky bg-white p-4 rounded-t-lg shadow-lg">
+              <Box className="sticky p-4">
                 <Button
                   size="xl"
                   action="positive"
                   className="bg-success-300"
                   onPress={() => actionPost(Mode.TAKE.key)}
                 >
-                  <ButtonText>Chọn Freelancer</ButtonText>
+                  <ButtonText>{i18n.t("word_choose_freelancer")}</ButtonText>
+                </Button>
+              </Box>
+            )}
+
+          {post.workSchedules.length > post.numOfWorkedDay &&
+            currentUser?.role === UserRole.FREELANCER &&
+            [
+              WorkScheduleStatus.INITIAL.key,
+              WorkScheduleStatus.DOING.key,
+            ].includes(post.workSchedules[post.numOfWorkedDay].status) && (
+              <Box className="sticky p-4">
+                <Button
+                  size="xl"
+                  action="positive"
+                  className="bg-success-300"
+                  onPress={() =>
+                    doWork(
+                      post,
+                      post.workSchedules[post.numOfWorkedDay].status ===
+                        WorkScheduleStatus.INITIAL.key
+                        ? i18n.t("word_start_work")
+                        : i18n.t("word_end_work")
+                    )
+                  }
+                >
+                  <ButtonText>
+                    {post.workSchedules[post.numOfWorkedDay].status ===
+                    WorkScheduleStatus.INITIAL.key
+                      ? i18n.t("word_start_work")
+                      : i18n.t("word_end_work")}
+                  </ButtonText>
                 </Button>
               </Box>
             )}

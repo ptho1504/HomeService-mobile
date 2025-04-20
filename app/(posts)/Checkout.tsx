@@ -1,37 +1,38 @@
-import React, { useState } from 'react';
-import { SafeAreaView, ScrollView } from 'react-native';
-import { VStack } from '@/components/ui/vstack';
-import { HStack } from '@/components/ui/hstack';
-import { Card } from '@/components/ui/card';
-import { Text } from '@/components/ui/text';
-import { Heading } from '@/components/ui/heading';
-import { CreatePostModel, HouseCleaningOption } from '@/types/postTypes';
-import { Box } from '@/components/ui/box';
-import Ionicons from '@expo/vector-icons/Ionicons';
-import ScrollPickerModal from '@/components/modal/ScrollPickerModal';
-import { Button, ButtonSpinner, ButtonText } from '@/components/ui/button';
+import React, { useState } from "react";
+import { SafeAreaView, ScrollView } from "react-native";
+import { VStack } from "@/components/ui/vstack";
+import { HStack } from "@/components/ui/hstack";
+import { Card } from "@/components/ui/card";
+import { Text } from "@/components/ui/text";
+import { Heading } from "@/components/ui/heading";
+import { CreatePostModel, HouseCleaningOption } from "@/types/postTypes";
+import { Box } from "@/components/ui/box";
+import Ionicons from "@expo/vector-icons/Ionicons";
+import ScrollPickerModal from "@/components/modal/ScrollPickerModal";
+import { Button, ButtonSpinner, ButtonText } from "@/components/ui/button";
 import {
   Radio,
   RadioGroup,
   RadioIcon,
   RadioIndicator,
   RadioLabel,
-} from '@/components/ui/radio';
-import { CircleIcon } from '@/components/ui/icon';
-import { Textarea, TextareaInput } from '@/components/ui/textarea';
-import { useDispatch, useSelector } from 'react-redux';
-import { clearPostForm, selectPostForm } from '@/store/reducers';
-import { router, useLocalSearchParams } from 'expo-router';
-import { useCreatePostMutation } from '@/services/post';
+} from "@/components/ui/radio";
+import { CircleIcon } from "@/components/ui/icon";
+import { Textarea, TextareaInput } from "@/components/ui/textarea";
+import { useDispatch, useSelector } from "react-redux";
+import { clearPostForm, selectPostForm } from "@/store/reducers";
+import { router, useLocalSearchParams } from "expo-router";
+import { useCreatePostMutation } from "@/services/post";
 import {
   useToast,
   Toast,
   ToastTitle,
   ToastDescription,
-} from '@/components/ui/toast';
-import PostInfo from '@/components/post/PostInfo';
-import PostAddress from '@/components/post/PostAddress';
-import { LinearGradient } from 'expo-linear-gradient';
+} from "@/components/ui/toast";
+import PostInfo from "@/components/post/PostInfo";
+import PostAddress from "@/components/post/PostAddress";
+import { LinearGradient } from "expo-linear-gradient";
+import { i18n } from "@/localization";
 
 const options: HouseCleaningOption[] = [
   { area: 60, totalFreelancers: 2, duration: 3 },
@@ -42,7 +43,7 @@ const options: HouseCleaningOption[] = [
   { area: 400, totalFreelancers: 4, duration: 8 },
 ];
 
-const addressId = '08d44b77-8c12-49f4-8ce4-7e94ecafe2fd';
+const addressId = "08d44b77-8c12-49f4-8ce4-7e94ecafe2fd";
 
 const Checkout = () => {
   const dispatch = useDispatch();
@@ -52,8 +53,8 @@ const Checkout = () => {
 
   const [selectedHour, setSelectedHour] = useState<number>(0);
   const [selectedMinute, setSelectedMinute] = useState<number>(0);
-  const [paymentType, setPaymentType] = useState<string>('QR');
-  const [customerNote, setCustomerNote] = useState<string>('');
+  const [paymentType, setPaymentType] = useState<string>("QR");
+  const [customerNote, setCustomerNote] = useState<string>("");
 
   const toast = useToast();
 
@@ -67,16 +68,17 @@ const Checkout = () => {
         customerNote: customerNote,
         paymentType: paymentType,
       };
+      console.info(data);
       const res = await createPost(data);
       if (error || res.data?.returnCode != 1000) {
         toast.show({
-          placement: 'top',
+          placement: "top",
           duration: 3000,
           render: ({ id }) => {
-            const uniqueToastId = 'toast-' + id;
+            const uniqueToastId = "toast-" + id;
             return (
               <Toast nativeID={uniqueToastId} action="error" variant="outline">
-                <ToastTitle>Đăng công việc thất bại</ToastTitle>
+                <ToastTitle>{i18n.t("st_post_job_failed")}</ToastTitle>
                 <ToastDescription>{res.error.data.message}</ToastDescription>
               </Toast>
             );
@@ -84,18 +86,20 @@ const Checkout = () => {
         });
       } else {
         toast.show({
-          placement: 'top',
+          placement: "top",
           duration: 3000,
           render: ({ id }) => {
-            const uniqueToastId = 'toast-' + id;
+            const uniqueToastId = "toast-" + id;
             return (
               <Toast
                 nativeID={uniqueToastId}
                 action="success"
                 variant="outline"
               >
-                <ToastTitle>Thành công</ToastTitle>
-                <ToastDescription>Đăng công việc thành công</ToastDescription>
+                <ToastTitle>{i18n.t("word_success")}</ToastTitle>
+                <ToastDescription>
+                  {i18n.t("st_post_job_success")}
+                </ToastDescription>
               </Toast>
             );
           },
@@ -111,7 +115,7 @@ const Checkout = () => {
     <SafeAreaView className="flex h-full">
       <LinearGradient
         // Background Linear Gradient
-        colors={['#ebf7eb', 'transparent', '#ffffff']}
+        colors={["#ebf7eb", "transparent", "#ffffff"]}
         className="absolute h-[1000px] left-0 right-0 top-0"
       />
       <ScrollView>
@@ -121,7 +125,7 @@ const Checkout = () => {
             <PostInfo workType={workType} postForm={postForm} />
             <Card size="md" variant="elevated" className="shadow-2xl">
               <VStack space="md">
-                <Heading>Hình thức thanh toán</Heading>
+                <Heading>{i18n.t("word_payment_method")}</Heading>
                 <VStack
                   space="md"
                   className="border p-4 rounded-lg border-secondary-50"
@@ -139,7 +143,9 @@ const Checkout = () => {
                           <Text className="text-md">
                             <Ionicons name="qr-code-outline" size={20} />
                           </Text>
-                          <RadioLabel>Trừ vào số dư</RadioLabel>
+                          <RadioLabel>
+                            {i18n.t("word_deduct_from_balance")}
+                          </RadioLabel>
                         </HStack>
 
                         <RadioIndicator>
@@ -157,7 +163,7 @@ const Checkout = () => {
                           <Text className="text-md text-green-600">
                             <Ionicons name="cash-outline" size={20} />
                           </Text>
-                          <RadioLabel>Thanh toán tiền mặt</RadioLabel>
+                          <RadioLabel>{i18n.t("word_payment_cash")}</RadioLabel>
                         </HStack>
 
                         <RadioIndicator>
@@ -171,9 +177,9 @@ const Checkout = () => {
             </Card>
             <Card size="md" variant="elevated" className="shadow-2xl">
               <VStack space="md">
-                <Heading>Ghi chú cho Freelancers</Heading>
+                <Heading>{i18n.t("word_note_for_freelancer")}</Heading>
                 <Text className="text-gray-500">
-                  Ghi chú giúp Freelancers làm tốt hơn
+                  {i18n.t("st_note_description_for_freelancer")}
                 </Text>
                 <Textarea
                   size="md"
@@ -184,7 +190,7 @@ const Checkout = () => {
                   <TextareaInput
                     value={customerNote}
                     onChangeText={setCustomerNote}
-                    placeholder="Ghi chú dành cho Freelancers ở đây..."
+                    placeholder={i18n.t("word_note_placeholder_for_freelancer")}
                   />
                 </Textarea>
               </VStack>
@@ -203,7 +209,9 @@ const Checkout = () => {
       <Box className="sticky bg-white p-4 rounded-t-lg shadow-lg">
         <VStack space="md">
           <Box className="flex flex-row justify-between items-center">
-            <Text className="text-xl font-semibold">Tổng cộng:</Text>
+            <Text className="text-xl font-semibold">
+              {i18n.t("word_total_payment")}:
+            </Text>
             <Text className="text-xl font-semibold text-success-400">
               {postForm?.price.toLocaleString()} VND
             </Text>
@@ -215,7 +223,7 @@ const Checkout = () => {
             onPress={handlePost}
           >
             {isLoading && <ButtonSpinner className="text-secondary-50" />}
-            <ButtonText>Đăng việc</ButtonText>
+            <ButtonText>{i18n.t("word_post_a_job")}</ButtonText>
           </Button>
         </VStack>
       </Box>

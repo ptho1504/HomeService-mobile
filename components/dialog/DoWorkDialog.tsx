@@ -1,13 +1,7 @@
-import React from 'react';
+import React from "react";
 
-import { Heading } from '@/components/ui/heading';
-import { Text } from '../ui/text';
-import { Card } from '../ui/card';
-import { Grid, GridItem } from '../ui/grid';
-import { VStack } from '../ui/vstack';
-import { Package } from '@/types/postTypes';
-import { isLoading } from 'expo-font';
-import { Mode } from '../list/PostList';
+import { Heading } from "@/components/ui/heading";
+import { Text } from "../ui/text";
 import {
   AlertDialog,
   AlertDialogBackdrop,
@@ -15,8 +9,9 @@ import {
   AlertDialogHeader,
   AlertDialogBody,
   AlertDialogFooter,
-} from '../ui/alert-dialog';
-import { ButtonText, ButtonSpinner, Button } from '../ui/button';
+} from "../ui/alert-dialog";
+import { ButtonText, ButtonSpinner, Button } from "../ui/button";
+import { i18n } from "@/localization";
 
 interface Props {
   showAlertDialog: boolean;
@@ -41,23 +36,25 @@ const DoWorkDialog = ({
       <AlertDialogContent>
         <AlertDialogHeader>
           <Heading className="text-typography-950 font-semibold" size="md">
-            Bạn có muốn {workType === 'start' ? 'bắt đầu' : 'kết thúc'} công
-            việc này?
+            {workType === "start"
+              ? i18n.t("st_confirm_start_work")
+              : i18n.t("st_end_work_sucst_confirm_end_workcess")}
           </Heading>
         </AlertDialogHeader>
         <AlertDialogBody className="mt-3 mb-4">
           <Text>
-            Vui lòng xác nhận để{' '}
-            {workType === 'start' ? 'bắt đầu' : 'hoàn thành'} công việc
+            {workType === "start"
+              ? i18n.t("st_confirm_start_job")
+              : i18n.t("st_confirm_finish_job")}
           </Text>
         </AlertDialogBody>
         <AlertDialogFooter className="">
           <Button variant="outline" action="secondary" onPress={handleClose}>
-            <ButtonText>Hủy</ButtonText>
+            <ButtonText>{i18n.t("word_cancel")}</ButtonText>
           </Button>
           <Button onPress={handleUploadImages} action="positive">
             {isLoading && <ButtonSpinner className="text-secondary-50" />}
-            <ButtonText>Đồng ý</ButtonText>
+            <ButtonText>{i18n.t("word_confirm")}</ButtonText>
           </Button>
         </AlertDialogFooter>
       </AlertDialogContent>

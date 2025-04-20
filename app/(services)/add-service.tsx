@@ -19,9 +19,9 @@ import AlertConfirmDialog from "@/components/dialog/AlertConfirmDialog";
 import { useToast } from "@/components/ui/toast";
 import { showToastMessage } from "@/components/Toast/ToastMessage";
 
-i18n.locale = "vn";
-i18n.enableFallback = true;
-i18n.defaultLocale = Language.VIETNAMESE;
+// i18n.locale = "vn";
+// i18n.enableFallback = true;
+// i18n.defaultLocale = Language.VIETNAMESE;
 
 const AddService = () => {
   const user = useSelector(selectUser);

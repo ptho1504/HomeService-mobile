@@ -14,9 +14,10 @@ import Ionicons from "@expo/vector-icons/Ionicons";
 import { i18n, Language } from "@/localization";
 import { Input, InputField, InputIcon, InputSlot } from "@/components/ui/input";
 import { Icon, SearchIcon } from "@/components/ui/icon";
-i18n.locale = "vn";
-i18n.enableFallback = true;
-i18n.defaultLocale = Language.VIETNAMESE;
+
+// i18n.locale = "vn";
+// i18n.enableFallback = true;
+// i18n.defaultLocale = Language.VIETNAMESE;
 
 const AddAdress = () => {
   return (

@@ -67,6 +67,10 @@ export const en = {
   [LocalizationKey.WORD_DAY_THU]: "Thu",
   [LocalizationKey.WORD_DAY_FRI]: "Fri",
   [LocalizationKey.WORD_DAY_SAT]: "Sat",
+  [LocalizationKey.ST_SWITCH_LANGUAGE_TO]: "Language",
+  [LocalizationKey.ST_OTP_AUTO_SENT]: "We are automatically sending an OTP to",
+  [LocalizationKey.WORD_EMAIL]: "email",
+  [LocalizationKey.ST_CHECK_EMAIL]: "Check your email",
 
   // add working screen
   [LocalizationKey.ADD_WORKING]: "Add service",
@@ -118,7 +122,7 @@ export const en = {
 
   // job in system
   [LocalizationKey.JOB_HOMECLEANING]: "Home cleaning",
-  [LocalizationKey.JOB_BABYSITTING]: "Babysitting",
+  [LocalizationKey.JOB_BABYSITTING]: "Baby sitting",
 
   // word for model confirm
   [LocalizationKey.WORD_JOIN]: "Join",
@@ -293,7 +297,7 @@ export const en = {
 
   // Customer folder
   // home screen
-  [LocalizationKey.WORD_HELLO]: "Xin chào",
+  [LocalizationKey.WORD_HELLO]: "Hello",
 
   //Customer folder -> home screen -> RequiredAuthenticationModal
   [LocalizationKey.WORD_REQUIRE_LOGIN]:

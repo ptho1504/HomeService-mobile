@@ -43,12 +43,13 @@ import {
 } from '@/components/ui/radio';
 import { useDebounce, validateEmail } from '@/utils/helper';
 import { Text } from '@/components/ui/text';
+import LanguageDropdown from '@/components/customeButton/LanguageDropdown';
 
 // import { getLocales } from 'expo-localization';
 // i18n.locale = getLocales()[0].languageCode ?? "vn";
-i18n.locale = 'vn';
-i18n.enableFallback = true;
-i18n.defaultLocale = Language.VIETNAMESE;
+// i18n.locale = 'vn';
+// i18n.enableFallback = true;
+// i18n.defaultLocale = Language.VIETNAMESE;
 
 const LogIn = () => {
   // Set Valid
@@ -145,18 +146,7 @@ const LogIn = () => {
               Service
             </Text>
           </Box>
-          <View className="flex-2 bg-white border-2 border-primary-300 rounded-md">
-            <Button
-              size="md"
-              variant="solid"
-              action="primary"
-              className="bg-white"
-            >
-              <ButtonText className="text-primary-500">
-                {i18n.t('language')}
-              </ButtonText>
-            </Button>
-          </View>
+          <LanguageDropdown />
         </Box>
 
         {/* Logo */}

@@ -50,9 +50,9 @@ import {
 import { TransactionModel } from "@/types/userTypes";
 
 // i18n.locale = getLocales()[0].languageCode ?? "vn";
-i18n.locale = "vn";
-i18n.enableFallback = true;
-i18n.defaultLocale = Language.VIETNAMESE;
+// i18n.locale = "vn";
+// i18n.enableFallback = true;
+// i18n.defaultLocale = Language.VIETNAMESE;
 
 const Transaction = () => {
   const { type } = useLocalSearchParams();

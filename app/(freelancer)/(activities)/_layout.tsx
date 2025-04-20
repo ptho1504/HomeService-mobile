@@ -1,11 +1,24 @@
 import { createMaterialTopTabNavigator } from "@react-navigation/material-top-tabs";
 import { RootStackParamList } from "@/types/postTypes";
 import Posts from ".";
-import { i18n } from "@/localization";
+import { i18n, Language } from "@/localization";
+import { getLang } from "@/store/reducers";
+import { useEffect } from "react";
+import { useSelector } from "react-redux";
 
 const Tab = createMaterialTopTabNavigator<RootStackParamList>();
 
 export default function ActivityLayout() {
+  // const lang = useSelector(getLang);
+
+  // useEffect(() => {
+  //   i18n.locale = lang;
+  //   i18n.enableFallback = true;
+  //   i18n.defaultLocale = Language.VIETNAMESE;
+  // }, [lang]);
+
+  // console.log("language in freelancer activity: ", lang);
+
   return (
     <Tab.Navigator
       screenOptions={{

@@ -1,4 +1,4 @@
-import { Image, TouchableWithoutFeedback, View } from 'react-native';
+import { Image, TouchableWithoutFeedback, View } from "react-native";
 import {
   FormControl,
   FormControlError,
@@ -8,40 +8,41 @@ import {
   FormControlHelperText,
   FormControlLabel,
   FormControlLabelText,
-} from '@/components/ui/form-control';
-import { Button, ButtonSpinner, ButtonText } from '@/components/ui/button';
-import { i18n, Language } from '@/localization';
-import { Box } from '@/components/ui/box';
-import { useEffect, useState } from 'react';
-import { Input, InputField, InputIcon, InputSlot } from '@/components/ui/input';
+} from "@/components/ui/form-control";
+import { Button, ButtonSpinner, ButtonText } from "@/components/ui/button";
+import { i18n, Language } from "@/localization";
+import { Box } from "@/components/ui/box";
+import { useEffect, useState } from "react";
+import { Input, InputField, InputIcon, InputSlot } from "@/components/ui/input";
 import {
   AlertCircleIcon,
   AtSignIcon,
   CircleIcon,
   MailIcon,
-} from '@/components/ui/icon';
+} from "@/components/ui/icon";
 import {
   Radio,
   RadioGroup,
   RadioIcon,
   RadioIndicator,
   RadioLabel,
-} from '@/components/ui/radio';
-import { Link, router, useLocalSearchParams } from 'expo-router';
-import { Divider } from '@/components/ui/divider';
-import * as SecureStore from 'expo-secure-store';
-import { useSignupMutation } from '@/services';
-import { LOCAL_STORAGE_JWT_KEY, LOCAL_STORAGE_OTP } from '@/constants';
-import { useDispatch } from 'react-redux';
-import { authenticateUser, setUser } from '@/store/reducers';
-import { Keyboard } from 'react-native';
-import { Text } from '@/components/ui/text';
-import { useDebounce, validateEmail } from '@/utils/helper';
-import { registerForPushNotificationsAsync } from '@/utils/firebaseUtil';
+} from "@/components/ui/radio";
+import { Link, router, useLocalSearchParams } from "expo-router";
+import { Divider } from "@/components/ui/divider";
+import * as SecureStore from "expo-secure-store";
+import { useSignupMutation } from "@/services";
+import { LOCAL_STORAGE_JWT_KEY, LOCAL_STORAGE_OTP } from "@/constants";
+import { useDispatch } from "react-redux";
+import { authenticateUser, setUser } from "@/store/reducers";
+import { Keyboard } from "react-native";
+import { Text } from "@/components/ui/text";
+import { useDebounce, validateEmail } from "@/utils/helper";
+import { registerForPushNotificationsAsync } from "@/utils/firebaseUtil";
+import LanguageDropdown from "@/components/customeButton/LanguageDropdown";
 // i18n.locale = getLocales()[0].languageCode ?? "vn";
-i18n.locale = 'vn';
-i18n.enableFallback = true;
-i18n.defaultLocale = Language.VIETNAMESE;
+// i18n.locale = 'vn';
+// i18n.enableFallback = true;
+// i18n.defaultLocale = Language.VIETNAMESE;
 
 const Register = () => {
   //
@@ -53,24 +54,24 @@ const Register = () => {
 
   // Set Valid
   const [isInvalid, setIsInvalid] = useState(false);
-  const [errorText, setErrorText] = useState('');
+  const [errorText, setErrorText] = useState("");
   const [loading, setLoading] = useState(false);
 
   const [isRoleInvalid, setIsRoleInvalid] = useState(false);
-  const [errorRoleText, setErrorRoleText] = useState('');
+  const [errorRoleText, setErrorRoleText] = useState("");
 
   // Set form
-  const [username, setUsername] = useState<string>('');
-  const [role, setRole] = useState<string>('');
-  const [expoPushToken, setExpoPushToken] = useState('');
+  const [username, setUsername] = useState<string>("");
+  const [role, setRole] = useState<string>("");
+  const [expoPushToken, setExpoPushToken] = useState("");
   // Call Api
   const [signUp] = useSignupMutation();
 
   useEffect(() => {
     registerForPushNotificationsAsync()
-      .then(token => {
+      .then((token) => {
         console.log(token);
-        setExpoPushToken(token ?? '');
+        setExpoPushToken(token ?? "");
       })
       .catch((error: any) => setExpoPushToken(`${error}`));
   }, []);
@@ -83,14 +84,14 @@ const Register = () => {
     console.log(email, username, role, otp);
 
     setLoading(true);
-    setErrorText('');
+    setErrorText("");
     setIsInvalid(false);
     setIsRoleInvalid(false);
 
     // Check Role
     if (!role) {
       setIsRoleInvalid(true);
-      setErrorRoleText(i18n.t('role_not_found'));
+      setErrorRoleText(i18n.t("role_not_found"));
       setLoading(false);
       return;
     }
@@ -107,7 +108,7 @@ const Register = () => {
     console.log(response);
 
     if (response.error) {
-      const message = response.error.data?.message || 'Unknown error';
+      const message = response.error.data?.message || "Unknown error";
       // console.log(message);
       setIsInvalid(true);
       setErrorText(message);
@@ -120,7 +121,7 @@ const Register = () => {
 
       // Save to Async storage
       if (!response.data.items.jwt) {
-        console.error('JWT is missing!');
+        console.error("JWT is missing!");
         return;
       }
 
@@ -128,11 +129,11 @@ const Register = () => {
 
       await SecureStore.setItemAsync(
         LOCAL_STORAGE_JWT_KEY,
-        response.data.items.jwt!,
+        response.data.items.jwt!
       );
 
       setLoading(false);
-      router.replace('/(customer)/(home)');
+      router.replace("/(customer)/(home)");
     }
   };
 
@@ -144,7 +145,7 @@ const Register = () => {
       <View className="flex items-center gap-5 justify-start h-full bg-white">
         <Image
           className="h-full w-full absolute opacity-50"
-          source={require('@/assets/images/bg.png')}
+          source={require("@/assets/images/bg.png")}
         />
 
         {/* header */}
@@ -157,25 +158,14 @@ const Register = () => {
               Service
             </Text>
           </View>
-          <View className="flex-2 bg-white border-2 border-primary-300 rounded-md">
-            <Button
-              size="md"
-              variant="solid"
-              action="primary"
-              className="bg-white"
-            >
-              <ButtonText className="text-primary-500">
-                {i18n.t('language')}
-              </ButtonText>
-            </Button>
-          </View>
+          <LanguageDropdown />
         </View>
 
         {/* Logo */}
         <Box className="shadow-2xl">
           <Image
             className="w-40 h-40 rounded-full"
-            source={require('@/assets/images/logo.jpg')}
+            source={require("@/assets/images/logo.jpg")}
           />
         </Box>
         {/* login */}
@@ -199,7 +189,7 @@ const Register = () => {
                 className="my-1 flex items-center h-12 border-none"
               >
                 <InputSlot className="pl-3 flex items-center">
-                  <InputIcon as={MailIcon} size={'lg'} />
+                  <InputIcon as={MailIcon} size={"lg"} />
                 </InputSlot>
                 <InputField
                   size="lg"
@@ -232,15 +222,15 @@ const Register = () => {
             <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
               <Input className="my-1 flex items-center h-12">
                 <InputSlot className="pl-3 flex items-center">
-                  <InputIcon as={AtSignIcon} size={'lg'} />
+                  <InputIcon as={AtSignIcon} size={"lg"} />
                 </InputSlot>
                 <InputField
                   size="lg"
                   className="leading-none px-4 py-2 h-full"
                   type="text"
-                  placeholder={`${i18n.t('username_placeholder')}`}
+                  placeholder={`${i18n.t("username_placeholder")}`}
                   value={username}
-                  onChangeText={text => setUsername(text)}
+                  onChangeText={(text) => setUsername(text)}
                 />
               </Input>
             </TouchableWithoutFeedback>
@@ -274,7 +264,7 @@ const Register = () => {
                 <RadioIndicator>
                   <RadioIcon as={CircleIcon} />
                 </RadioIndicator>
-                <RadioLabel size="lg">{i18n.t('freelancer')}</RadioLabel>
+                <RadioLabel size="lg">{i18n.t("freelancer")}</RadioLabel>
               </Radio>
               <Radio
                 value="CUSTOMER"
@@ -285,7 +275,7 @@ const Register = () => {
                 <RadioIndicator>
                   <RadioIcon as={CircleIcon} />
                 </RadioIndicator>
-                <RadioLabel size="lg">{i18n.t('customer')}</RadioLabel>
+                <RadioLabel size="lg">{i18n.t("customer")}</RadioLabel>
               </Radio>
             </RadioGroup>
             <FormControlError>
@@ -305,16 +295,16 @@ const Register = () => {
                 variant="solid"
                 action="positive"
               >
-                {loading && <ButtonSpinner color={'#D1D5DB'} />}
+                {loading && <ButtonSpinner color={"#D1D5DB"} />}
                 <ButtonText size="lg" className="text-white">
-                  {i18n.t('login')}
+                  {i18n.t("login")}
                 </ButtonText>
               </Button>
             </TouchableWithoutFeedback>
 
             <Box className="mt-3 px-10  flex flex-row items-center justify-center opacity-0 ">
               <Divider className="my-1 w-1/2" />
-              <Text className="text-center px-4">{i18n.t('or')}</Text>
+              <Text className="text-center px-4">{i18n.t("or")}</Text>
               <Divider className="my-1 w-1/2" />
             </Box>
           </Box>

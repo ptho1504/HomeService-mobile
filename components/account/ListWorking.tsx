@@ -19,6 +19,8 @@ const ListWorking = () => {
   // lấy thông tin user
   const user = useSelector(selectUser);
 
+  const [isDone, setDone] = useState(false);
+
   const [dataServices, setDataService] = useState<
     {
       serviceId: string;
@@ -37,12 +39,13 @@ const ListWorking = () => {
 
       const dataConvert = dataFilter.map((item) => ({
         serviceId: item.id,
-        serviceName: WorkType[item.name as keyof typeof WorkType].value,
+        serviceName: item.name,
         serviceImage: item.image,
         serviceStatus: item.status,
       }));
 
       setDataService(dataConvert);
+      setDone(true);
     }
   }, [data]);
 
@@ -81,7 +84,7 @@ const ListWorking = () => {
               </Avatar>
               <VStack>
                 <Text size="2xl" className="ms-3 font-semibold">
-                  {serviceName}
+                  {WorkType[serviceName as keyof typeof WorkType].value}
                 </Text>
                 <Text
                   size="sm"
@@ -99,28 +102,25 @@ const ListWorking = () => {
                 </Text>
               </VStack>
             </View>
-            <Ionicons
-              name="arrow-forward"
-              size={24}
-            />
+            <Ionicons name="arrow-forward" size={24} />
           </Card>
         )}
       </Pressable>
     );
   };
 
-  return isFetching ? (
+  return error ? (
+    <Text size="lg" className="text-orange-500 text-center mt-5">
+      {i18n.t("st_system_error")}
+    </Text>
+  ) : !isDone ? (
     <VStack className="mt-5">
       <Spinner size="large" color={colors.emerald[600]} />
       <Text size="lg" className="text-green-800 text-center">
         {i18n.t("word_loading_your_service")}
       </Text>
     </VStack>
-  ) : error ? (
-    <Text size="lg" className="text-orange-500 text-center mt-5">
-      {i18n.t("st_system_error")}
-    </Text>
-  ) : !error && dataServices.length === 0 ? (
+  ) : isDone && dataServices.length === 0 ? (
     <Text size="lg" className="text-orange-500 text-center mt-5">
       {i18n.t("st_not_in_services")}
     </Text>

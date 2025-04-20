@@ -13,9 +13,9 @@ import { useSelector } from 'react-redux';
 import { selectIsAuthenticated, selectUser } from '@/store/reducers';
 import RequiredAuthenticationModal from '@/components/authentication/RequiredAuthenticationModal';
 
-i18n.locale = 'vn';
-i18n.enableFallback = true;
-i18n.defaultLocale = Language.VIETNAMESE;
+// i18n.locale = 'vn';
+// i18n.enableFallback = true;
+// i18n.defaultLocale = Language.VIETNAMESE;
 
 interface Props {
   route:

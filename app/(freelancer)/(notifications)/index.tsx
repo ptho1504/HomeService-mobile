@@ -12,9 +12,9 @@ import NotificationSkeleton from '@/components/skeleton/NotificationSkeleton';
 import { useSelector } from 'react-redux';
 import { selectUser } from '@/store/reducers';
 
-i18n.locale = 'vn';
-i18n.enableFallback = true;
-i18n.defaultLocale = Language.VIETNAMESE;
+// i18n.locale = 'vn';
+// i18n.enableFallback = true;
+// i18n.defaultLocale = Language.VIETNAMESE;
 
 interface Props {
   route:

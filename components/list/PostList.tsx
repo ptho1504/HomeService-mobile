@@ -56,7 +56,7 @@ import { useViewNotificationMutation } from "@/services";
 import { i18n } from "@/localization";
 import { getLocales } from "expo-localization";
 
-i18n.locale = getLocales()[0].languageCode ?? "vn";
+// i18n.locale = getLocales()[0].languageCode ?? "vn";
 
 interface Props {
   posts?: PostModel[] | TakePostModel[];

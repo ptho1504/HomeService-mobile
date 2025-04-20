@@ -26,9 +26,9 @@ import { Text } from "@/components/ui/text";
 import { obfuscateEmail } from "@/utils/helper";
 import { Spinner } from "@/components/ui/spinner";
 // i18n.locale = getLocales()[0].languageCode ?? "vn";
-i18n.locale = "vn";
-i18n.enableFallback = true;
-i18n.defaultLocale = Language.VIETNAMESE;
+// i18n.locale = "vn";
+// i18n.enableFallback = true;
+// i18n.defaultLocale = Language.VIETNAMESE;
 
 const VerifySignUp = () => {
   const { email } = useLocalSearchParams<{
@@ -85,10 +85,8 @@ const VerifySignUp = () => {
           {i18n.t("enter_verify")}
         </Text>
         <Text className="text-xl font-font-normal">
-          {i18n.t("st_send_otp_to_email")}
-          {": "}
-          {obfuscateEmail(email)}
-          {i18n.t("st_check_your_email")}
+          {i18n.t("st_otp_auto_sent") + " " + obfuscateEmail(email)}{" "}
+          {i18n.t("word_email") + ".\n" + i18n.t("st_check_email")}.
         </Text>
         {/* OTP */}
         <View className="my-5 w-full">
@@ -103,8 +101,8 @@ const VerifySignUp = () => {
             theme={{
               pinCodeContainerStyle: {
                 backgroundColor: "white",
-                width: 58,
-                height: 58,
+                width: 50,
+                height: 50,
                 borderRadius: 12,
               },
             }}

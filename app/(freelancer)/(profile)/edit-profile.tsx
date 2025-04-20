@@ -35,9 +35,9 @@ import { BankAccount } from "@/types/types";
 import { useDebounce } from "@/utils/helper";
 import { LinearGradient } from "expo-linear-gradient";
 
-i18n.locale = "vn";
-i18n.enableFallback = true;
-i18n.defaultLocale = Language.VIETNAMESE;
+// i18n.locale = "vn";
+// i18n.enableFallback = true;
+// i18n.defaultLocale = Language.VIETNAMESE;
 
 const InforSchema = Yup.object().shape({
   name: Yup.string()

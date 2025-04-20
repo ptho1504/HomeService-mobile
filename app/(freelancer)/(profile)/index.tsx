@@ -2,6 +2,7 @@ import { Button, ButtonText } from "@/components/ui/button";
 import { LOCAL_STORAGE_JWT_KEY } from "@/constants";
 import {
   clearAuthState,
+  getLang,
   selectIsAuthenticated,
   selectUser,
   setIsAuthenticated,
@@ -27,11 +28,15 @@ import RequiredAuthenticationModal from "@/components/authentication/RequiredAut
 import ListWorking from "@/components/account/ListWorking";
 import { Divider } from "@/components/ui/divider";
 import StarRating from "@/components/badge/Rating";
-i18n.locale = "vn";
-i18n.enableFallback = true;
-i18n.defaultLocale = Language.VIETNAMESE;
+import LanguageToggleButton from "@/components/customeButton/LanguageToggleButton";
+import LanguageDropdown from "@/components/customeButton/LanguageDropdown";
+// i18n.locale = "vn";
+// i18n.enableFallback = true;
+// i18n.defaultLocale = Language.VIETNAMESE;
 
 const Profile = () => {
+  // const lang = useSelector(getLang);
+
   const currentUser = useSelector(selectUser);
   const isAuthenticated = useSelector(selectIsAuthenticated);
   // const isAuthenticated = true;
@@ -215,6 +220,17 @@ const Profile = () => {
                   color="#fff"
                 />
               </Pressable>
+
+              {/* Switch language */}
+              <View className=" rounded-lg border border-gray-100 bg-success-200 p-4 flex flex-row items-center gap-4 justify-between">
+                <Box className="flex flex-row gap-2 items-center">
+                  <Ionicons name="globe-outline" size={32} color="white" />
+                  <Text className="text-xl font-bold text-white">
+                    {i18n.t("st_switch_language_to")}{" :"}
+                  </Text>
+                </Box>
+                <LanguageDropdown />
+              </View>
 
               {/* Logout */}
               <Pressable

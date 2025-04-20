@@ -45,7 +45,7 @@ import { LinearGradient } from "expo-linear-gradient";
 import { i18n } from "@/localization";
 
 import { getLocales } from 'expo-localization';
-i18n.locale = getLocales()[0].languageCode ?? "vn";
+// i18n.locale = getLocales()[0].languageCode ?? "vn";
 
 const userId = "USER-1";
 const workId = "WORK-1";

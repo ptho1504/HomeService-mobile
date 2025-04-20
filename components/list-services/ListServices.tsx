@@ -22,22 +22,23 @@ export interface IService {
   id: number;
   href: Href;
 }
-const services: IService[] = [
-  {
-    id: 1,
-    title: WorkType.HOUSECLEANING.value,
-    iconName: "cleaning-services",
-    href: `/Post?workType=${WorkType.HOUSECLEANING.key}`,
-  },
-  {
-    id: 2,
-    title: WorkType.BABYSITTING.value,
-    iconName: "baby-changing-station",
-    href: `/Post?workType=${WorkType.BABYSITTING.key}`,
-  },
-];
 
 export default function ListServices() {
+  const services: IService[] = [
+    {
+      id: 1,
+      title: WorkType.HOUSECLEANING.value,
+      iconName: "cleaning-services",
+      href: `/Post?workType=${WorkType.HOUSECLEANING.key}`,
+    },
+    {
+      id: 2,
+      title: WorkType.BABYSITTING.value,
+      iconName: "baby-changing-station",
+      href: `/Post?workType=${WorkType.BABYSITTING.key}`,
+    },
+  ];
+
   const isAuthenticated = useSelector(selectIsAuthenticated);
   const [showModal, setShowModal] = React.useState(false);
   return (
@@ -57,12 +58,12 @@ export default function ListServices() {
                 router.push(item.href);
               }
             }}
-            className="flex py-2"
+            className="flex flex-col items-center mt-2 mx-5 w-20 text-wrap"
           >
             {({ pressed }) => (
               <>
                 <Box
-                  className={`mx-4 px-2 w-16 h-16 border border-success-200 flex justify-center items-center bg-success-0 rounded-3xl ${
+                  className={`mx-4 px-2 w-20 h-20 border border-success-200 flex justify-center items-center bg-success-0 rounded-3xl ${
                     pressed ? "opacity-50" : "opacity-100"
                   }`}
                 >

@@ -66,6 +66,10 @@ export const vn = {
   [LocalizationKey.WORD_DAY_THU]: "Th 5",
   [LocalizationKey.WORD_DAY_FRI]: "Th 6",
   [LocalizationKey.WORD_DAY_SAT]: "Th 7",
+  [LocalizationKey.ST_SWITCH_LANGUAGE_TO]: "Ngôn ngữ",
+  [LocalizationKey.ST_OTP_AUTO_SENT]: "Chúng tôi đang tự động gửi mã OTP đến",
+  [LocalizationKey.WORD_EMAIL]: "email",
+  [LocalizationKey.ST_CHECK_EMAIL]: "Kiểm tra email của bạn",
 
   // màn hình thêm dịch vụ
   [LocalizationKey.ADD_WORKING]: "Thêm dịch vụ",

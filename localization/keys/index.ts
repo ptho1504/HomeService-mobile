@@ -60,6 +60,10 @@ export enum LocalizationKey {
   WORD_DAY_THU = "word_day_thu",
   WORD_DAY_FRI = "word_day_fri",
   WORD_DAY_SAT = "word_day_sat",
+  ST_SWITCH_LANGUAGE_TO = "st_switch_language_to",
+  ST_OTP_AUTO_SENT = "st_otp_auto_sent",
+  WORD_EMAIL = "word_email",
+  ST_CHECK_EMAIL = "st_check_email",
 
   // add working screen
   ADD_WORKING = "add_workings",

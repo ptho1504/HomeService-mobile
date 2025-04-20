@@ -24,9 +24,12 @@ import ListAddress from "@/components/account/ListAddress";
 import { useDispatch } from "react-redux";
 import { router, useFocusEffect } from "expo-router";
 import RequiredAuthenticationModal from "@/components/authentication/RequiredAuthenticationModal";
-i18n.locale = "vn";
-i18n.enableFallback = true;
-i18n.defaultLocale = Language.VIETNAMESE;
+import LanguageToggleButton from "@/components/customeButton/LanguageToggleButton";
+import LanguageDropdown from "@/components/customeButton/LanguageDropdown";
+
+// i18n.locale = "vn";
+// i18n.enableFallback = true;
+// i18n.defaultLocale = Language.VIETNAMESE;
 
 const Home = () => {
   const currentUser = useSelector(selectUser);
@@ -200,6 +203,17 @@ const Home = () => {
                   color="#fff"
                 />
               </Pressable>
+
+              {/* Switch language */}
+              <View className=" rounded-lg border border-gray-100 bg-success-200 p-4 flex flex-row items-center gap-4 justify-between">
+                <Box className="flex flex-row gap-2 items-center">
+                  <Ionicons name="globe-outline" size={32} color="white" />
+                  <Text className="text-xl font-bold text-white">
+                    {i18n.t("st_switch_language_to")}{" :"}
+                  </Text>
+                </Box>
+                <LanguageDropdown />
+              </View>
 
               {/* Logout */}
               <Pressable

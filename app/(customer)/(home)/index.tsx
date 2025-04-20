@@ -24,10 +24,11 @@ import { i18n, Language } from "@/localization";
 import { HStack } from "@/components/ui/hstack";
 import Carousel from "@/components/carousel/Carousel";
 import ListServices from "@/components/list-services/ListServices";
+import LanguageToggleButton from "@/components/customeButton/LanguageToggleButton";
 
-i18n.locale = "vn";
-i18n.enableFallback = true;
-i18n.defaultLocale = Language.VIETNAMESE;
+// i18n.locale = "vn";
+// i18n.enableFallback = true;
+// i18n.defaultLocale = Language.VIETNAMESE;
 
 const Home = () => {
   const currentUser = useSelector(selectUser);
@@ -56,19 +57,23 @@ const Home = () => {
         />
         <VStack space="2xl" className="px-5 h-full flex items-center">
           {/* Hello And change languae */}
-          <Box className="w-full m-5 px-8 py-2 flex flex-row justify-between h-auto bg-green-300 rounded-full">
+          <Box className="w-full m-5 px-8 py-2 flex flex-row items-center justify-between h-auto bg-green-300 rounded-full">
             <VStack>
               <Text size="xl" className="px-4 w-full text-white font-semibold">
-                {i18n.t("word_hello")} 👋,
+                {i18n.t("word_hello")} 👋
               </Text>
-              <Text size="xl" className="px-4 w-full text-white font-semibold">
+              <Text
+                size="xl"
+                className={
+                  "px-4 w-full text-white font-semibold " +
+                  (currentUser !== null ? "block" : "hidden")
+                }
+              >
                 {currentUser?.name}
               </Text>
             </VStack>
             <Box className="px-4 rounded-full flex flex-row items-center justify-between gap-3 bg-white">
-              <Pressable className="bg-green-200 p-3 rounded-full">
-                <FlagVN />
-              </Pressable>
+              <LanguageToggleButton className="bg-green-200 p-3 rounded-full" />
               <Pressable className="bg-green-200 p-3 rounded-full">
                 <Ionicons name="calendar-sharp" size={20} color="black" />
               </Pressable>

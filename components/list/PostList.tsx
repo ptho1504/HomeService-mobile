@@ -414,8 +414,8 @@ const PostList = ({ posts, takePostStatus, status, refetch }: Props) => {
                           convertToPost(post).workSchedules[
                             convertToPost(post).numOfWorkedDay
                           ].status === WorkScheduleStatus.INITIAL.key
-                            ? i18n.t("word_start_work")
-                            : i18n.t("word_end_work")
+                            ? "start"
+                            : "end"
                         )
                       }
                     >

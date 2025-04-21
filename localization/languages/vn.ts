@@ -41,9 +41,9 @@ export const vn = {
   [LocalizationKey.SERVICE]: "Dịch vụ",
   [LocalizationKey.ACCOUNT]: "Tài khoản",
   [LocalizationKey.REPUTATION]: "Điểm uy tín",
-  [LocalizationKey.PHONE]: "Số điện thoại",
+  [LocalizationKey.PHONE]: "SĐT",
   [LocalizationKey.EMAIL]: "Email",
-  [LocalizationKey.FINANCE]: "Tài chính",
+  [LocalizationKey.FINANCE]: "Nạp rút tiền",
   [LocalizationKey.ADDRESSES]: "Danh sách địa chỉ",
   [LocalizationKey.ADD_ADDRESSES]: "Thêm địa chỉ mới",
   [LocalizationKey.NO_ADDRESSES]: "Bạn cần thêm địa chỉ mới",
@@ -498,5 +498,5 @@ export const vn = {
   [LocalizationKey.ST_CHOOSE_WORK_DATE_AND_TIME]:
     "Chọn ngày làm việc và thời gian phù hợp",
   [LocalizationKey.WORD_CHOOSE_WORK_SCHEDULE]: "Chọn lịch làm việc",
-  [LocalizationKey.PLACEHOLDER_SEARCH_MAP]: 'Nhập địa chỉ của bạn',
+  [LocalizationKey.PLACEHOLDER_SEARCH_MAP]: "Nhập địa chỉ của bạn",
 };

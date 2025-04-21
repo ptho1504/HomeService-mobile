@@ -1,15 +1,6 @@
-import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs';
-import { RootStackParamList } from '@/types/postTypes';
-import Notifications from '.';
-import { i18n, Language } from '@/localization';
-import { useSelector } from 'react-redux';
-import { useEffect } from 'react';
-import { getLang } from '@/store/reducers';
-
-const Tab = createMaterialTopTabNavigator<RootStackParamList>();
+import { Stack } from "expo-router";
 
 export default function NotificationLayout() {
-
   // const lang = useSelector(getLang);
 
   // useEffect(() => {
@@ -19,27 +10,19 @@ export default function NotificationLayout() {
   // }, [lang]);
 
   // console.log("language in freelancer notif: ", lang);
-  
+
   return (
-    <Tab.Navigator
+    <Stack
       screenOptions={{
-        tabBarIndicatorStyle: {
-          backgroundColor: '#059669',
-        },
+        headerShown: true,
       }}
     >
-      <Tab.Screen
-        name="Chat"
-        options={{ title: i18n.t('word_title_chat') }}
-        component={Notifications}
-        initialParams={{ status: 'CHAT' }}
+      <Stack.Screen
+        name="index"
+        options={{
+          headerShown: false,
+        }}
       />
-      <Tab.Screen
-        name="Notifications"
-        options={{ title: i18n.t('word_title_notification') }}
-        component={Notifications} // Truyền component mà không cần hàm inline
-        initialParams={{ status: 'NOTIFICATION' }}
-      />
-    </Tab.Navigator>
+    </Stack>
   );
 }

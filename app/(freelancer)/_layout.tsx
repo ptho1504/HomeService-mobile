@@ -13,7 +13,6 @@ import { useEffect } from "react";
 // i18n.defaultLocale = Language.VIETNAMESE;
 
 export default function Layout() {
-
   return (
     <Tabs
       initialRouteName="(home)"
@@ -49,7 +48,6 @@ export default function Layout() {
         options={{
           title: i18n.t("chat"),
           headerShown: true,
-          headerShadowVisible: false,
           tabBarIcon: ({ color }) => (
             <Ionicons name="notifications-outline" size={24} color={color} />
           ),

@@ -57,7 +57,7 @@ export default function Layout() {
         options={{
           title: i18n.t("chat"),
           headerShown: true,
-          headerShadowVisible: false,
+          headerShadowVisible: true,
           tabBarIcon: ({ color }) => (
             <Ionicons name="notifications-outline" size={24} color={color} />
           ),
@@ -67,8 +67,8 @@ export default function Layout() {
         name="(account)"
         options={{
           title: i18n.t("account"),
-          headerShown: false,
-          headerShadowVisible: false,
+          headerShown: true,
+          headerShadowVisible: true,
           tabBarIcon: ({ color }) => (
             <Ionicons size={24} name="person-outline" color={color} />
           ),

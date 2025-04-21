@@ -191,33 +191,6 @@ const SignUp = () => {
                 </Text>
               </Pressable>
             </Box>
-
-            <Box className="mt-3 px-10 w-full flex flex-row items-center justify-center">
-              <Divider className="my-1 w-1/2" />
-              <Text className="text-center px-4">{i18n.t("or")}</Text>
-              <Divider className="my-1 w-1/2" />
-            </Box>
-            {/* Login third party */}
-            <HStack
-              space="md"
-              reversed={false}
-              className="flex justify-center items-center mt-4"
-            >
-              {/* Google */}
-              <TouchableOpacity className="w-full hover:bg-red-500">
-                <Button
-                  variant="outline"
-                  action="secondary"
-                  className="bg-white flex flex-row items-center border border-gray-200 py-5"
-                  isPressed={false}
-                >
-                  <GoogleSvg />
-                  <ButtonText className="h-6 text-black text-lg flex items-center">
-                    Google
-                  </ButtonText>
-                </Button>
-              </TouchableOpacity>
-            </HStack>
           </Box>
         </Box>
       </View>

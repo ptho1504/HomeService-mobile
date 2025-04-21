@@ -175,6 +175,7 @@ const PostDetail = () => {
   //     </Box>
   //   );
   // }
+  console.log(status);
 
   return (
     <SafeAreaView className="flex h-full">
@@ -337,6 +338,7 @@ const PostDetail = () => {
             )}
 
           {post.workSchedules.length > post.numOfWorkedDay &&
+            ["UPCOMING", "ALL", "PACKAGE"].includes(String(status)) &&
             currentUser?.role === UserRole.FREELANCER &&
             [
               WorkScheduleStatus.INITIAL.key,

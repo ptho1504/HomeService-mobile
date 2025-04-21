@@ -1,4 +1,4 @@
-import moment from 'moment';
+import moment from "moment";
 
 export const generateNext7Days = (): Date[] => {
   const dates: Date[] = [];
@@ -6,7 +6,7 @@ export const generateNext7Days = (): Date[] => {
 
   for (let i = 0; i < 7; i++) {
     const nextDay = new Date(today);
-    nextDay.setDate(today.getDate() + i);
+    nextDay.setDate(today.getDate() + i + 1);
 
     // Thêm đối tượng Date vào mảng
     dates.push(nextDay);
@@ -17,7 +17,7 @@ export const generateNext7Days = (): Date[] => {
 
 export const getWorkSchedulesByDaysOfWeek = (
   daysOfWeek: string[],
-  monthOffset: number,
+  monthOffset: number
 ): Date[] => {
   const currentDate = new Date();
 
@@ -32,7 +32,7 @@ export const getWorkSchedulesByDaysOfWeek = (
   const schedules: Date[] = [];
 
   // Mảng các thứ trong tuần
-  const weekDays = ['CN', 'TH 2', 'TH 3', 'TH 4', 'TH 5', 'TH 6', 'TH 7'];
+  const weekDays = ["CN", "TH 2", "TH 3", "TH 4", "TH 5", "TH 6", "TH 7"];
 
   // Lặp qua từng ngày từ ngày bắt đầu đến ngày kết thúc
   for (
@@ -67,16 +67,16 @@ export function normalizeDateTime(dateTime: number[]): number[] {
 export function normalizeDate(
   date: number[] | Date | undefined,
   pattern: string,
-  isCalendar: boolean,
+  isCalendar: boolean
 ): string {
   if (Array.isArray(date)) {
     return isCalendar
       ? date[0] + pattern + date[1] + pattern + date[2]
       : date[2] + pattern + date[1] + pattern + date[0];
   } else {
-    const format = 'DD' + pattern + 'MM' + pattern + 'YYYY';
+    const format = "DD" + pattern + "MM" + pattern + "YYYY";
     return moment(date).format(
-      isCalendar ? format.split('').reverse().join('') : format,
+      isCalendar ? format.split("").reverse().join("") : format
     );
   }
 }
@@ -112,16 +112,16 @@ export function formatTimeRange(startTime: string, duration: number): string {
 export function convertToTime(
   hour: number,
   minute: number,
-  second: number,
+  second: number
 ): string {
   return (
-    (hour < 10 ? '0' : '') +
+    (hour < 10 ? "0" : "") +
     hour +
-    ':' +
-    (minute < 10 ? '0' : '') +
+    ":" +
+    (minute < 10 ? "0" : "") +
     minute +
-    ':' +
-    (second < 10 ? '0' : '') +
+    ":" +
+    (second < 10 ? "0" : "") +
     second
   );
 }

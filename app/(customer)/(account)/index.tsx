@@ -16,18 +16,17 @@ import { VStack } from "@/components/ui/vstack";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import { Text } from "@/components/ui/text";
 import { Pressable } from "@/components/ui/pressable";
-import { i18n, Language } from "@/localization";
+import { i18n } from "@/localization";
 import { Image } from "@/components/ui/image";
-import AntDesign from "@expo/vector-icons/AntDesign";
 import { HStack } from "@/components/ui/hstack";
 import ListAddress from "@/components/account/ListAddress";
 import { useDispatch } from "react-redux";
 import { router, useFocusEffect } from "expo-router";
 import RequiredAuthenticationModal from "@/components/authentication/RequiredAuthenticationModal";
-import { useGetUserByIdQuery } from "@/services";
 import { Config } from "@/config";
-import LanguageToggleButton from "@/components/customeButton/LanguageToggleButton";
 import LanguageDropdown from "@/components/customeButton/LanguageDropdown";
+import { Card } from "@/components/ui/card";
+import { Divider } from "@/components/ui/divider";
 
 // i18n.locale = "vn";
 // i18n.enableFallback = true;
@@ -109,175 +108,131 @@ const Home = () => {
             // showsVerticalScrollIndicator={false}
             className="h-full flex w-full"
           >
-            <VStack space="md" className="h-full flex w-full px-2 mt-2">
+            <VStack space="lg" className="h-full flex w-full p-2 mt-2">
               {/* Avatar */}
-              <Box
-                className="
-              rounded-lg bg-success-200
-              border border-gray-100 w-full p-4 flex flex-row items-center gap-4"
-              >
-                {/* Avatar */}
-                <Pressable className="" onPress={() => setShowModalEdit(true)}>
-                  {currentUser?.avatar && (
-                    <Box>
-                      <Image
-                        size="md"
-                        source={{
-                          uri:
-                            Config.URL_PATH +
+              <Card className={`rounded-xl border border-success-300`}>
+                <Box className="flex flex-row items-center justify-between">
+                  <HStack space="md" className="items-center">
+                    <Image
+                      size="md"
+                      source={{
+                        uri: currentUser?.avatar
+                          ? Config.URL_PATH +
                             currentUser.avatar +
-                            `?time=${Date.now()}`,
-                        }}
-                        alt={`${currentUser?.name}`}
-                        className="rounded-full"
-                      />
-                      <AntDesign
-                        className="absolute bottom-0 right-0 p-1 bg-black rounded-full"
-                        name="camerao"
-                        size={24}
-                        color="white"
-                      />
-                    </Box>
-                  )}
-                  {!currentUser?.avatar && (
-                    <Box className="relative w-16 h-16  rounded-full bg-black flex items-center justify-center border border-gray-300">
-                      <Text className="text-white text-3xl font-bold">
-                        {currentUser?.name[0]?.toUpperCase()}
+                            `?time=${Date.now()}`
+                          : "https://static.vecteezy.com/system/resources/previews/009/292/244/non_2x/default-avatar-icon-of-social-media-user-vector.jpg",
+                      }}
+                      alt={`${currentUser?.name}`}
+                      className="rounded-full"
+                    />
+                    {/* <Pressable onPress={() => setShowModalEdit(true)}>
+                        <AntDesign
+                          className="absolute bottom-0 right-0 p-1 bg-black rounded-full"
+                          name="camera"
+                          size={20}
+                          color="white"
+                        />
+                      </Pressable> */}
+                    <VStack>
+                      <Text className="text-xl font-bold">
+                        {currentUser?.name}
                       </Text>
-                      <AntDesign
-                        className="absolute bottom-0 right-0 p-1 bg-black rounded-full border border-gray-50"
-                        name="camerao"
-                        size={12}
-                        color="white"
-                      />
-                    </Box>
-                  )}
-                </Pressable>
-                {/* In4 */}
-                <VStack className="w-full">
-                  {/* Name */}
-                  <HStack className="flex items-center gap-5 w-[70%]">
-                    <Text className="text-xl font-bold text-white">
-                      {currentUser?.name}
-                    </Text>
-                    <Pressable onPress={handleEdit}>
-                      {/* <View className="bg-[#66B584] rounded-md"> */}
-                      <View className="bg-success-400 rounded-md">
-                        <Text className="text-md text-white px-2 py-1">
+                      <Text className="text-lg font-medium">
+                        {i18n.t("reputation")}: {currentUser?.reputationPoint}
+                      </Text>
+                      <Text className="text-lg font-medium">
+                        {i18n.t("phone")}:{" "}
+                        {currentUser?.phoneNumber ||
+                          i18n.t("word_not_available")}
+                      </Text>
+                    </VStack>
+                  </HStack>
+
+                  {/* In4 */}
+
+                  <Pressable onPress={handleEdit}>
+                    {({ pressed }) => (
+                      <View
+                        className={`bg-success-400 rounded-md ${
+                          pressed && "opacity-50"
+                        }`}
+                      >
+                        <Text className="text-md px-2 py-1 text-white">
                           {i18n.t("word_update")}
                         </Text>
                       </View>
-                    </Pressable>
-                  </HStack>
-
-                  {/* Reputation */}
-                  <HStack>
-                    <Text className="text-lg text-white font-medium">
-                      {i18n.t("reputation")}: {currentUser?.reputationPoint}
-                    </Text>
-                  </HStack>
-
-                  {/* Phone */}
-                  <HStack>
-                    <Text className="text-lg text-white font-medium">
-                      {i18n.t("phone")}:{" "}
-                      {currentUser?.phoneNumber || i18n.t("word_not_available")}
-                    </Text>
-                  </HStack>
-
-                  {/* Phone */}
-                  <HStack className="w-full ">
-                    <Text className="text-lg overflow-hidden text-white font-medium">
-                      {i18n.t("email")}: {currentUser?.email}
-                    </Text>
-                  </HStack>
-                </VStack>
-              </Box>
+                    )}
+                  </Pressable>
+                </Box>
+              </Card>
 
               {/* Finance */}
-              <Pressable
-                className=" rounded-lg border border-gray-100 bg-success-200 p-4 flex flex-row items-center gap-4 justify-between hover:opacity-50"
-                onPress={handleFinance}
-              >
-                <Box className="flex flex-row gap-2 items-center">
-                  <Ionicons name="wallet-outline" size={32} color="white" />
-                  <Text className="text-xl font-bold text-white">
-                    {i18n.t("finance")}
-                  </Text>
-                </Box>
-                <Ionicons
-                  name="arrow-forward-circle-outline"
-                  size={32}
-                  color="#fff"
-                />
-              </Pressable>
-
-              {/* Switch language */}
-              <View className=" rounded-lg border border-gray-100 bg-success-200 p-4 flex flex-row items-center gap-4 justify-between">
-                <Box className="flex flex-row gap-2 items-center">
-                  <Ionicons name="globe-outline" size={32} color="white" />
-                  <Text className="text-xl font-bold text-white">
-                    {i18n.t("st_switch_language_to")}
-                    {" :"}
-                  </Text>
-                </Box>
-                <LanguageDropdown />
-              </View>
-
-              {/* Logout */}
-              <Pressable
-                className="rounded-lg border border-gray-100 bg-success-200 p-4 flex flex-row items-center gap-4 justify-between hover:opacity-50"
-                onPress={handleLogout}
-              >
-                <Box className="flex flex-row gap-2 items-center">
-                  <Ionicons name="log-out-outline" size={32} color="white" />
-                  <Text className="text-xl font-bold text-white">
-                    {i18n.t("log_out")}
-                  </Text>
-                </Box>
-              </Pressable>
-
-              {/* Addresses */}
-
-              <Box className="border border-gray-100 p-4 flex items-center gap-4">
-                <View className="flex flex-row items-center justify-between w-full">
-                  <Text className="text-xl font-bold ">
-                    {i18n.t("addresses")}
-                  </Text>
-                  <Pressable
-                    className="flex flex-row items-center"
-                    onPress={handleAdd}
+              <Pressable className="" onPress={handleFinance}>
+                {({ pressed }) => (
+                  <Card
+                    className={`rounded-xl shadow-lg ${
+                      pressed && "opacity-50"
+                    }`}
                   >
-                    <Ionicons name="add-sharp" size={32} color="#66B584" />
-                    <Text className="text-lg font-bold text-[#66B584]">
-                      {i18n.t("add_addresses")}
-                    </Text>
-                  </Pressable>
-                </View>
+                    <Box className="flex flex-row justify-between items-center">
+                      <HStack className="flex flex-row gap-4 items-center">
+                        <Ionicons size={24} name="cash" color={"green"} />
+                        <Text className="text-xl font-bold">
+                          {i18n.t("finance")}
+                        </Text>
+                      </HStack>
+                      <Ionicons name="arrow-forward" size={32} color={"gray"} />
+                    </Box>
+                  </Card>
+                )}
+              </Pressable>
 
-                {/* List Addresses */}
-                <View className="flex items-center w-full px-4 gap-3">
-                  {currentUser?.addresses ? (
-                    <>
-                      {/* {console.log(userWithAddress)} */}
-                      {/* {console.log(currentUser?.addresses)} */}
-                      {currentUser?.addresses.map(
-                        (item, index) =>
-                          item.id &&
-                          !item.deleted && (
-                            <ListAddress key={index} address={item as any} />
-                          )
-                      )}
-                    </>
-                  ) : (
-                    <View>
-                      <Text className="text-lg font-semibold">
-                        {i18n.t("no_addresses")}
+              <Pressable className="" onPress={handleFinance}>
+                {({ pressed }) => (
+                  <Card
+                    className={`rounded-xl shadow-lg ${
+                      pressed && "opacity-50"
+                    }`}
+                  >
+                    <Box className="flex flex-row justify-between items-center">
+                      <HStack className="flex flex-row gap-4 items-center">
+                        <Ionicons size={24} name="location" color={"red"} />
+                        <Text className="text-xl font-bold">Địa chỉ</Text>
+                      </HStack>
+                      <Ionicons name="arrow-forward" size={32} color={"gray"} />
+                    </Box>
+                  </Card>
+                )}
+              </Pressable>
+
+              <Card className={`rounded-xl shadow-lg`}>
+                <Box className="flex flex-row justify-between items-center">
+                  <HStack className="flex flex-row gap-4 items-center">
+                    <Ionicons size={24} name="globe-outline" color={"blue"} />
+                    <Text className="text-xl font-bold">
+                      {i18n.t("st_switch_language_to")}
+                    </Text>
+                  </HStack>
+                  <LanguageDropdown />
+                </Box>
+              </Card>
+
+              <Pressable className="" onPress={handleFinance}>
+                {({ pressed }) => (
+                  <Card
+                    className={`rounded-xl shadow-lg ${
+                      pressed && "opacity-50"
+                    }`}
+                  >
+                    <HStack className="flex flex-row gap-4 items-center">
+                      <Ionicons name="log-out-outline" size={32} />
+                      <Text className="text-xl font-bold">
+                        {i18n.t("log_out")}
                       </Text>
-                    </View>
-                  )}
-                </View>
-              </Box>
+                    </HStack>
+                  </Card>
+                )}
+              </Pressable>
             </VStack>
           </ScrollView>
         </SafeAreaView>

@@ -148,7 +148,8 @@ const WorkSchedule = ({
                         <Ionicons size={20} name="calendar-outline" />
                       </Text>
                       <Text className="font-medium text-lg">
-                        {i18n.t("word_choose_work_schedule")} ({workSchedules.length} {i18n.t("word_option")})
+                        {i18n.t("word_choose_work_schedule")} (
+                        {workSchedules.length} {i18n.t("word_option")})
                       </Text>
                     </HStack>
                     <Text className="">

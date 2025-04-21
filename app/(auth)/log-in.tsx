@@ -1,4 +1,4 @@
-import { Button, ButtonSpinner, ButtonText } from '@/components/ui/button';
+import { Button, ButtonSpinner, ButtonText } from "@/components/ui/button";
 import {
   FormControl,
   FormControlError,
@@ -8,17 +8,17 @@ import {
   FormControlHelperText,
   FormControlLabel,
   FormControlLabelText,
-} from '@/components/ui/form-control';
+} from "@/components/ui/form-control";
 import {
   AlertCircleIcon,
   CircleIcon,
   EyeIcon,
   MailIcon,
-} from '@/components/ui/icon';
-import { Input, InputField, InputIcon, InputSlot } from '@/components/ui/input';
-import { useLoginMutation, useSendOtpMutation } from '@/services';
-import { Link, router } from 'expo-router';
-import React, { useCallback, useEffect, useState } from 'react';
+} from "@/components/ui/icon";
+import { Input, InputField, InputIcon, InputSlot } from "@/components/ui/input";
+import { useLoginMutation, useSendOtpMutation } from "@/services";
+import { Link, router } from "expo-router";
+import React, { useCallback, useEffect, useState } from "react";
 import {
   Image,
   Keyboard,
@@ -26,24 +26,24 @@ import {
   TouchableOpacity,
   TouchableWithoutFeedback,
   View,
-} from 'react-native';
-import { SafeAreaView } from 'react-native-safe-area-context';
-import { i18n, Language } from '@/localization';
-import { Box } from '@/components/ui/box';
-import { Divider } from '@/components/ui/divider';
-import { HStack } from '@/components/ui/hstack';
-import GoogleSvg from '@/components/svg/GoogleSvg';
-import FacebookSvg from '@/components/svg/FacebookSvg';
+} from "react-native";
+import { SafeAreaView } from "react-native-safe-area-context";
+import { i18n, Language } from "@/localization";
+import { Box } from "@/components/ui/box";
+import { Divider } from "@/components/ui/divider";
+import { HStack } from "@/components/ui/hstack";
+import GoogleSvg from "@/components/svg/GoogleSvg";
+import FacebookSvg from "@/components/svg/FacebookSvg";
 import {
   Radio,
   RadioGroup,
   RadioIcon,
   RadioIndicator,
   RadioLabel,
-} from '@/components/ui/radio';
-import { useDebounce, validateEmail } from '@/utils/helper';
-import { Text } from '@/components/ui/text';
-import LanguageDropdown from '@/components/customeButton/LanguageDropdown';
+} from "@/components/ui/radio";
+import { useDebounce, validateEmail } from "@/utils/helper";
+import { Text } from "@/components/ui/text";
+import LanguageDropdown from "@/components/customeButton/LanguageDropdown";
 
 // import { getLocales } from 'expo-localization';
 // i18n.locale = getLocales()[0].languageCode ?? "vn";
@@ -54,29 +54,29 @@ import LanguageDropdown from '@/components/customeButton/LanguageDropdown';
 const LogIn = () => {
   // Set Valid
   const [isInvalid, setIsInvalid] = useState(false);
-  const [errorText, setErrorText] = useState('');
+  const [errorText, setErrorText] = useState("");
   const [loading, setLoading] = useState(false);
 
   const [isRoleInvalid, setIsRoleInvalid] = useState(false);
-  const [errorRoleText, setErrorRoleText] = useState('');
+  const [errorRoleText, setErrorRoleText] = useState("");
 
   // Set form
-  const [email, setEmail] = useState<string>('');
+  const [email, setEmail] = useState<string>("");
   const debounceEmail = useDebounce(email, 1000);
-  const [role, setRole] = useState<string>('');
+  const [role, setRole] = useState<string>("");
   // Call Api
   const [sendOtp] = useSendOtpMutation();
 
   const handleSubmit = async () => {
     setLoading(true);
-    setErrorText('');
+    setErrorText("");
     setIsInvalid(false);
     setIsRoleInvalid(false);
 
     // Check Email
     if (!validateEmail(email)) {
       setIsInvalid(true);
-      setErrorText(i18n.t('mail_invalid'));
+      setErrorText(i18n.t("mail_invalid"));
       setLoading(false);
       return;
     }
@@ -84,7 +84,7 @@ const LogIn = () => {
     // Check Role
     if (!role) {
       setIsRoleInvalid(true);
-      setErrorRoleText(i18n.t('role_not_found'));
+      setErrorRoleText(i18n.t("role_not_found"));
       setLoading(false);
       return;
     }
@@ -95,7 +95,7 @@ const LogIn = () => {
     console.log(response);
 
     if (response.error) {
-      const message = response.error.data?.message || 'Unknown error';
+      const message = response.error.data?.message || "Unknown error";
       // console.log(message);
       setIsInvalid(true);
       setErrorText(message);
@@ -115,13 +115,13 @@ const LogIn = () => {
     ) {
       if (!validateEmail(email)) {
         setIsInvalid(true);
-        setErrorText(i18n.t('mail_invalid'));
+        setErrorText(i18n.t("mail_invalid"));
       } else {
         setIsInvalid(false);
       }
     } else {
       setIsInvalid(false);
-      setErrorText('');
+      setErrorText("");
     }
   }, [debounceEmail]);
 
@@ -133,7 +133,7 @@ const LogIn = () => {
       <Box className="flex items-center justify-start h-full bg-white gap-5">
         <Image
           className="h-full w-full absolute opacity-50"
-          source={require('@/assets/images/bg.png')}
+          source={require("@/assets/images/bg.png")}
         />
 
         {/* header */}
@@ -153,7 +153,7 @@ const LogIn = () => {
         <Box className="shadow-2xl">
           <Image
             className="w-40 h-40 rounded-full"
-            source={require('@/assets/images/logo.jpg')}
+            source={require("@/assets/images/logo.jpg")}
           />
         </Box>
 
@@ -174,14 +174,14 @@ const LogIn = () => {
             <TouchableWithoutFeedback>
               <Input size="lg" className="my-1 flex items-center h-12">
                 <InputSlot className="pl-3 flex items-center">
-                  <InputIcon as={MailIcon} size={'lg'} />
+                  <InputIcon as={MailIcon} size={"lg"} />
                 </InputSlot>
                 <InputField
                   className="leading-none px-4 py-2 h-full"
                   type="text"
-                  placeholder={`${i18n.t('mail_placeholder')}`}
+                  placeholder={`${i18n.t("mail_placeholder")}`}
                   value={email}
-                  onChangeText={text => setEmail(text)}
+                  onChangeText={(text) => setEmail(text)}
                 />
               </Input>
             </TouchableWithoutFeedback>
@@ -218,7 +218,7 @@ const LogIn = () => {
                 <RadioIndicator>
                   <RadioIcon as={CircleIcon} />
                 </RadioIndicator>
-                <RadioLabel>{i18n.t('freelancer')}</RadioLabel>
+                <RadioLabel>{i18n.t("freelancer")}</RadioLabel>
               </Radio>
               <Radio
                 value="CUSTOMER"
@@ -229,7 +229,7 @@ const LogIn = () => {
                 <RadioIndicator>
                   <RadioIcon as={CircleIcon} />
                 </RadioIndicator>
-                <RadioLabel>{i18n.t('customer')}</RadioLabel>
+                <RadioLabel>{i18n.t("customer")}</RadioLabel>
               </Radio>
             </RadioGroup>
 
@@ -250,9 +250,9 @@ const LogIn = () => {
                 variant="solid"
                 action="positive"
               >
-                {loading && <ButtonSpinner color={'#D1D5DB'} />}
+                {loading && <ButtonSpinner color={"#D1D5DB"} />}
                 <ButtonText size="lg" className="text-white">
-                  {i18n.t('login')}
+                  {i18n.t("login")}
                 </ButtonText>
               </Button>
             </TouchableWithoutFeedback>
@@ -260,45 +260,18 @@ const LogIn = () => {
             {/* You have account */}
             <Box className="flex flex-row gap-2 items-center mt-4">
               <Text size="md" className="text-center">
-                {i18n.t('not_have_account')}
+                {i18n.t("not_have_account")}
               </Text>
               <Pressable
                 onPress={() => {
-                  router.replace('/(auth)/sign-up');
+                  router.replace("/(auth)/sign-up");
                 }}
               >
                 <Text size="lg" className="font-bold color-green-600">
-                  {i18n.t('signup')}
+                  {i18n.t("signup")}
                 </Text>
               </Pressable>
             </Box>
-
-            <Box className="mt-3 px-10 w-full flex flex-row items-center justify-center">
-              <Divider className="my-1 w-1/2" />
-              <Text className="text-center px-4">{i18n.t('or')}</Text>
-              <Divider className="my-1 w-1/2" />
-            </Box>
-            {/* Login third party */}
-            <HStack
-              space="md"
-              reversed={false}
-              className="flex justify-center items-center mt-4"
-            >
-              {/* Google */}
-              <TouchableOpacity className="w-full hover:bg-red-500">
-                <Button
-                  variant="outline"
-                  action="secondary"
-                  className="bg-white flex flex-row items-center border border-gray-200 py-5"
-                  onPress={() => router.push('/(auth)/GoogleLogin')}
-                >
-                  <GoogleSvg />
-                  <ButtonText className="h-6 text-black text-lg flex items-center">
-                    Google
-                  </ButtonText>
-                </Button>
-              </TouchableOpacity>
-            </HStack>
           </Box>
         </Box>
       </Box>

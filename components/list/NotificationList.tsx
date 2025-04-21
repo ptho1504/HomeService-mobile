@@ -62,7 +62,9 @@ const NotificationList = ({ notifications, refetch }: Props) => {
     <Card
       size="md"
       variant="elevated"
-      className={`m-3 shadow-lg ${item.view ? "bg-secondary-0" : "bg-info-0"}`}
+      className={`mx-2 my-1 shadow-lg ${
+        item.view ? "bg-secondary-0" : "bg-info-0"
+      }`}
     >
       <Pressable className="" onPress={() => handleViewNotification(item)}>
         {({ pressed }) => (
@@ -85,6 +87,7 @@ const NotificationList = ({ notifications, refetch }: Props) => {
 
   return (
     <FlatList
+      className="mt-1"
       data={notifications}
       keyExtractor={(item) => String(item.id)}
       renderItem={renderItem}

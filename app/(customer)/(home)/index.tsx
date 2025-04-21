@@ -73,10 +73,7 @@ const Home = () => {
               </Text>
             </VStack>
             <Box className="px-4 rounded-full flex flex-row items-center justify-between gap-3 bg-white">
-              <LanguageToggleButton className="bg-green-200 p-3 rounded-full" />
-              <Pressable className="bg-green-200 p-3 rounded-full">
-                <Ionicons name="calendar-sharp" size={20} color="black" />
-              </Pressable>
+              <LanguageToggleButton className="py-2" />
             </Box>
           </Box>
           <Box className="w-full h-auto px-8 bg-white flex gap-2 py-5 rounded-3xl shadow-2xl shadow-green-400">

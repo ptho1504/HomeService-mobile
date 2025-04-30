@@ -1,28 +1,28 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState } from 'react';
 import {
   ActivityIndicator,
   Pressable,
   Text,
   TextInput,
   View,
-} from "react-native";
-import MapView, { Marker, PROVIDER_DEFAULT, Region } from "react-native-maps";
-import * as Location from "expo-location";
-import Ionicons from "@expo/vector-icons/Ionicons";
-import { useRouter } from "expo-router";
-import MaterialIcons from "@expo/vector-icons/MaterialIcons";
-import { useSelector } from "react-redux";
-import { selectUser, updateCurrentUserWithAddress } from "@/store/reducers";
-import { useCreateAddressMutation } from "@/services";
-import { AddressType } from "@/types/addressType";
-import { useDispatch } from "react-redux";
-import { AddressModel } from "@/types/userTypes";
+} from 'react-native';
+import MapView, { Marker, PROVIDER_DEFAULT, Region } from 'react-native-maps';
+import * as Location from 'expo-location';
+import Ionicons from '@expo/vector-icons/Ionicons';
+import { useRouter } from 'expo-router';
+import MaterialIcons from '@expo/vector-icons/MaterialIcons';
+import { useSelector } from 'react-redux';
+import { selectUser, updateCurrentUserWithAddress } from '@/store/reducers';
+import { useCreateAddressMutation } from '@/services';
+import { AddressType } from '@/types/addressType';
+import { useDispatch } from 'react-redux';
+import { AddressModel } from '@/types/userTypes';
 
 const MapAddress = () => {
   const router = useRouter();
   const [hasPermission, setHasPermission] = useState(false);
   const [region, setRegion] = useState<Region | null>(null);
-  const [address, setAddress] = useState<string>("");
+  const [address, setAddress] = useState<string>('');
   const currentUser = useSelector(selectUser);
   const dispatch = useDispatch();
   const [createAddress, { isLoading, error, data }] =
@@ -31,7 +31,7 @@ const MapAddress = () => {
   useEffect(() => {
     const requestLocation = async () => {
       const { status } = await Location.requestForegroundPermissionsAsync();
-      if (status !== "granted") {
+      if (status !== 'granted') {
         setHasPermission(false);
         return;
       }
@@ -51,8 +51,8 @@ const MapAddress = () => {
       if (addr && addr.formattedAddress) {
         // console.log(addr.formattedAddress);
 
-        const parts = addr.formattedAddress.split(", "); // Split the address string into parts
-        const shortAddress = parts.slice(0, 3).join(", "); // Take the first 3 parts and join them
+        const parts = addr.formattedAddress.split(', '); // Split the address string into parts
+        const shortAddress = parts.slice(0, 3).join(', '); // Take the first 3 parts and join them
         const formatted =
           `${shortAddress[0]}, ${shortAddress[1]}, ${shortAddress[2]}`.trim();
 
@@ -72,11 +72,10 @@ const MapAddress = () => {
     // console.log("Address:", address);
     // router.back(); // You can replace this with logic to pass back data
     const customerName = currentUser?.name;
-    const phoneNumber = currentUser?.phoneNumber || "";
+    const phoneNumber = currentUser?.phoneNumber || '';
     const latitude = region?.latitude;
     const longitude = region?.longitude;
     const detail = address;
-    
 
     if (customerName && latitude && longitude && detail) {
       // console.log("test IN");
@@ -100,7 +99,7 @@ const MapAddress = () => {
           updateCurrentUserWithAddress({
             user: currentUser,
             address: newAddress,
-          })
+          }),
         );
         router.back();
       }
@@ -119,8 +118,8 @@ const MapAddress = () => {
     if (addr && addr.formattedAddress) {
       // console.log(addr.formattedAddress);
 
-      const parts = addr.formattedAddress.split(", "); // Split the address string into parts
-      const shortAddress = parts.slice(0, 3).join(", "); // Take the first 3 parts and join them
+      const parts = addr.formattedAddress.split(', '); // Split the address string into parts
+      const shortAddress = parts.slice(0, 3).join(', '); // Take the first 3 parts and join them
       const formatted =
         `${shortAddress[0]}, ${shortAddress[1]}, ${shortAddress[2]}`.trim();
 
@@ -166,7 +165,7 @@ const MapAddress = () => {
               className="flex-1"
               initialRegion={region}
               onRegionChangeComplete={handleRegionChange}
-              style={{ width: "100%", height: "100%", borderRadius: 16 }}
+              style={{ width: '100%', height: '100%', borderRadius: 16 }}
               tintColor="black"
               showsPointsOfInterest={false}
               showsUserLocation={true}

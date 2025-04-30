@@ -1,5 +1,5 @@
-import { Button, ButtonText } from "@/components/ui/button";
-import { LOCAL_STORAGE_JWT_KEY } from "@/constants";
+import { Button, ButtonText } from '@/components/ui/button';
+import { LOCAL_STORAGE_JWT_KEY } from '@/constants';
 import {
   clearAuthState,
   getLang,
@@ -7,32 +7,32 @@ import {
   selectUser,
   setIsAuthenticated,
   setUser,
-} from "@/store/reducers";
-import React, { useEffect, useState } from "react";
-import { SafeAreaView, ScrollView, View } from "react-native";
-import { useSelector } from "react-redux";
-import * as SecureStore from "expo-secure-store";
-import { Box } from "@/components/ui/box";
-import { VStack } from "@/components/ui/vstack";
-import Ionicons from "@expo/vector-icons/Ionicons";
-import { Text } from "@/components/ui/text";
-import { Pressable } from "@/components/ui/pressable";
-import { i18n, Language } from "@/localization";
-import { Image } from "@/components/ui/image";
-import AntDesign from "@expo/vector-icons/AntDesign";
-import { HStack } from "@/components/ui/hstack";
-import ListAddress from "@/components/account/ListAddress";
-import { useDispatch } from "react-redux";
-import { router, useFocusEffect } from "expo-router";
-import RequiredAuthenticationModal from "@/components/authentication/RequiredAuthenticationModal";
-import ListWorking from "@/components/account/ListWorking";
-import { Divider } from "@/components/ui/divider";
-import StarRating from "@/components/badge/Rating";
-import LanguageToggleButton from "@/components/customeButton/LanguageToggleButton";
-import LanguageDropdown from "@/components/customeButton/LanguageDropdown";
-import { Config } from "@/config";
+} from '@/store/reducers';
+import React, { useEffect, useState } from 'react';
+import { SafeAreaView, ScrollView, View } from 'react-native';
+import { useSelector } from 'react-redux';
+import * as SecureStore from 'expo-secure-store';
+import { Box } from '@/components/ui/box';
+import { VStack } from '@/components/ui/vstack';
+import Ionicons from '@expo/vector-icons/Ionicons';
+import { Text } from '@/components/ui/text';
+import { Pressable } from '@/components/ui/pressable';
+import { i18n, Language } from '@/localization';
+import { Image } from '@/components/ui/image';
+import AntDesign from '@expo/vector-icons/AntDesign';
+import { HStack } from '@/components/ui/hstack';
+import ListAddress from '@/components/list/AddressList';
+import { useDispatch } from 'react-redux';
+import { router, useFocusEffect } from 'expo-router';
+import RequiredAuthenticationModal from '@/components/authentication/RequiredAuthenticationModal';
+import ListWorking from '@/components/account/ListWorking';
+import { Divider } from '@/components/ui/divider';
+import StarRating from '@/components/badge/Rating';
+import LanguageToggleButton from '@/components/customeButton/LanguageToggleButton';
+import LanguageDropdown from '@/components/customeButton/LanguageDropdown';
+import { Config } from '@/config';
 // import { Config } from "@/config";
-i18n.locale = "vn";
+i18n.locale = 'vn';
 // i18n.enableFallback = true;
 // i18n.defaultLocale = Language.VIETNAMESE;
 
@@ -58,32 +58,32 @@ const Profile = () => {
   }, []);
 
   const handleEdit = () => {
-    console.log("Edit mode");
+    console.log('Edit mode');
 
-    router.push("/(freelancer)/(profile)/edit-profile");
+    router.push('/(freelancer)/(account)/edit-profile');
   };
 
   const handleFinance = () => {
-    console.log("Finace Mode");
-    router.push("/(profile)/PaymentHistory");
+    console.log('Finace Mode');
+    router.push('/(profile)/PaymentHistory');
   };
 
   const handleAdd = () => {
-    console.log("Add a service");
-    router.push("/(services)/add-service");
+    console.log('Add a service');
+    router.push('/(services)/add-service');
     // router.push("/(services)/do-test");
   };
 
   const handleLogout = async () => {
-    console.log("Handle Logout");
+    console.log('Handle Logout');
     dispatch(clearAuthState());
 
     dispatch(setUser(null));
     dispatch(setIsAuthenticated(false));
-    await SecureStore.deleteItemAsync("jwt");
+    await SecureStore.deleteItemAsync('jwt');
     // console.log("JWT successfully deleted.");
     setShowModal(false);
-    router.replace("/(customer)/(home)");
+    router.replace('/(customer)/(home)');
   };
 
   useEffect(() => {
@@ -98,7 +98,7 @@ const Profile = () => {
       } else {
         setShowModal(true); // Show the modal if not authenticated
       }
-    }, [isAuthenticated])
+    }, [isAuthenticated]),
   );
 
   return (
@@ -178,7 +178,7 @@ const Profile = () => {
                       {/* <View className="bg-[#66B584] rounded-md"> */}
                       <View className="bg-success-400 rounded-md">
                         <Text className="text-md text-white px-2 py-1">
-                          {i18n.t("word_update")}
+                          {i18n.t('word_update')}
                         </Text>
                       </View>
                     </Pressable>
@@ -187,22 +187,22 @@ const Profile = () => {
                   {/* Reputation */}
                   <HStack>
                     <Text className="text-lg text-white font-medium">
-                      {i18n.t("reputation")}: {currentUser?.reputationPoint}
+                      {i18n.t('reputation')}: {currentUser?.reputationPoint}
                     </Text>
                   </HStack>
 
                   {/* Phone */}
                   <HStack>
                     <Text className="text-lg text-white font-medium">
-                      {i18n.t("phone")}:{" "}
-                      {currentUser?.phoneNumber || i18n.t("word_not_available")}
+                      {i18n.t('phone')}:{' '}
+                      {currentUser?.phoneNumber || i18n.t('word_not_available')}
                     </Text>
                   </HStack>
 
                   {/* Phone */}
                   <HStack className="w-full ">
                     <Text className="text-lg overflow-hidden text-white font-medium">
-                      {i18n.t("email")}: {currentUser?.email}
+                      {i18n.t('email')}: {currentUser?.email}
                     </Text>
                   </HStack>
                 </VStack>
@@ -216,7 +216,7 @@ const Profile = () => {
                 <Box className="flex flex-row gap-2 items-center">
                   <Ionicons name="wallet-outline" size={32} color="white" />
                   <Text className="text-xl font-bold text-white">
-                    {i18n.t("finance")}
+                    {i18n.t('finance')}
                   </Text>
                 </Box>
                 <Ionicons
@@ -231,7 +231,8 @@ const Profile = () => {
                 <Box className="flex flex-row gap-2 items-center">
                   <Ionicons name="globe-outline" size={32} color="white" />
                   <Text className="text-xl font-bold text-white">
-                    {i18n.t("st_switch_language_to")}{" :"}
+                    {i18n.t('st_switch_language_to')}
+                    {' :'}
                   </Text>
                 </Box>
                 <LanguageDropdown />
@@ -245,7 +246,7 @@ const Profile = () => {
                 <Box className="flex flex-row gap-2 items-center">
                   <Ionicons name="log-out-outline" size={32} color="white" />
                   <Text className="text-xl font-bold text-white">
-                    {i18n.t("log_out")}
+                    {i18n.t('log_out')}
                   </Text>
                 </Box>
               </Pressable>
@@ -255,7 +256,7 @@ const Profile = () => {
               <Box className="border rounded-lg border-gray-300 p-3 flex items-center gap-4">
                 <View className="flex flex-row items-center justify-between w-full">
                   <Text className="text-xl font-bold ">
-                    {i18n.t("workings")}
+                    {i18n.t('workings')}
                   </Text>
                   <Pressable
                     className="flex flex-row items-center"
@@ -263,7 +264,7 @@ const Profile = () => {
                   >
                     <Ionicons name="add-sharp" size={32} color="#66B584" />
                     <Text className="text-lg font-bold text-[#66B584]">
-                      {i18n.t("add_workings")}
+                      {i18n.t('add_workings')}
                     </Text>
                   </Pressable>
                 </View>

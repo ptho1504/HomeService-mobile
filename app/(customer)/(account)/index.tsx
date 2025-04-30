@@ -1,32 +1,32 @@
-import { Button, ButtonText } from "@/components/ui/button";
-import { LOCAL_STORAGE_JWT_KEY } from "@/constants";
+import { Button, ButtonText } from '@/components/ui/button';
+import { LOCAL_STORAGE_JWT_KEY } from '@/constants';
 import {
   clearAuthState,
   selectIsAuthenticated,
   selectUser,
   setIsAuthenticated,
   setUser,
-} from "@/store/reducers";
-import React, { useEffect, useState } from "react";
-import { SafeAreaView, ScrollView, View } from "react-native";
-import { useSelector } from "react-redux";
-import * as SecureStore from "expo-secure-store";
-import { Box } from "@/components/ui/box";
-import { VStack } from "@/components/ui/vstack";
-import Ionicons from "@expo/vector-icons/Ionicons";
-import { Text } from "@/components/ui/text";
-import { Pressable } from "@/components/ui/pressable";
-import { i18n } from "@/localization";
-import { Image } from "@/components/ui/image";
-import { HStack } from "@/components/ui/hstack";
-import ListAddress from "@/components/account/ListAddress";
-import { useDispatch } from "react-redux";
-import { router, useFocusEffect } from "expo-router";
-import RequiredAuthenticationModal from "@/components/authentication/RequiredAuthenticationModal";
-import { Config } from "@/config";
-import LanguageDropdown from "@/components/customeButton/LanguageDropdown";
-import { Card } from "@/components/ui/card";
-import { Divider } from "@/components/ui/divider";
+} from '@/store/reducers';
+import React, { useEffect, useState } from 'react';
+import { SafeAreaView, ScrollView, View } from 'react-native';
+import { useSelector } from 'react-redux';
+import * as SecureStore from 'expo-secure-store';
+import { Box } from '@/components/ui/box';
+import { VStack } from '@/components/ui/vstack';
+import Ionicons from '@expo/vector-icons/Ionicons';
+import { Text } from '@/components/ui/text';
+import { Pressable } from '@/components/ui/pressable';
+import { i18n } from '@/localization';
+import { Image } from '@/components/ui/image';
+import { HStack } from '@/components/ui/hstack';
+import ListAddress from '@/components/list/AddressList';
+import { useDispatch } from 'react-redux';
+import { router, useFocusEffect } from 'expo-router';
+import RequiredAuthenticationModal from '@/components/authentication/RequiredAuthenticationModal';
+import { Config } from '@/config';
+import LanguageDropdown from '@/components/customeButton/LanguageDropdown';
+import { Card } from '@/components/ui/card';
+import { Divider } from '@/components/ui/divider';
 
 // i18n.locale = "vn";
 // i18n.enableFallback = true;
@@ -51,31 +51,31 @@ const Home = () => {
   }, []);
 
   const handleEdit = () => {
-    console.log("Edit mode");
+    console.log('Edittt mode');
 
-    router.push("/(customer)/(account)/edit-profile");
+    router.push('/(profile)');
   };
 
   const handleFinance = () => {
-    console.log("Finace Mode");
-    router.push("/(profile)/PaymentHistory");
+    console.log('Finace Mode');
+    router.push('/(profile)/PaymentHistory');
   };
 
-  const handleAdd = () => {
-    console.log("Add address");
-    router.push("/(customer)/(account)/add-address");
+  const handleAddress = () => {
+    console.log('Address Mode');
+    router.push('/(profile)/Address');
   };
 
   const handleLogout = async () => {
-    console.log("Handle Logout");
+    console.log('Handle Logout');
     dispatch(clearAuthState());
 
     dispatch(setUser(null));
     dispatch(setIsAuthenticated(false));
-    await SecureStore.deleteItemAsync("jwt");
+    await SecureStore.deleteItemAsync('jwt');
     // console.log("JWT successfully deleted.");
     setShowModal(false);
-    router.replace("/(customer)/(home)");
+    router.replace('/(customer)/(home)');
   };
 
   useEffect(() => {
@@ -90,7 +90,7 @@ const Home = () => {
       } else {
         setShowModal(true); // Show the modal if not authenticated
       }
-    }, [isAuthenticated])
+    }, [isAuthenticated]),
   );
 
   return (
@@ -110,7 +110,7 @@ const Home = () => {
           >
             <VStack space="lg" className="h-full flex w-full p-2 mt-2">
               {/* Avatar */}
-              <Card className={`rounded-xl border border-success-300`}>
+              <Card className={`rounded-xl bg-success-200 shadow-lg`}>
                 <Box className="flex flex-row items-center justify-between">
                   <HStack space="md" className="items-center">
                     <Image
@@ -120,7 +120,7 @@ const Home = () => {
                           ? Config.URL_PATH +
                             currentUser.avatar +
                             `?time=${Date.now()}`
-                          : "https://static.vecteezy.com/system/resources/previews/009/292/244/non_2x/default-avatar-icon-of-social-media-user-vector.jpg",
+                          : 'https://static.vecteezy.com/system/resources/previews/009/292/244/non_2x/default-avatar-icon-of-social-media-user-vector.jpg',
                       }}
                       alt={`${currentUser?.name}`}
                       className="rounded-full"
@@ -134,16 +134,16 @@ const Home = () => {
                         />
                       </Pressable> */}
                     <VStack>
-                      <Text className="text-xl font-bold">
+                      <Text className="text-xl font-bold text-white">
                         {currentUser?.name}
                       </Text>
-                      <Text className="text-lg font-medium">
-                        {i18n.t("reputation")}: {currentUser?.reputationPoint}
+                      <Text className="text-lg font-medium text-white">
+                        {i18n.t('reputation')}: {currentUser?.reputationPoint}
                       </Text>
-                      <Text className="text-lg font-medium">
-                        {i18n.t("phone")}:{" "}
+                      <Text className="text-lg font-medium text-white">
+                        {i18n.t('phone')}:{' '}
                         {currentUser?.phoneNumber ||
-                          i18n.t("word_not_available")}
+                          i18n.t('word_not_available')}
                       </Text>
                     </VStack>
                   </HStack>
@@ -154,11 +154,11 @@ const Home = () => {
                     {({ pressed }) => (
                       <View
                         className={`bg-success-400 rounded-md ${
-                          pressed && "opacity-50"
+                          pressed && 'opacity-50'
                         }`}
                       >
                         <Text className="text-md px-2 py-1 text-white">
-                          {i18n.t("word_update")}
+                          {i18n.t('word_update')}
                         </Text>
                       </View>
                     )}
@@ -170,64 +170,66 @@ const Home = () => {
               <Pressable className="" onPress={handleFinance}>
                 {({ pressed }) => (
                   <Card
-                    className={`rounded-xl shadow-lg ${
-                      pressed && "opacity-50"
+                    className={`rounded-xl border border-success-200 ${
+                      pressed && 'opacity-50'
                     }`}
                   >
                     <Box className="flex flex-row justify-between items-center">
                       <HStack className="flex flex-row gap-4 items-center">
-                        <Ionicons size={24} name="cash" color={"green"} />
+                        <Ionicons size={24} name="cash" color={'green'} />
                         <Text className="text-xl font-bold">
-                          {i18n.t("finance")}
+                          {i18n.t('finance')}
                         </Text>
                       </HStack>
-                      <Ionicons name="arrow-forward" size={32} color={"gray"} />
+                      <Ionicons name="arrow-forward" size={32} color={'gray'} />
                     </Box>
                   </Card>
                 )}
               </Pressable>
 
-              <Pressable className="" onPress={handleFinance}>
+              <Pressable className="" onPress={handleAddress}>
                 {({ pressed }) => (
                   <Card
-                    className={`rounded-xl shadow-lg ${
-                      pressed && "opacity-50"
+                    className={`rounded-xl border border-success-200 ${
+                      pressed && 'opacity-50'
                     }`}
                   >
                     <Box className="flex flex-row justify-between items-center">
                       <HStack className="flex flex-row gap-4 items-center">
-                        <Ionicons size={24} name="location" color={"red"} />
-                        <Text className="text-xl font-bold">Địa chỉ</Text>
+                        <Ionicons size={24} name="location" color={'red'} />
+                        <Text className="text-xl font-bold">
+                          {i18n.t('addresses')}
+                        </Text>
                       </HStack>
-                      <Ionicons name="arrow-forward" size={32} color={"gray"} />
+                      <Ionicons name="arrow-forward" size={32} color={'gray'} />
                     </Box>
                   </Card>
                 )}
               </Pressable>
 
-              <Card className={`rounded-xl shadow-lg`}>
+              <Card className={`rounded-xl border border-success-200`}>
                 <Box className="flex flex-row justify-between items-center">
                   <HStack className="flex flex-row gap-4 items-center">
-                    <Ionicons size={24} name="globe-outline" color={"blue"} />
+                    <Ionicons size={24} name="globe-outline" color={'blue'} />
                     <Text className="text-xl font-bold">
-                      {i18n.t("st_switch_language_to")}
+                      {i18n.t('st_switch_language_to')}
                     </Text>
                   </HStack>
                   <LanguageDropdown />
                 </Box>
               </Card>
 
-              <Pressable className="" onPress={handleFinance}>
+              <Pressable className="" onPress={handleLogout}>
                 {({ pressed }) => (
                   <Card
-                    className={`rounded-xl shadow-lg ${
-                      pressed && "opacity-50"
+                    className={`rounded-xl border border-success-200 ${
+                      pressed && 'opacity-50'
                     }`}
                   >
                     <HStack className="flex flex-row gap-4 items-center">
                       <Ionicons name="log-out-outline" size={32} />
                       <Text className="text-xl font-bold">
-                        {i18n.t("log_out")}
+                        {i18n.t('log_out')}
                       </Text>
                     </HStack>
                   </Card>

@@ -11,22 +11,22 @@ import {
   Pressable,
   FlatList,
   ActivityIndicator,
-} from "react-native";
-import React, { useEffect, useState } from "react";
-import { router } from "expo-router";
-import Ionicons from "@expo/vector-icons/Ionicons";
-import { i18n, Language } from "@/localization";
-import { Input, InputField, InputIcon, InputSlot } from "@/components/ui/input";
-import { EditIcon, Icon, SearchIcon } from "@/components/ui/icon";
+} from 'react-native';
+import React, { useEffect, useState } from 'react';
+import { router } from 'expo-router';
+import Ionicons from '@expo/vector-icons/Ionicons';
+import { i18n, Language } from '@/localization';
+import { Input, InputField, InputIcon, InputSlot } from '@/components/ui/input';
+import { EditIcon, Icon, SearchIcon } from '@/components/ui/icon';
 
 // import AddressSearch from "@/components/address/AddressSearch";
-import * as Location from "expo-location";
-import { useGetPlaceByInputQuery } from "@/services";
-i18n.locale = "vn";
+import * as Location from 'expo-location';
+import { useGetPlaceByInputQuery } from '@/services';
+i18n.locale = 'vn';
 // i18n.enableFallback = true;
 // i18n.defaultLocale = Language.VIETNAMESE;
 const AddAdress = () => {
-  const [location, setLocation] = useState<string>("");
+  const [location, setLocation] = useState<string>('');
   const [suggestions, setSuggestions] = useState<
     Location.LocationGeocodedLocation[]
   >([]);
@@ -36,7 +36,7 @@ const AddAdress = () => {
 
   const handleNavigateMap = () => {
     // console.log("Navigate to handle map");
-    router.push("/(customer)/(account)/map-address");
+    router.push('/(profile)/MapAddress');
   };
 
   const handleGoBack = () => {
@@ -49,13 +49,13 @@ const AddAdress = () => {
         setSuggestions([]);
         return;
       }
-      console.log("location ", location);
+      console.log('location ', location);
       try {
         // const results = await Location.geocodeAsync(location);
         // console.log("results ", results);
         // setSuggestions(results);
       } catch (error) {
-        console.error("Geocode error:", error);
+        console.error('Geocode error:', error);
       }
     };
 
@@ -77,8 +77,8 @@ const AddAdress = () => {
         className="mr-2"
       />
       <Text className="text-gray-800 text-sm">
-        {item.name || ""} {item.street || ""}, {item.subregion || ""},{" "}
-        {item.region || ""}
+        {item.name || ''} {item.street || ''}, {item.subregion || ''},{' '}
+        {item.region || ''}
       </Text>
     </Pressable>
   );

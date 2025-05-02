@@ -494,4 +494,15 @@ export const en = {
     "Choose a suitable work date and time",
   [LocalizationKey.WORD_CHOOSE_WORK_SCHEDULE]: "Choose work schedule",
   [LocalizationKey.PLACEHOLDER_SEARCH_MAP]: "Enter your location",
+
+  //  Delete
+  [LocalizationKey.DELETE]: "Delete",
+  [LocalizationKey.ST_CONFIRM_DELETE]: "Confirm Deletion",
+  [LocalizationKey.MSG_CONFIRM_DELETE_ADDRES]:
+    "Are you sure you want to delete this address",
+  // Change default
+  [LocalizationKey.ST_CONFIRM_CHANGE_DEFAULT_ADDRESS]:
+    "Confirm change default address",
+  [LocalizationKey.MSG_COFIRM_CHANGE_DEFAULT_ADDRESS]:
+    "Do you want to change this address to the default address ?",
 };

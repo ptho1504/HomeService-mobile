@@ -499,4 +499,12 @@ export const vn = {
     "Chọn ngày làm việc và thời gian phù hợp",
   [LocalizationKey.WORD_CHOOSE_WORK_SCHEDULE]: "Chọn lịch làm việc",
   [LocalizationKey.PLACEHOLDER_SEARCH_MAP]: "Nhập địa chỉ của bạn",
+
+  //  Delete
+  [LocalizationKey.DELETE]: "Xóa",
+  [LocalizationKey.ST_CONFIRM_DELETE]: "Xác nhận xóa",
+  [LocalizationKey.MSG_CONFIRM_DELETE_ADDRES]: "Bạn có muốn xóa địa chỉ này ?",
+  // Change default
+  [LocalizationKey.ST_CONFIRM_CHANGE_DEFAULT_ADDRESS]: "Xác nhận đổi địa chỉ",
+  [LocalizationKey.MSG_COFIRM_CHANGE_DEFAULT_ADDRESS]: "Bạn có muốn đổi địa chỉ này thành địa chỉ mặc định ?",
 };

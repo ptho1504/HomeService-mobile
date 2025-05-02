@@ -33,23 +33,15 @@ const slice = createSlice({
       state,
       action: PayloadAction<{ user: UserModel; address: AddressModel }>
     ) => {
-      const newDefaultAddress = action.payload.address;
-      // console.log("user ", action.payload.user);
-      // console.log("address ", action.payload.address);
       if (state.user) {
-        const updatedAddresses = state.user.addresses.map((addr) => ({
-          ...addr,
-          default: false,
-        }));
-
         state.user = {
           ...action.payload.user,
-          addresses: [newDefaultAddress, ...updatedAddresses],
+          addresses: [action.payload.address, ...state.user.addresses],
         };
       } else {
         state.user = {
           ...action.payload.user,
-          addresses: [newDefaultAddress],
+          addresses: [action.payload.address],
         };
       }
     },

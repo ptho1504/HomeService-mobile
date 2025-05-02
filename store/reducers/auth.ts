@@ -33,15 +33,23 @@ const slice = createSlice({
       state,
       action: PayloadAction<{ user: UserModel; address: AddressModel }>
     ) => {
+      const newDefaultAddress = action.payload.address;
+      // console.log("user ", action.payload.user);
+      // console.log("address ", action.payload.address);
       if (state.user) {
+        const updatedAddresses = state.user.addresses.map((addr) => ({
+          ...addr,
+          default: false,
+        }));
+
         state.user = {
           ...action.payload.user,
-          addresses: [action.payload.address, ...state.user.addresses],
+          addresses: [newDefaultAddress, ...updatedAddresses],
         };
       } else {
         state.user = {
           ...action.payload.user,
-          addresses: [action.payload.address],
+          addresses: [newDefaultAddress],
         };
       }
     },
@@ -50,6 +58,14 @@ const slice = createSlice({
         state.user.addresses = state.user.addresses.filter(
           (address) => address.id !== action.payload
         );
+      }
+    },
+    changeAddressByIdToDefault: (state, action: PayloadAction<string>) => {
+      if (state.user) {
+        state.user.addresses = state.user.addresses.map((address) => ({
+          ...address,
+          default: address.id === action.payload,
+        }));
       }
     },
     setAVTUser: (state, action: PayloadAction<string>) => {
@@ -71,6 +87,7 @@ export const {
   updateCurrentUserWithAddress,
   deleteAddressById,
   setAVTUser,
+  changeAddressByIdToDefault,
 } = slice.actions;
 
 export const selectIsAuthenticated = (state: { auth: AuthState }) =>

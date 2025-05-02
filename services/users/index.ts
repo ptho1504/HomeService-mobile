@@ -171,7 +171,6 @@ const usersApi = API.injectEndpoints({
 
     deleteAddressById: build.mutation<Response<null>, string>({
       query: (id) => {
-        console.log("deleteAddressById called with id:", id);
         return {
           url: `${baseUrl}/addresses/${id}`,
           method: "DELETE",
@@ -212,6 +211,22 @@ const usersApi = API.injectEndpoints({
         { type: "User", id: arg.userId }, // Đánh dấu các cache liên quan cần làm mới
       ],
     }),
+    uploadAddressById: build.mutation<
+      Response<Partial<AddressModel>>,
+      {
+        addressId: string;
+        body: Partial<AddressModel>;
+      }
+    >({
+      query: ({ addressId, body }) => ({
+        url: `${baseUrl}/addresses/${addressId}`,
+        method: "PATCH",
+        body: body,
+      }),
+      invalidatesTags: (result, error, arg) => [
+        { type: "User", id: arg.addressId }, // Đánh dấu các cache liên quan cần làm mới
+      ],
+    }),
   }),
 });
 
@@ -228,4 +243,5 @@ export const {
   useUploadUserByIdMutation,
   useRechargeMutation,
   useWithdrawMutation,
+  useUploadAddressByIdMutation,
 } = usersApi;

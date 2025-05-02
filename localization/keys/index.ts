@@ -458,4 +458,14 @@ export enum LocalizationKey {
   ST_CHOOSE_WORK_DATE_AND_TIME = "st_choose_work_date_and_time",
   WORD_CHOOSE_WORK_SCHEDULE = "word_choose_work_schedule",
   PLACEHOLDER_SEARCH_MAP = "placer_holder_search_map",
+
+  // Delete Address modal
+  ST_CONFIRM_DELETE = "st_confirm_delete",
+  MSG_CONFIRM_DELETE_ADDRES = "msg_confirm_delete_address",
+  DELETE = "word_delete",
+  CANCEL = "word_cancel",
+
+  // Change Address default
+  MSG_COFIRM_CHANGE_DEFAULT_ADDRESS = "msg_confirm_change_default_address",
+  ST_CONFIRM_CHANGE_DEFAULT_ADDRESS = "st_confirm_change_default_address",
 }

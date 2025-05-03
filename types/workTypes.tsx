@@ -103,6 +103,10 @@ export interface ServiceDetailModel {
   work: WorkModel;
   testResult: TestResultModel;
   rate: RateModel[];
+  images: {
+    id: string;
+    link: string;
+  }[];
 }
 
 export interface RateModel {

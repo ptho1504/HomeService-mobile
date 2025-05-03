@@ -137,6 +137,10 @@ const DoTest = () => {
         i18n.t("st_out_of_time"),
         "warning"
       );
+
+      // Hết thời gian sẽ tự động submit
+      console.log("Submit cause by time out");
+      handleSubmit(true);
       return;
     }
 
@@ -157,8 +161,10 @@ const DoTest = () => {
     setAnswers((prev) => ({ ...prev, [questionId]: text }));
   };
 
-  const handleSubmit = async () => {
-    if (Object.keys(answers).length < sortedQuestions.length) {
+  const handleSubmit = async (isTimeOut: boolean = false) => {
+
+    // Chưa hết thời gian nhưng submit sẽ kiểm tra xem freelancer có làm hết đề không ?
+    if (Object.keys(answers).length < sortedQuestions.length && !isTimeOut) {
       showToastMessage(
         toast,
         i18n.t("word_notification"),

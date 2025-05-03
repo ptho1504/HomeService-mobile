@@ -30,6 +30,10 @@ const Service = () => {
     freelancerId: user?.id ?? "",
   });
 
+  useEffect(() => {
+    console.log("Image", data?.items.images);
+  }, [data])
+
   const RenderItem = (rate: RateModel) => {
     return (
       <Card size="md" variant="outline" className="m-1">

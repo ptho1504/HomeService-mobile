@@ -39,7 +39,6 @@ const calculateDuration = (startTime: number[], endTime: number[]): string => {
 const ResultTest = () => {
   const dispatch = useDispatch();
 
-  const testInfo = useSelector(selectTestInfo);
   const testResult = useSelector(selectTestResult);
 
   const isPassed = testResult?.isPassed ?? false;
@@ -47,7 +46,6 @@ const ResultTest = () => {
 
   const registerProcess = useSelector(selectRegisterProcess);
 
-  const navigation = useNavigation();
   // Hiển thị cảnh báo nếu goback
   usePreventRemove(!registerProcess.isRegisterDone, ({ data }) => {
     Alert.alert(i18n.t("word_confirm"), i18n.t("st_confirm_goback"), [
@@ -55,7 +53,7 @@ const ResultTest = () => {
       {
         text: i18n.t("word_yes"),
         style: "default",
-        onPress: () => navigation.dispatch(data.action),
+        onPress: () => handleGoHome(),
       },
     ]);
   });

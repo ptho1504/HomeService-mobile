@@ -16,7 +16,8 @@ export const showToastMessage = (
   type: ToastType,
   toastId?: string
 ) => {
-  const id = toastId || Date.now().toString();
+  console.log("Start enter toast");
+  const id = toastId || Math.random().toString();
 
   if (toast.isActive(id)) return;
 

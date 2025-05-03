@@ -18,6 +18,10 @@ export default function ProfileLayout() {
         options={{ headerShown: true, title: i18n.t('word_transaction') }}
       />
       <Stack.Screen
+        name="Service"
+        options={{ headerShown: true, title: i18n.t('workings') }}
+      />
+      <Stack.Screen
         name="Address"
         options={{ headerShown: true, title: i18n.t('addresses') }}
       />

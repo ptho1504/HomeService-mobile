@@ -1,4 +1,4 @@
-import { UserModel } from "./userTypes";
+import { UserModel } from './userTypes';
 
 export interface WorkModel {
   id: string;
@@ -21,6 +21,11 @@ export interface FreelancerWorkModel {
   freelancer: UserModel;
   work: WorkModel;
   testResult: TestResultModel;
+  images: {
+    id: string;
+    link: string;
+  }[];
+  rate: RateModel[];
 }
 
 export interface TestResultModel {

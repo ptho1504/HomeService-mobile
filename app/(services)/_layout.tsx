@@ -1,7 +1,7 @@
-import { i18n } from "@/localization";
-import Ionicons from "@expo/vector-icons/Ionicons";
-import { router, Stack, useNavigation } from "expo-router";
-import { Alert, Button } from "react-native";
+import { i18n } from '@/localization';
+import Ionicons from '@expo/vector-icons/Ionicons';
+import { router, Stack, useNavigation } from 'expo-router';
+import { Alert, Button } from 'react-native';
 
 // const CustomBackButton = () => {
 //   const navigation = useNavigation();
@@ -22,27 +22,26 @@ export default function ServiceLayout() {
       screenOptions={{
         headerShown: false,
         // gestureEnabled: false,
-        headerBackVisible: false,
       }}
     >
       <Stack.Screen
         name="index"
         options={{
-          title: i18n.t("word_service_detail"),
+          title: i18n.t('word_service_detail'),
           headerShown: true,
         }}
       />
       <Stack.Screen
         name="add-service"
         options={{
-          title: i18n.t("add_workings"),
+          title: i18n.t('add_workings'),
           headerShown: true,
         }}
       />
       <Stack.Screen
         name="do-test"
         options={{
-          title: i18n.t("doing_test"),
+          title: i18n.t('doing_test'),
           headerShown: true,
           // headerLeft: () => <CustomBackButton />
         }}
@@ -51,7 +50,7 @@ export default function ServiceLayout() {
       <Stack.Screen
         name="result-test"
         options={{
-          title: i18n.t("result_test"),
+          title: i18n.t('result_test'),
           headerShown: true,
         }}
       />
@@ -59,7 +58,7 @@ export default function ServiceLayout() {
       <Stack.Screen
         name="addition-info"
         options={{
-          title: i18n.t("add_addition_info"),
+          title: i18n.t('add_addition_info'),
           headerShown: true,
         }}
       />

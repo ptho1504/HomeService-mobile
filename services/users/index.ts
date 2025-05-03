@@ -1,28 +1,27 @@
-import { createApi } from "@reduxjs/toolkit/query";
-import { API } from "../base";
-import { Address, BankAccount, User } from "@/types/types";
-import { FreelancerWorkModel } from "@/types/workTypes";
+import { createApi } from '@reduxjs/toolkit/query';
+import { API } from '../base';
+import { Address, BankAccount, User } from '@/types/types';
+import { FreelancerWorkModel } from '@/types/workTypes';
 import {
   AddressModel,
   NotificationModel,
   PaymentHistoryModel,
   TransactionModel,
   UserModel,
-} from "@/types/userTypes";
-import { Response } from "@/types/response";
-import { AddressPlaces, AddressType } from "@/types/addressType";
+} from '@/types/userTypes';
+import { Response } from '@/types/response';
+import { AddressPlaces, AddressType } from '@/types/addressType';
 
-const baseUrl = "/users";
+const baseUrl = '/users';
 
 const usersApi = API.injectEndpoints({
-  endpoints: (build) => ({
+  endpoints: build => ({
     getUserById: build.query<UserModel, string>({
-      query: (id) => {
+      query: id => {
         // console.log("id in api", id);
         return `${baseUrl}/users/${id}`;
       },
-      providesTags: (result) =>
-        result ? [{ type: "User", id: result.id }] : [],
+      providesTags: result => (result ? [{ type: 'User', id: result.id }] : []),
     }),
     getUsers: build.query<
       Response<UserModel[]>,
@@ -38,16 +37,16 @@ const usersApi = API.injectEndpoints({
         const params = new URLSearchParams();
 
         if (page !== undefined) {
-          params.append("index", page.toString());
+          params.append('index', page.toString());
         }
         if (size !== undefined) {
-          params.append("size", size.toString());
+          params.append('size', size.toString());
         }
         if (role) {
-          params.append("freelancerId", role);
+          params.append('freelancerId', role);
         }
         if (postId) {
-          params.append("freelancerId", postId);
+          params.append('freelancerId', postId);
         }
         // Kết hợp base URL và query string
         return `${baseUrl}?${params.toString()}`;
@@ -66,6 +65,18 @@ const usersApi = API.injectEndpoints({
       },
     }),
 
+    getServicesByUserId: build.query<
+      Response<FreelancerWorkModel[]>,
+      {
+        id: string;
+      }
+    >({
+      query: ({ id }) => {
+        // Kết hợp base URL và query string
+        return `${baseUrl}/${id}/works`;
+      },
+    }),
+
     viewNotification: build.mutation<
       Response<NotificationModel>,
       Partial<{ userId: string; id: number }>
@@ -74,7 +85,7 @@ const usersApi = API.injectEndpoints({
         console.log({ id, userId });
         return {
           url: `${baseUrl}/${userId}/notifications/${id}`,
-          method: "PUT",
+          method: 'PUT',
         };
       },
       async onQueryStarted({ id, userId }, { dispatch, queryFulfilled }) {
@@ -85,20 +96,20 @@ const usersApi = API.injectEndpoints({
           // Cập nhật cache của `getNotification`
           dispatch(
             usersApi.util.updateQueryData(
-              "getNotification",
+              'getNotification',
               { id: userId as string }, // Tham số của getNotification
-              (draft) => {
+              draft => {
                 if (draft?.items) {
-                  const notification = draft.items.find((n) => n.id === id);
+                  const notification = draft.items.find(n => n.id === id);
                   if (notification) {
                     notification.view = true; // Cập nhật trạng thái đã xem
                   }
                 }
-              }
-            )
+              },
+            ),
           );
         } catch (error) {
-          console.error("Failed to update cache:", error);
+          console.error('Failed to update cache:', error);
         }
       },
     }),
@@ -114,7 +125,7 @@ const usersApi = API.injectEndpoints({
         return `${baseUrl}/${id}/paymentHistories`;
       },
       providesTags: (result, error, { id }) => [
-        { type: "PaymentHistories", id },
+        { type: 'PaymentHistories', id },
       ],
     }),
 
@@ -123,7 +134,7 @@ const usersApi = API.injectEndpoints({
         const { userId, ...data } = rechargeModel;
         return {
           url: `${baseUrl}/${userId}/recharge`,
-          method: "PUT",
+          method: 'PUT',
           body: data,
         };
       },
@@ -134,12 +145,12 @@ const usersApi = API.injectEndpoints({
         const { userId, ...data } = withdrawModel;
         return {
           url: `${baseUrl}/${userId}/withdraw`,
-          method: "PUT",
+          method: 'PUT',
           body: data,
         };
       },
       invalidatesTags: (result, error, transactionModel) => [
-        { type: "PaymentHistories", id: transactionModel.userId }, // Đánh dấu các cache liên quan cần làm mới
+        { type: 'PaymentHistories', id: transactionModel.userId }, // Đánh dấu các cache liên quan cần làm mới
       ],
     }),
 
@@ -149,11 +160,11 @@ const usersApi = API.injectEndpoints({
     >({
       query: ({ userId, ...rest }) => ({
         url: `${baseUrl}/${userId}/addresses`,
-        method: "POST",
+        method: 'POST',
         body: rest,
       }),
       invalidatesTags: (result, error, createAddress) => [
-        { type: "Address", id: createAddress.userId }, // Đánh dấu các cache liên quan cần làm mới
+        { type: 'Address', id: createAddress.userId }, // Đánh dấu các cache liên quan cần làm mới
       ],
     }),
 
@@ -170,14 +181,14 @@ const usersApi = API.injectEndpoints({
     }),
 
     deleteAddressById: build.mutation<Response<null>, string>({
-      query: (id) => {
+      query: id => {
         return {
           url: `${baseUrl}/addresses/${id}`,
-          method: "DELETE",
+          method: 'DELETE',
         };
       },
       invalidatesTags: (result, error, deleteAddressById) => [
-        { type: "User" }, // Đánh dấu các cache liên quan cần làm mới
+        { type: 'User' }, // Đánh dấu các cache liên quan cần làm mới
       ],
     }),
     uploadAVT: build.mutation<
@@ -186,11 +197,11 @@ const usersApi = API.injectEndpoints({
     >({
       query: ({ userId, formData }) => ({
         url: `${baseUrl}/${userId}/uploadAvatar`,
-        method: "PUT",
+        method: 'PUT',
         body: formData,
       }),
       invalidatesTags: (result, error, arg) => [
-        { type: "User", id: arg.userId }, // Đánh dấu các cache liên quan cần làm mới
+        { type: 'User', id: arg.userId }, // Đánh dấu các cache liên quan cần làm mới
       ],
     }),
     uploadUserById: build.mutation<
@@ -204,11 +215,11 @@ const usersApi = API.injectEndpoints({
     >({
       query: ({ userId, body }) => ({
         url: `${baseUrl}/${userId}`,
-        method: "PATCH",
+        method: 'PATCH',
         body: body,
       }),
       invalidatesTags: (result, error, arg) => [
-        { type: "User", id: arg.userId }, // Đánh dấu các cache liên quan cần làm mới
+        { type: 'User', id: arg.userId }, // Đánh dấu các cache liên quan cần làm mới
       ],
     }),
     uploadAddressById: build.mutation<
@@ -220,11 +231,11 @@ const usersApi = API.injectEndpoints({
     >({
       query: ({ addressId, body }) => ({
         url: `${baseUrl}/addresses/${addressId}`,
-        method: "PATCH",
+        method: 'PATCH',
         body: body,
       }),
       invalidatesTags: (result, error, arg) => [
-        { type: "User", id: arg.addressId }, // Đánh dấu các cache liên quan cần làm mới
+        { type: 'User', id: arg.addressId }, // Đánh dấu các cache liên quan cần làm mới
       ],
     }),
   }),
@@ -244,4 +255,5 @@ export const {
   useRechargeMutation,
   useWithdrawMutation,
   useUploadAddressByIdMutation,
+  useGetServicesByUserIdQuery,
 } = usersApi;

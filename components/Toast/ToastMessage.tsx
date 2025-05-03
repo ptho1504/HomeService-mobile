@@ -1,28 +1,28 @@
 // components/common/ToastMessage.tsx
-import React from "react";
+import React from 'react';
 import {
   Toast,
   ToastTitle,
   ToastDescription,
   useToast,
-} from "@/components/ui/toast";
+} from '@/components/ui/toast';
 
-export type ToastType = "error" | "muted" | "warning" | "success" | "info";
+export type ToastType = 'error' | 'muted' | 'warning' | 'success' | 'info';
 
 export const showToastMessage = (
   toast: ReturnType<typeof useToast>,
   title: string,
   message: string,
   type: ToastType,
-  toastId?: string
+  toastId?: string,
 ) => {
-  const id = toastId || Date.now().toString();
+  const id = toastId || Math.random().toString();
 
   if (toast.isActive(id)) return;
 
   toast.show({
     id,
-    placement: "top",
+    placement: 'top',
     duration: 3000,
     render: () => (
       <Toast nativeID={id} action={type} variant="solid">

@@ -1,6 +1,6 @@
-import { createApi } from "@reduxjs/toolkit/query";
-import { API } from "../base";
-import { Address, BankAccount } from "@/types/types";
+import { createApi } from '@reduxjs/toolkit/query';
+import { API } from '../base';
+import { Address, BankAccount } from '@/types/types';
 import {
   FreelancerWorkModel,
   registerServiceModel,
@@ -8,14 +8,14 @@ import {
   WorkModel,
   ImageModel,
   ServiceDetailModel,
-} from "@/types/workTypes";
+} from '@/types/workTypes';
 
-import { Response } from "@/types/response";
+import { Response } from '@/types/response';
 
-const baseUrl = "/works";
+const baseUrl = '/works';
 
 const worksApi = API.injectEndpoints({
-  endpoints: (build) => ({
+  endpoints: build => ({
     // getUser: build.query<User, string>({
     //   query: (id) => `users/${id}`,
     // }),
@@ -31,18 +31,18 @@ const worksApi = API.injectEndpoints({
         const params = new URLSearchParams();
 
         if (id !== undefined) {
-          params.append("freelancerId", id.toString());
+          params.append('freelancerId', id.toString());
         }
 
         // Kết hợp base URL và query string
         return `${baseUrl}?${params.toString()}`;
       },
-      providesTags: (result, error, { id }) => [{ type: "Service", id }],
+      providesTags: (result, error, { id }) => [{ type: 'Service', id }],
     }),
 
     // Get service detail of a freelancer
     getServicesDetailOfFreelancer: build.query<
-      Response<ServiceDetailModel>,
+      Response<FreelancerWorkModel>,
       {
         workId: string;
         freelancerId: string;
@@ -64,11 +64,11 @@ const worksApi = API.injectEndpoints({
     >({
       query: ({ serviceId, freelancerId, data }) => ({
         url: `${baseUrl}/${serviceId}/freelancers/${freelancerId}`,
-        method: "PATCH",
+        method: 'PATCH',
         body: data,
       }),
       invalidatesTags: (result, error, { freelancerId }) => [
-        { type: "Service", id: freelancerId }, // Làm mới danh sách dịch vụ của freelancer
+        { type: 'Service', id: freelancerId }, // Làm mới danh sách dịch vụ của freelancer
       ],
     }),
 
@@ -79,7 +79,7 @@ const worksApi = API.injectEndpoints({
       query: ({ id, formData }) => {
         return {
           url: `${baseUrl}/freelancerWorkService/${id}/uploadImages`,
-          method: "PUT",
+          method: 'PUT',
           body: formData,
         };
       },

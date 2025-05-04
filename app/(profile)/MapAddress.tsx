@@ -9,19 +9,30 @@ import {
 import MapView, { Marker, PROVIDER_DEFAULT, Region } from 'react-native-maps';
 import * as Location from 'expo-location';
 import Ionicons from '@expo/vector-icons/Ionicons';
-import { useRouter } from 'expo-router';
+import { useLocalSearchParams, useRouter } from 'expo-router';
 import MaterialIcons from '@expo/vector-icons/MaterialIcons';
 import { useSelector } from 'react-redux';
 import { selectUser, updateCurrentUserWithAddress } from '@/store/reducers';
 import { useCreateAddressMutation } from '@/services';
 import { AddressType } from '@/types/addressType';
 import { useDispatch } from 'react-redux';
-import { AddressModel } from '@/types/userTypes';
+import { AddressModel, CreateAddressModel } from '@/types/userTypes';
+import { Button, ButtonSpinner, ButtonText } from '@/components/ui/button';
 
 const MapAddress = () => {
+  const { lat, lng } = useLocalSearchParams();
   const router = useRouter();
   const [hasPermission, setHasPermission] = useState(false);
-  const [region, setRegion] = useState<Region | null>(null);
+  const [region, setRegion] = useState<Region | null>(
+    lat && lng
+      ? {
+          latitude: Number(lat),
+          longitude: Number(lng),
+          latitudeDelta: 0.01,
+          longitudeDelta: 0.01,
+        }
+      : null,
+  );
   const [address, setAddress] = useState<string>('');
   const currentUser = useSelector(selectUser);
   const dispatch = useDispatch();
@@ -59,13 +70,10 @@ const MapAddress = () => {
         setAddress(shortAddress);
       }
     };
-
-    requestLocation();
+    if (!region) {
+      requestLocation();
+    }
   }, []);
-
-  const handleGoBack = () => {
-    router.back();
-  };
 
   const handleSelectLocation = async () => {
     // console.log("Selected location:", region);
@@ -79,7 +87,7 @@ const MapAddress = () => {
 
     if (customerName && latitude && longitude && detail) {
       // console.log("test IN");
-      const data: AddressModel = {
+      const data: CreateAddressModel = {
         customerName: customerName,
         phoneNumber: phoneNumber,
         latitude: latitude.toString(),
@@ -101,7 +109,7 @@ const MapAddress = () => {
             address: newAddress,
           }),
         );
-        router.back();
+        router.dismissTo(`/(profile)/Address`);
       }
     }
     // console.log("test OUT");
@@ -137,16 +145,6 @@ const MapAddress = () => {
       {region ? (
         <View className="flex-1">
           {/* Header */}
-          <View className="px-4 pt-12">
-            <View className="flex-row items-center mb-4 mt-4">
-              <Pressable onPress={handleGoBack} className="mr-4">
-                <Ionicons name="chevron-back" size={28} color="black" />
-              </Pressable>
-              <Text className="text-lg font-semibold">
-                Chọn vị trí làm việc
-              </Text>
-            </View>
-          </View>
 
           {/* Search bar */}
           <View className="absolute top-[160px] left-4 right-4 z-10 bg-white border border-emerald-500 px-4 py-2 rounded-2xl shadow-md flex-row items-center">
@@ -180,12 +178,12 @@ const MapAddress = () => {
 
           {/* Bottom button */}
           <View className="absolute bottom-8 w-full items-center px-6">
-            <Pressable
-              className="py-3 px-4 w-full rounded-xl items-center bg-black"
-              onPress={handleSelectLocation}
-            >
-              <Text className="text-white font-semibold">Chọn vị trí này</Text>
-            </Pressable>
+            <Button className="w-full" onPress={handleSelectLocation}>
+              {isLoading && <ButtonSpinner className="text-secondary-50" />}
+              <ButtonText className="text-white font-semibold">
+                Chọn vị trí này
+              </ButtonText>
+            </Button>
           </View>
         </View>
       ) : (

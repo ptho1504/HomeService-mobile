@@ -11,7 +11,12 @@ import {
 } from 'react-native';
 import { Text } from '@/components/ui/text';
 import * as ImagePicker from 'expo-image-picker';
-import { Button, ButtonIcon, ButtonText } from '@/components/ui/button';
+import {
+  Button,
+  ButtonIcon,
+  ButtonSpinner,
+  ButtonText,
+} from '@/components/ui/button';
 import { HStack } from '@/components/ui/hstack';
 import { VStack } from '@/components/ui/vstack';
 import { Textarea, TextareaInput } from '@/components/ui/textarea';
@@ -275,7 +280,7 @@ const AdditionInfo = () => {
 
   useEffect(() => {
     if (registerProcess.isRegisterDone) {
-      router.dismissAll();
+      router.dismissTo('/(profile)/Service');
 
       showToastMessage(
         toast,
@@ -299,101 +304,93 @@ const AdditionInfo = () => {
         className="absolute h-[1000px] left-0 right-0 top-0"
       />
 
-      {registerIsLoading || uploadImagesIsLoading ? (
-        <VStack className="mt-5">
-          <Spinner size="large" color={colors.emerald[600]} />
-          <Text size="lg" className="text-green-800 text-center">
-            {i18n.t('st_wait_for_registering')}
-          </Text>
-        </VStack>
-      ) : (
-        <Box className="m-4">
-          <VStack space="xl" className="bg-white rounded-md shadow px-4 py-8">
-            <VStack space="4xl">
-              <VStack space="md">
-                <Text className="font-bold text-lg">
-                  {i18n.t('st_enter_your_addition_info')}:
-                </Text>
-                <Textarea size="md">
-                  <TextareaInput
-                    placeholder={i18n.t('st_enter_your_addition_info_here')}
-                    onChangeText={setNote}
-                    value={note}
-                  />
-                </Textarea>
-              </VStack>
-              <VStack space="md">
-                {/* Tải hình ảnh */}
-                <Text className="font-bold text-lg">
-                  {i18n.t('st_upload_your_image')}:
-                </Text>
-                <Button
-                  size="lg"
-                  variant="solid"
-                  className="w-full"
-                  action="secondary"
-                  onPress={handlePickImage}
-                >
-                  <ButtonText> {i18n.t('st_choice_image')}</ButtonText>
-                  <ButtonIcon as={EditIcon} />
-                </Button>
-
-                {/* Hiển thị hình ảnh đã chọn */}
-                {images.length > 0 && (
-                  <FlatList
-                    horizontal
-                    data={images}
-                    keyExtractor={(item, index) => index.toString()}
-                    contentContainerStyle={{ paddingVertical: 12 }}
-                    renderItem={({ item }) => (
-                      <ImageBackground
-                        source={{ uri: item.uri }}
-                        className="w-32 h-32 me-1 border"
-                      >
-                        <TouchableOpacity
-                          onPress={() => removeImage(item.uri)}
-                          className="absolute top-1 right-1 border border-red-500 bg-white rounded-full"
-                        >
-                          <Icon
-                            as={CloseIcon}
-                            className="text-red-500 m-1 w-4 h-4"
-                          />
-                        </TouchableOpacity>
-                      </ImageBackground>
-                    )}
-                  />
-                )}
-              </VStack>
-            </VStack>
-            <VStack>
-              <Text size="lg" className="text-orange-500 font-bold">
-                *{i18n.t('word_note')}:
+      <Box className="m-4">
+        <VStack space="xl" className="bg-white rounded-md shadow px-4 py-8">
+          <VStack space="4xl">
+            <VStack space="md">
+              <Text className="font-bold text-lg">
+                {i18n.t('st_enter_your_addition_info')}:
               </Text>
-              <VStack className="ms-3">
-                <Text className="font-semibold">
-                  - {i18n.t('st_note_addition_info')}
-                </Text>
-                <Text className="font-semibold">
-                  - {i18n.t('st_note_addition_image')}
-                </Text>
-              </VStack>
+              <Textarea size="md">
+                <TextareaInput
+                  placeholder={i18n.t('st_enter_your_addition_info_here')}
+                  onChangeText={setNote}
+                  value={note}
+                />
+              </Textarea>
             </VStack>
-            <Center>
+            <VStack space="md">
+              {/* Tải hình ảnh */}
+              <Text className="font-bold text-lg">
+                {i18n.t('st_upload_your_image')}:
+              </Text>
               <Button
                 size="lg"
                 variant="solid"
-                action="positive"
-                className={'w-64 h-14'}
-                onPress={handleOpenAlert}
+                className="w-full"
+                action="secondary"
+                onPress={handlePickImage}
               >
-                <ButtonText className="font-bold text-xl">
-                  {i18n.t('st_send_register')}
-                </ButtonText>
+                <ButtonText> {i18n.t('st_choice_image')}</ButtonText>
+                <ButtonIcon as={EditIcon} />
               </Button>
-            </Center>
+
+              {/* Hiển thị hình ảnh đã chọn */}
+              {images.length > 0 && (
+                <FlatList
+                  horizontal
+                  data={images}
+                  keyExtractor={(item, index) => index.toString()}
+                  contentContainerStyle={{ paddingVertical: 12 }}
+                  renderItem={({ item }) => (
+                    <ImageBackground
+                      source={{ uri: item.uri }}
+                      className="w-32 h-32 me-1 border"
+                    >
+                      <TouchableOpacity
+                        onPress={() => removeImage(item.uri)}
+                        className="absolute top-1 right-1 border border-red-500 bg-white rounded-full"
+                      >
+                        <Icon
+                          as={CloseIcon}
+                          className="text-red-500 m-1 w-4 h-4"
+                        />
+                      </TouchableOpacity>
+                    </ImageBackground>
+                  )}
+                />
+              )}
+            </VStack>
           </VStack>
-        </Box>
-      )}
+          <VStack>
+            <Text size="lg" className="text-orange-500 font-bold">
+              *{i18n.t('word_note')}:
+            </Text>
+            <VStack className="ms-3">
+              <Text className="font-semibold">
+                - {i18n.t('st_note_addition_info')}
+              </Text>
+              <Text className="font-semibold">
+                - {i18n.t('st_note_addition_image')}
+              </Text>
+            </VStack>
+          </VStack>
+          <Center>
+            <Button
+              size="lg"
+              variant="solid"
+              action="positive"
+              className={'w-64 h-14'}
+              onPress={handleOpenAlert}
+            >
+              <ButtonText className="font-bold text-xl">
+                {i18n.t('st_send_register')}
+              </ButtonText>
+              {registerIsLoading && <ButtonSpinner color={'#D1D5DB'} />}
+            </Button>
+          </Center>
+        </VStack>
+      </Box>
 
       {/* Alert dialog */}
       <AlertConfirmDialog

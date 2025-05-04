@@ -220,21 +220,23 @@ const DoTest = () => {
     { useNativeDriver: false },
   );
 
+  if (isFetching) {
+    return (
+      <HStack className="mt-5">
+        <QuestionSkeleton />
+      </HStack>
+    );
+  }
+
   return (
     <SafeAreaView className="flex-1">
-      {isFetching && (
-        <HStack className="mt-5">
-          <QuestionSkeleton />
-        </HStack>
-      )}
-
       {(error || errorTestData) && (
         <Text size="lg" className="text-red-800 text-center mt-5">
           {i18n.t('st_system_error')}
         </Text>
       )}
 
-      {!isFetching && !error && !isLoadingSubmitTest && !errorTestData && (
+      {!error && !errorTestData && (
         <VStack className="flex-1">
           {isVisible && <Timer timeLeft={timeLeft} />}
 

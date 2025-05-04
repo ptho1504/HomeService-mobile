@@ -10,7 +10,7 @@ import {
   UserModel,
 } from '@/types/userTypes';
 import { Response } from '@/types/response';
-import { AddressPlaces, AddressType } from '@/types/addressType';
+import { AddressPlaces, AddressType, Geocode } from '@/types/addressType';
 
 const baseUrl = '/users';
 
@@ -180,6 +180,18 @@ const usersApi = API.injectEndpoints({
       },
     }),
 
+    getGeocode: build.query<
+      Response<Geocode>,
+      {
+        placeId: string;
+      }
+    >({
+      query: ({ placeId }) => {
+        // Kết hợp base URL và query string
+        return `addresses/googleMap/geocode?placeId=${placeId}`;
+      },
+    }),
+
     deleteAddressById: build.mutation<Response<null>, string>({
       query: id => {
         return {
@@ -256,4 +268,5 @@ export const {
   useWithdrawMutation,
   useUploadAddressByIdMutation,
   useGetServicesByUserIdQuery,
+  useGetGeocodeQuery,
 } = usersApi;

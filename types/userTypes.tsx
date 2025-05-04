@@ -68,3 +68,14 @@ export interface AddressModel {
   deleted?: boolean;
   userId?: string;
 }
+
+export interface CreateAddressModel {
+  customerName: string;
+  phoneNumber: string;
+  detail: string;
+  latitude: string;
+  longitude: string;
+  default: boolean;
+  deleted?: boolean;
+  userId?: string;
+}

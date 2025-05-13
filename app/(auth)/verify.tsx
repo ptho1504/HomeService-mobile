@@ -3,25 +3,25 @@ import {
   TouchableOpacity,
   TouchableWithoutFeedback,
   View,
-} from "react-native";
-import { SafeAreaView } from "react-native-safe-area-context";
+} from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
 // import Swiper from "react-native-swiper";
 
-import { useEffect, useRef, useState } from "react";
-import { OtpInput } from "react-native-otp-entry";
-import { useLoginMutation, useVerifyOtpMutation } from "@/services";
-import { router, useLocalSearchParams } from "expo-router";
-import { i18n, Language } from "@/localization";
-import { Button, ButtonSpinner, ButtonText } from "@/components/ui/button";
-import { useDispatch } from "react-redux";
-import { setUser, authenticateUser } from "@/store/reducers/auth";
-import * as SecureStore from "expo-secure-store";
-import { LOCAL_STORAGE_JWT_KEY, UserRole } from "@/constants";
-import { Keyboard } from "react-native";
-import { Text } from "@/components/ui/text";
-import { obfuscateEmail, useDebounce } from "@/utils/helper";
-import { Spinner } from "@/components/ui/spinner";
-import { registerForPushNotificationsAsync } from "@/utils/firebaseUtil";
+import { useEffect, useRef, useState } from 'react';
+import { OtpInput } from 'react-native-otp-entry';
+import { useLoginMutation, useVerifyOtpMutation } from '@/services';
+import { router, useLocalSearchParams } from 'expo-router';
+import { i18n, Language } from '@/localization';
+import { Button, ButtonSpinner, ButtonText } from '@/components/ui/button';
+import { useDispatch } from 'react-redux';
+import { setUser, authenticateUser } from '@/store/reducers/auth';
+import * as SecureStore from 'expo-secure-store';
+import { LOCAL_STORAGE_JWT_KEY, UserRole } from '@/constants';
+import { Keyboard } from 'react-native';
+import { Text } from '@/components/ui/text';
+import { obfuscateEmail, useDebounce } from '@/utils/helper';
+import { Spinner } from '@/components/ui/spinner';
+import { registerForPushNotificationsAsync } from '@/utils/firebaseUtil';
 
 // i18n.locale = getLocales()[0].languageCode ?? "vn";
 // i18n.locale = 'vn';
@@ -31,21 +31,20 @@ import { registerForPushNotificationsAsync } from "@/utils/firebaseUtil";
 const Verify = () => {
   const { email, role } = useLocalSearchParams<{
     email: string;
-    role: "FREELANCER" | "CUSTOMER";
+    role: 'FREELANCER' | 'CUSTOMER';
   }>();
 
   const [isLoading, SetIsLoading] = useState(false);
   const [otp, setOtp] = useState<string | undefined>(undefined);
-  const [expoPushToken, setExpoPushToken] = useState("");
+  const [expoPushToken, setExpoPushToken] = useState('');
   const otpRef = useRef<any>(null);
   const [login] = useLoginMutation();
   const dispatch = useDispatch();
 
   useEffect(() => {
     registerForPushNotificationsAsync()
-      .then((token) => {
-        console.log(token);
-        setExpoPushToken(token ?? "");
+      .then(token => {
+        setExpoPushToken(token ?? '');
       })
       .catch((error: any) => setExpoPushToken(`${error}`));
   }, []);
@@ -62,7 +61,6 @@ const Verify = () => {
               otp: otp,
               firebaseToken: expoPushToken,
             });
-            console.log(response);
             if (response.error) {
               if (otpRef.current) {
                 otpRef.current.clear(); // Clears the input
@@ -77,23 +75,23 @@ const Verify = () => {
 
               // Save to Async storage
               if (!response.data.items.jwt) {
-                console.error("JWT is missing!");
+                console.error('JWT is missing!');
                 return;
               }
               await SecureStore.setItemAsync(
                 LOCAL_STORAGE_JWT_KEY,
-                response.data.items.jwt!
+                response.data.items.jwt!,
               );
 
               if (role === UserRole.CUSTOMER) {
-                router.replace("/(customer)/(home)");
+                router.replace('/(customer)/(home)');
               } else {
-                router.replace("/(freelancer)/(home)");
+                router.replace('/(freelancer)/(home)');
               }
             }
           }
         } catch (error) {
-          console.error("Error during login:", error);
+          console.error('Error during login:', error);
         } finally {
           SetIsLoading(false);
         }
@@ -109,24 +107,24 @@ const Verify = () => {
     >
       <View className="flex h-full bg-white p-4 items-center">
         <Text className="text-3xl font-bold my-3">
-          {i18n.t("enter_verify")}
+          {i18n.t('enter_verify')}
         </Text>
         <Text className="text-xl font-font-normal">
-          {i18n.t("st_otp_auto_sent") + " " + obfuscateEmail(email)}{" "}
-          {i18n.t("word_email") + ".\n" + i18n.t("st_check_email")}.
+          {i18n.t('st_otp_auto_sent') + ' ' + obfuscateEmail(email)}{' '}
+          {i18n.t('word_email') + '.\n' + i18n.t('st_check_email')}.
         </Text>
         {/* OTP */}
         <View className="my-5 w-full">
           <OtpInput
             ref={otpRef}
             numberOfDigits={6}
-            onTextChange={(text) => setOtp(text)}
-            focusColor={"#397e52"}
+            onTextChange={text => setOtp(text)}
+            focusColor={'#397e52'}
             focusStickBlinkingDuration={400}
             disabled={false}
             theme={{
               pinCodeContainerStyle: {
-                backgroundColor: "white",
+                backgroundColor: 'white',
                 width: 50,
                 height: 50,
                 borderRadius: 12,
@@ -134,17 +132,17 @@ const Verify = () => {
             }}
             type="numeric"
             textInputProps={{
-              accessibilityLabel: "One-Time Password",
+              accessibilityLabel: 'One-Time Password',
             }}
             autoFocus={true}
           />
         </View>
-        {isLoading && <Spinner size={"large"} />}
+        {isLoading && <Spinner size={'large'} />}
         <View className="my-3 flex items-center flex-row gap-3">
-          <Text size="lg">{i18n.t("send_otp_text")}</Text>
+          <Text size="lg">{i18n.t('send_otp_text')}</Text>
           <TouchableOpacity>
             <Text size="lg" className="font-bold color-green-600">
-              {i18n.t("resend")}
+              {i18n.t('resend')}
             </Text>
           </TouchableOpacity>
         </View>

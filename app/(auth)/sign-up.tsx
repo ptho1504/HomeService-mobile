@@ -4,7 +4,7 @@ import {
   TouchableOpacity,
   TouchableWithoutFeedback,
   View,
-} from "react-native";
+} from 'react-native';
 import {
   FormControl,
   FormControlError,
@@ -14,23 +14,23 @@ import {
   FormControlHelperText,
   FormControlLabel,
   FormControlLabelText,
-} from "@/components/ui/form-control";
-import { Button, ButtonSpinner, ButtonText } from "@/components/ui/button";
-import { i18n, Language } from "@/localization";
-import { Box } from "@/components/ui/box";
-import { useEffect, useState } from "react";
-import { Input, InputField, InputIcon, InputSlot } from "@/components/ui/input";
-import { AlertCircleIcon, CircleIcon, MailIcon } from "@/components/ui/icon";
-import { Link, router } from "expo-router";
-import { Divider } from "@/components/ui/divider";
-import { HStack } from "@/components/ui/hstack";
-import FacebookSvg from "@/components/svg/FacebookSvg";
-import GoogleSvg from "@/components/svg/GoogleSvg";
-import { useDebounce, validateEmail } from "@/utils/helper";
-import { useSendOtpMutation } from "@/services";
-import { Text } from "@/components/ui/text";
-import { Pressable } from "@/components/ui/pressable";
-import LanguageDropdown from "@/components/customeButton/LanguageDropdown";
+} from '@/components/ui/form-control';
+import { Button, ButtonSpinner, ButtonText } from '@/components/ui/button';
+import { i18n, Language } from '@/localization';
+import { Box } from '@/components/ui/box';
+import { useEffect, useState } from 'react';
+import { Input, InputField, InputIcon, InputSlot } from '@/components/ui/input';
+import { AlertCircleIcon, CircleIcon, MailIcon } from '@/components/ui/icon';
+import { Link, router } from 'expo-router';
+import { Divider } from '@/components/ui/divider';
+import { HStack } from '@/components/ui/hstack';
+import FacebookSvg from '@/components/svg/FacebookSvg';
+import GoogleSvg from '@/components/svg/GoogleSvg';
+import { useDebounce, validateEmail } from '@/utils/helper';
+import { useSendOtpMutation } from '@/services';
+import { Text } from '@/components/ui/text';
+import { Pressable } from '@/components/ui/pressable';
+import LanguageDropdown from '@/components/customeButton/LanguageDropdown';
 // i18n.locale = getLocales()[0].languageCode ?? "vn";
 // i18n.locale = "vn";
 // i18n.enableFallback = true;
@@ -39,34 +39,32 @@ import LanguageDropdown from "@/components/customeButton/LanguageDropdown";
 const SignUp = () => {
   // Set Valid
   const [isInvalid, setIsInvalid] = useState(false);
-  const [errorText, setErrorText] = useState("");
+  const [errorText, setErrorText] = useState('');
   const [loading, setLoading] = useState(false);
 
   // Set form
-  const [email, setEmail] = useState<string>("");
+  const [email, setEmail] = useState<string>('');
   const debounceEmail = useDebounce(email, 1000);
   // Call Api
   const [sendOtp] = useSendOtpMutation();
 
   const handleSubmit = async () => {
     setLoading(true);
-    setErrorText("");
+    setErrorText('');
     setIsInvalid(false);
 
     // Check Email
     if (!validateEmail(email)) {
       setIsInvalid(true);
-      setErrorText(i18n.t("mail_invalid"));
+      setErrorText(i18n.t('mail_invalid'));
       setLoading(false);
       return;
     }
 
     const response = await sendOtp({ email });
-    console.log(response);
 
     if (response.error) {
-      const message = response.error.data?.message || "Unknown error";
-      // console.log(message);
+      const message = response.error.data?.message || 'Unknown error';
       setIsInvalid(true);
       setErrorText(message);
       setLoading(false);
@@ -84,13 +82,13 @@ const SignUp = () => {
     ) {
       if (!validateEmail(email)) {
         setIsInvalid(true);
-        setErrorText(i18n.t("mail_invalid"));
+        setErrorText(i18n.t('mail_invalid'));
       } else {
         setIsInvalid(false);
       }
     } else {
       setIsInvalid(false);
-      setErrorText("");
+      setErrorText('');
     }
   }, [debounceEmail]);
 
@@ -102,7 +100,7 @@ const SignUp = () => {
       <View className="flex items-center justify-start h-full bg-white gap-5">
         <Image
           className="h-full w-full absolute opacity-50"
-          source={require("@/assets/images/bg1.png")}
+          source={require('@/assets/images/bg1.png')}
         />
         <Box className="p-5 mt-10 flex flex-row items-center justify-between ">
           <Box className="flex-1 flex-row gap-1">
@@ -120,7 +118,7 @@ const SignUp = () => {
         <Box className="shadow-2xl">
           <Image
             className="w-40 h-40 rounded-full"
-            source={require("@/assets/images/logo.jpg")}
+            source={require('@/assets/images/logo.jpg')}
           />
         </Box>
         {/* signup */}
@@ -140,15 +138,15 @@ const SignUp = () => {
             <TouchableWithoutFeedback>
               <Input size="lg" className="my-1 flex items-center h-12">
                 <InputSlot className="pl-3 flex items-center">
-                  <InputIcon as={MailIcon} size={"lg"} />
+                  <InputIcon as={MailIcon} size={'lg'} />
                 </InputSlot>
                 <InputField
                   size="lg"
                   className="leading-none px-4 py-2 h-full"
                   type="text"
-                  placeholder={`${i18n.t("mail_placeholder")}`}
+                  placeholder={`${i18n.t('mail_placeholder')}`}
                   value={email}
-                  onChangeText={(text) => setEmail(text)}
+                  onChangeText={text => setEmail(text)}
                 />
               </Input>
             </TouchableWithoutFeedback>
@@ -169,9 +167,9 @@ const SignUp = () => {
                 variant="solid"
                 action="positive"
               >
-                {loading && <ButtonSpinner color={"#D1D5DB"} />}
+                {loading && <ButtonSpinner color={'#D1D5DB'} />}
                 <ButtonText size="lg" className="text-white">
-                  {i18n.t("verify")}
+                  {i18n.t('verify')}
                 </ButtonText>
               </Button>
             </TouchableWithoutFeedback>
@@ -179,15 +177,15 @@ const SignUp = () => {
             {/* You have account */}
             <Box className="flex flex-row gap-2 items-center mt-4">
               <Text size="lg" className="text-center">
-                {i18n.t("have_account")}
+                {i18n.t('have_account')}
               </Text>
               <Pressable
                 onPress={() => {
-                  router.replace("/(auth)/log-in");
+                  router.replace('/(auth)/log-in');
                 }}
               >
                 <Text size="lg" className="font-bold color-green-600">
-                  {i18n.t("login")}
+                  {i18n.t('login')}
                 </Text>
               </Pressable>
             </Box>

@@ -40,6 +40,12 @@ import { BankAccount } from '@/types/types';
 import { useDebounce } from '@/utils/helper';
 import { LinearGradient } from 'expo-linear-gradient';
 import { Config } from '@/config';
+import {
+  Toast,
+  ToastDescription,
+  ToastTitle,
+  useToast,
+} from '@/components/ui/toast';
 // i18n.locale = "vn";
 // i18n.enableFallback = true;
 // i18n.defaultLocale = Language.VIETNAMESE;
@@ -64,7 +70,7 @@ const InforSchema = Yup.object().shape({
 const EditProfile = () => {
   const dispatch = useDispatch();
   const currentUser = useSelector(selectUser);
-
+  const toast = useToast();
   const defaultAvatar =
     'https://static.vecteezy.com/system/resources/previews/009/292/244/non_2x/default-avatar-icon-of-social-media-user-vector.jpg';
 
@@ -168,6 +174,25 @@ const EditProfile = () => {
         console.error(error);
         router.replace(`/+not-found`);
       } finally {
+        toast.show({
+          placement: 'top',
+          duration: 3000,
+          render: ({ id }) => {
+            const uniqueToastId = 'toast-' + id;
+            return (
+              <Toast
+                nativeID={uniqueToastId}
+                action="success"
+                variant="outline"
+              >
+                <ToastTitle>Thành công</ToastTitle>
+                <ToastDescription>
+                  Cập nhật thông tin người dùng thành công
+                </ToastDescription>
+              </Toast>
+            );
+          },
+        });
         setIsLoadingButton(false);
       }
     },

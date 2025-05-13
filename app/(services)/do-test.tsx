@@ -64,8 +64,6 @@ const convertAnswers = (
     }
   });
 
-  console.log(dataMap);
-
   return dataMap;
 };
 
@@ -116,36 +114,36 @@ const DoTest = () => {
 
   const [isStartTest, setIsStartTest] = useState(false);
 
-  // useEffect(() => {
-  //   if (data) {
-  //     startTime = getLocalISOTime();
-  //     setIsStartTest(true);
-  //   } else {
-  //     setIsStartTest(false);
-  //   }
-  // }, [data]);
+  useEffect(() => {
+    if (data) {
+      startTime = getLocalISOTime();
+      setIsStartTest(true);
+    } else {
+      setIsStartTest(false);
+    }
+  }, [data]);
 
   const [timeLeft, setTimeLeft] = useState(
     testInfo.time ? testInfo.time * 60 : 100,
   );
 
-  // useEffect(() => {
-  //   if (timeLeft <= 0) {
-  //     showToastMessage(
-  //       toast,
-  //       i18n.t('word_notification'),
-  //       i18n.t('st_out_of_time'),
-  //       'warning',
-  //     );
-  //     return;
-  //   }
+  useEffect(() => {
+    if (timeLeft <= 0) {
+      showToastMessage(
+        toast,
+        i18n.t('word_notification'),
+        i18n.t('st_out_of_time'),
+        'warning',
+      );
+      return;
+    }
 
-  //   const timer = setInterval(() => {
-  //     setTimeLeft(prev => prev - 1);
-  //   }, 1000);
+    const timer = setInterval(() => {
+      setTimeLeft(prev => prev - 1);
+    }, 1000);
 
-  //   return () => clearInterval(timer);
-  // }, [timeLeft, isStartTest]);
+    return () => clearInterval(timer);
+  }, [timeLeft, isStartTest]);
 
   const [answers, setAnswers] = useState<Record<string, string>>({});
 
@@ -176,8 +174,12 @@ const DoTest = () => {
       answerForQuestions: convertAnswers(sortedQuestions, answers),
     };
 
+    console.info({ answer, testId });
+
     const result = await submitTest({ testId: testId, answer: answer });
-    console.log(result.data?.items);
+    if (result.error) {
+      console.info({ err: result.error.data });
+    }
   };
 
   useEffect(() => {

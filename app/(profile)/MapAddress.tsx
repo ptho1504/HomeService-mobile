@@ -76,9 +76,6 @@ const MapAddress = () => {
   }, []);
 
   const handleSelectLocation = async () => {
-    // console.log("Selected location:", region);
-    // console.log("Address:", address);
-    // router.back(); // You can replace this with logic to pass back data
     const customerName = currentUser?.name;
     const phoneNumber = currentUser?.phoneNumber || '';
     const latitude = region?.latitude;

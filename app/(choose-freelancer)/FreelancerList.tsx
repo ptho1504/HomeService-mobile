@@ -1,56 +1,56 @@
-import React, { useCallback, useState } from "react";
+import React, { useCallback, useState } from 'react';
 import {
   FlatList,
   ListRenderItemInfo,
   RefreshControl,
   ScrollView,
-} from "react-native";
-import { VStack } from "@/components/ui/vstack";
-import { HStack } from "@/components/ui/hstack";
-import { Card } from "@/components/ui/card";
-import { Text } from "@/components/ui/text";
-import { Pressable } from "@/components/ui/pressable";
+} from 'react-native';
+import { VStack } from '@/components/ui/vstack';
+import { HStack } from '@/components/ui/hstack';
+import { Card } from '@/components/ui/card';
+import { Text } from '@/components/ui/text';
+import { Pressable } from '@/components/ui/pressable';
 import {
   CreateTakePostModel,
   PostModel,
   TakePostModel,
-} from "@/types/postTypes";
-import { Box } from "@/components/ui/box";
-import Ionicons from "@expo/vector-icons/Ionicons";
+} from '@/types/postTypes';
+import { Box } from '@/components/ui/box';
+import Ionicons from '@expo/vector-icons/Ionicons';
 import {
   convertMinuteToHour,
   formatTimeRange,
   normalizeDate,
   normalizeDateTime,
-} from "@/utils/dateUtil";
+} from '@/utils/dateUtil';
 import {
   PackageName,
   PostStatus,
   TakePostStatus,
   UserRole,
   WorkType,
-} from "@/constants";
-import { Image } from "@/components/ui/image";
+} from '@/constants';
+import { Image } from '@/components/ui/image';
 
-import { useLocalSearchParams, useRouter } from "expo-router";
-import { useDispatch } from "react-redux";
-import { selectUser, setPost } from "@/store/reducers";
-import { useSelector } from "react-redux";
+import { useLocalSearchParams, useRouter } from 'expo-router';
+import { useDispatch } from 'react-redux';
+import { selectUser, setPost } from '@/store/reducers';
+import { useSelector } from 'react-redux';
 
-import { useTakePostMutation } from "@/services/post";
+import { useTakePostMutation } from '@/services/post';
 import {
   Toast,
   ToastDescription,
   ToastTitle,
   useToast,
-} from "@/components/ui/toast";
-import { isPostModel } from "@/components/post/PostInfo";
-import TakePostDialog from "@/components/dialog/TakePostDialog";
-import { useGetUsersQuery } from "@/services";
-import { UserModel } from "@/types/userTypes";
-import UserSkeleton from "@/components/skeleton/UserSkeleton";
-import { renderStar } from "@/components/post/FreelancerInfo";
-import { i18n } from "@/localization";
+} from '@/components/ui/toast';
+import { isPostModel } from '@/components/post/PostInfo';
+import TakePostDialog from '@/components/dialog/TakePostDialog';
+import { useGetUsersQuery } from '@/services';
+import { UserModel } from '@/types/userTypes';
+import UserSkeleton from '@/components/skeleton/UserSkeleton';
+import { renderStar } from '@/components/post/FreelancerInfo';
+import { i18n } from '@/localization';
 
 const FreelancerList = () => {
   const { postId } = useLocalSearchParams();
@@ -59,8 +59,6 @@ const FreelancerList = () => {
     role: UserRole.FREELANCER,
   });
   const [refreshing, setRefreshing] = useState(false);
-
-  console.log(data);
 
   const currentUser = useSelector(selectUser);
   const router = useRouter();
@@ -76,7 +74,7 @@ const FreelancerList = () => {
         {({ pressed }) => (
           <Box
             className={`rounded-xl shadow-lg flex flex-row justify-between items-center p-3 bg-white ${
-              pressed && "opacity-75"
+              pressed && 'opacity-75'
             }`}
           >
             <HStack space="md" className="items-center">
@@ -85,7 +83,7 @@ const FreelancerList = () => {
                 source={{
                   uri: `${
                     freelancer.avatar ??
-                    "https://img.freepik.com/premium-vector/default-image-icon-vector-missing-picture-page-website-design-mobile-app-no-photo-available_87543-11093.jpg"
+                    'https://img.freepik.com/premium-vector/default-image-icon-vector-missing-picture-page-website-design-mobile-app-no-photo-available_87543-11093.jpg'
                   }`,
                 }}
                 alt={`${freelancer.name}`}
@@ -123,7 +121,7 @@ const FreelancerList = () => {
       >
         <Box className="flex flex-1 justify-center items-center">
           <Text className="text-lg text-center mt-10">
-            {i18n.t("word_no_suitable_freelancer")}
+            {i18n.t('word_no_suitable_freelancer')}
           </Text>
         </Box>
       </ScrollView>
@@ -134,7 +132,7 @@ const FreelancerList = () => {
         <FlatList
           data={data.items}
           renderItem={renderItem}
-          keyExtractor={(item) => item.id.toString()}
+          keyExtractor={item => item.id.toString()}
           refreshControl={
             <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
           }

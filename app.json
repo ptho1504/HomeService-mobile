@@ -4,7 +4,7 @@
     "slug": "HomeService",
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "./assets/images/icon.png",
+    "icon": "./assets/images/logo.png",
     "scheme": "myapp",
     "userInterfaceStyle": "automatic",
     "newArchEnabled": true,
@@ -47,14 +47,14 @@
         "origin": false
       },
       "eas": {
-        "projectId": "8ea08770-cb56-4ee1-979b-e55e33c00402"
+        "projectId": "31e482e9-42a7-43ea-b219-d1adee2242e7"
       }
     },
     "runtimeVersion": {
       "policy": "appVersion"
     },
     "updates": {
-      "url": "https://u.expo.dev/7fb2b81e-da05-4d4d-9088-5f5808583f4a"
+      "url": "https://u.expo.dev/31e482e9-42a7-43ea-b219-d1adee2242e7"
     }
   }
 }

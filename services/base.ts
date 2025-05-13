@@ -1,22 +1,22 @@
-import { Config } from "@/config";
+import { Config } from '@/config';
 import {
   BaseQueryApi,
   BaseQueryResult,
   createApi,
   FetchArgs,
   fetchBaseQuery,
-} from "@reduxjs/toolkit/query/react";
-import * as SecureStore from "expo-secure-store";
+} from '@reduxjs/toolkit/query/react';
+import * as SecureStore from 'expo-secure-store';
 
 const baseQuery = fetchBaseQuery({
   baseUrl: Config.API_URL,
   prepareHeaders: async (headers, api) => {
-    const token = await SecureStore.getItemAsync("jwt");
+    const token = await SecureStore.getItemAsync('jwt');
     // console.log("token in base APi", token);
 
-    // if (token) {
-    //   headers.set('authorization', `Bearer ${token}`);
-    // }
+    if (token) {
+      headers.set('authorization', `Bearer ${token}`);
+    }
     return headers;
   },
 });
@@ -24,7 +24,7 @@ const baseQuery = fetchBaseQuery({
 const baseQueryWithInterceptor = async (
   args: string | FetchArgs,
   api: BaseQueryApi,
-  extraOptions: {}
+  extraOptions: {},
 ): Promise<BaseQueryResult<any>> => {
   const result = await baseQuery(args, api, extraOptions);
   if (result.error && result.error.status === 401) {
@@ -42,13 +42,13 @@ export const API = createApi({
   baseQuery: baseQueryWithInterceptor,
   endpoints: () => ({}),
   tagTypes: [
-    "Posts",
-    "PostsByCustomerId",
-    "TakePostsByFreelancerId",
-    "PaymentHistories",
-    "Notifications",
-    "Service",
-    "Address",
-    "User",
+    'Posts',
+    'PostsByCustomerId',
+    'TakePostsByFreelancerId',
+    'PaymentHistories',
+    'Notifications',
+    'Service',
+    'Address',
+    'User',
   ],
 });

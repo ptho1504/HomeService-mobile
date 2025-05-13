@@ -74,7 +74,6 @@ const Register = () => {
   useEffect(() => {
     registerForPushNotificationsAsync()
       .then(token => {
-        console.log(token);
         setExpoPushToken(token ?? '');
       })
       .catch((error: any) => setExpoPushToken(`${error}`));
@@ -100,8 +99,6 @@ const Register = () => {
       return;
     }
 
-    // console.log(email, role);
-
     const response = await signUp({
       email: email,
       role: role,
@@ -109,11 +106,9 @@ const Register = () => {
       otp: otp!,
       firebaseToken: expoPushToken,
     });
-    console.log(response);
 
     if (response.error) {
       const message = response.error.data?.message || 'Unknown error';
-      // console.log(message);
       setIsInvalid(true);
       setErrorText(message);
       setLoading(false);

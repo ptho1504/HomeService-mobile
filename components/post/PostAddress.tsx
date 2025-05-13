@@ -12,8 +12,9 @@ import Ionicons from '@expo/vector-icons/Ionicons';
 import { Button, ButtonText } from '../ui/button';
 import { i18n } from '@/localization';
 import { useSelector } from 'react-redux';
-import { selectUser } from '@/store/reducers';
+import { selectPost, selectUser } from '@/store/reducers';
 import { router } from 'expo-router';
+import { AddressModel } from '@/types/userTypes';
 
 export const numsOfBaby: number[] = [1, 2, 3];
 
@@ -30,7 +31,11 @@ interface Props {
 
 const PostAddress = ({ canChange }: Props) => {
   const user = useSelector(selectUser);
-  const address = user?.addresses.filter(addr => addr.default)[0];
+  const post = useSelector(selectPost);
+  const address = canChange
+    ? user?.addresses.filter(addr => addr.default)[0]
+    : post?.address;
+  console.log(address?.id);
   const navigateToAddress = () => {
     router.push('/(profile)/Address');
   };
@@ -42,35 +47,55 @@ const PostAddress = ({ canChange }: Props) => {
           space="md"
           className="border p-4 rounded-lg border-secondary-50"
         >
-          <HStack space="sm" className="items-center">
-            <Text className="text-red-600 text-lg">
-              <Ionicons name="location" size={24} />
-            </Text>
-            <Text className="font-medium text-lg">{address?.detail}</Text>
-          </HStack>
-          <HStack className="justify-between items-center">
-            <HStack space="sm" className="items-center">
-              <Text className="text-cyan-600 text-lg">
-                <Ionicons name="person" size={24} />
-              </Text>
-              <VStack>
-                <Text className="font-medium text-lg">
-                  {address?.customerName}
+          {address ? (
+            <>
+              <HStack space="sm" className="items-center">
+                <Text className="text-red-600 text-lg">
+                  <Ionicons name="location" size={24} />
                 </Text>
-                <Text>{address?.phoneNumber}</Text>
-              </VStack>
-            </HStack>
-            {canChange && (
-              <Button
-                action="positive"
-                className="rounded-2xl bg-success-300"
-                size="sm"
-                onPress={navigateToAddress}
-              >
-                <ButtonText>{i18n.t('word_change')}</ButtonText>
-              </Button>
-            )}
-          </HStack>
+                <Text className="font-medium text-lg">{address?.detail}</Text>
+              </HStack>
+              <HStack className="justify-between items-center">
+                <HStack space="sm" className="items-center">
+                  <Text className="text-cyan-600 text-lg">
+                    <Ionicons name="person" size={24} />
+                  </Text>
+                  <VStack>
+                    <Text className="font-medium text-lg">
+                      {address?.customerName}
+                    </Text>
+                    <Text>{address?.phoneNumber}</Text>
+                  </VStack>
+                </HStack>
+                {canChange && (
+                  <Button
+                    action="positive"
+                    className="rounded-2xl bg-success-300"
+                    size="sm"
+                    onPress={navigateToAddress}
+                  >
+                    <ButtonText>{i18n.t('word_change')}</ButtonText>
+                  </Button>
+                )}
+              </HStack>
+            </>
+          ) : (
+            <>
+              <HStack className="justify-between items-center">
+                <Text>Chưa có thông tin địa chỉ</Text>
+                {canChange && (
+                  <Button
+                    action="positive"
+                    className="rounded-2xl bg-success-300"
+                    size="sm"
+                    onPress={navigateToAddress}
+                  >
+                    <ButtonText>Thêm địa chỉ</ButtonText>
+                  </Button>
+                )}
+              </HStack>
+            </>
+          )}
         </VStack>
       </VStack>
     </Card>

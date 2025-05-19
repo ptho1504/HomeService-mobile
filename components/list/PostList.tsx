@@ -71,18 +71,30 @@ interface Props {
 export const Mode = {
   TAKE: {
     key: "TAKE",
-    value: i18n.t("word_mode_take_value"),
-    description: i18n.t("word_mode_take_description"),
+    get value() {
+      return i18n.t("word_mode_take_value");
+    },
+    get description() {
+      return i18n.t("word_mode_take_description");
+    },
   },
   ACCEPT: {
     key: "ACCEPT",
-    value: i18n.t("word_mode_accept_value"),
-    description: i18n.t("word_mode_accept_description"),
+    get value() {
+      return i18n.t("word_mode_accept_value");
+    },
+    get description() {
+      return i18n.t("word_mode_accept_description");
+    },
   },
   REJECT: {
     key: "REJECT",
-    value: i18n.t("word_mode_reject_value"),
-    description: i18n.t("word_mode_reject_description"),
+    get value() {
+      return i18n.t("word_mode_reject_value");
+    },
+    get description() {
+      return i18n.t("word_mode_reject_description");
+    },
   },
 };
 

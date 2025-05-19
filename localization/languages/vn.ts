@@ -85,7 +85,7 @@ export const vn = {
   // màn hình làm bài kiểm tra
   [LocalizationKey.DOING_TEST]: "Làm bài kiểm tra",
   [LocalizationKey.WORD_QUESTION]: "Câu hỏi",
-  [LocalizationKey.ST_ENTER_YOUR_ANSWER]: "Nhập câu trả lời của bạn...",
+  [LocalizationKey.ST_ENTER_YOUR_ANSWER]: "Nhập câu trả lời...",
   [LocalizationKey.WORD_SUBMIT]: "Nộp bài",
   [LocalizationKey.WORD_MULTIPLE_CHOICE]: "Câu hỏi trắc nghiệm",
   [LocalizationKey.WORD_ESSAY]: "Câu hỏi tự luận",

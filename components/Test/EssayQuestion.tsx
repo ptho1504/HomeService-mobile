@@ -1,6 +1,7 @@
 import React from "react";
 import { TextInput, View, Text } from "react-native";
 import { QuestionModel } from "@/types/workTypes";
+import { i18n } from "@/localization";
 
 const EssayQuestion = ({
   item,
@@ -15,7 +16,7 @@ const EssayQuestion = ({
     {/* <Text className="text-xl font-semibold mb-2">{item.content}</Text> */}
     <TextInput
       className="border border-gray-300 p-3 rounded-lg mt-2 bg-white text-lg"
-      placeholder="Enter your answer"
+      placeholder={i18n.t("st_enter_your_answer")}
       multiline
       value={answers[item.id] || ""}
       onChangeText={(text) => onEssayChange(item.id, text)}
